@@ -10,6 +10,10 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +25,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NodeManagerActivity extends ListActivity implements NodeManagerDialog.NodeManagerDialogListener {
+public class NodeManagerActivity extends ActionBarActivity implements NodeManagerDialog.NodeManagerDialogListener,MyListFragment.OnItemSelectedListener {
 
 	private GlobalState gs;
-	// This is the Adapter being used to display the list's data
-	private NodeManagerArrayAdapter mAdapter;
 	private LinearLayout actionBar;
 	private ListView list;
-	private CopyOnWriteArrayList<LocalNode> values;
+    MyListFragment mListFragment;
 	private Builder discardDialog;
 
 	@Override
@@ -37,13 +39,15 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 		setContentView(R.layout.activity_node_management);
 		this.gs = (GlobalState) getApplication();
 
-		values = this.gs.getLocalNodeList();
 
-		mAdapter = new NodeManagerArrayAdapter(this,values);
-		setListAdapter(mAdapter);
-		
 		this.list = (ListView)findViewById(android.R.id.list);
-		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        // setHasOptionsMenu(true);
+        setSupportActionBar(toolbar);
+
+        mListFragment = new MyListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.listFragment, mListFragment).commit();
 		
 		this.actionBar = (LinearLayout)findViewById(R.id.node_management_action_bar);
 		ImageButton addButton = (ImageButton)this.actionBar.findViewById(R.id.node_add);
@@ -113,8 +117,8 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 				if(selected == AdapterView.INVALID_POSITION){
 					return;
 				}
-	        	values.remove(selected);
 				list.setItemChecked(selected,false);
+                mListFragment.getValues().remove(selected);
 				
 		        int currentActive = gs.getActiveLocalNodeIndex();
 		        if(currentActive == selected){
@@ -124,8 +128,8 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 		        	//System.out.println(">>>deleted node less than active node");
 		        	gs.setActiveLocalNodeIndex(currentActive-1);
 		        }
-		        
-		        mAdapter.notifyDataSetChanged();
+
+                mListFragment.notifyDataSetChanged();
 		        gs.savePreferences();
 		        redrawNodeManagementActionBar();
 	        }
@@ -137,12 +141,6 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 		     });
 		
 	}
-
-	@Override 
-    public void onListItemClick(ListView l, View v, int position, long id) {
-		redrawNodeManagementActionBar();
-		
-    }
 	
 	public void doPositiveClick(LocalNode n, boolean edit) {
 		if(edit){
@@ -150,12 +148,12 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 			if(selected == AdapterView.INVALID_POSITION){
 				return;
 			}
-		    
-		    values.set(selected, n);
+
+            mListFragment.getValues().set(selected, n);
 		}else{
-		    values.add(n);
+            mListFragment.getValues().add(n);
 		}
-		mAdapter.notifyDataSetChanged();
+        mListFragment.notifyDataSetChanged();
         gs.savePreferences();
 	}
 
@@ -180,33 +178,7 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 		}
 	}
 	
-	private class NodeManagerArrayAdapter extends ArrayAdapter<String> {
-		private final Context context;
-		private CopyOnWriteArrayList<LocalNode> values;
 
-		public NodeManagerArrayAdapter(Context context, CopyOnWriteArrayList<LocalNode> values) {
-			super(context, R.layout.peer);
-			this.context = context;
-			this.values = values;
-		}
-		
-		public int getCount (){
-			return values.size();
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(R.layout.peer, parent, false);
-			TextView peerName = (TextView) rowView.findViewById(R.id.peer_name);
-			TextView peerAddress = (TextView) rowView.findViewById(R.id.peer_address);
-			peerName.setText(values.get(position).getName());
-			peerAddress.setText(values.get(position).getAddress()+":"+values.get(position).getPort());
-
-			return rowView;
-		}
-	}
 
 
 }

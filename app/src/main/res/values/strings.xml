@@ -71,4 +71,5 @@
     <string name="priority_3">Medium</string>
     <string name="priority_4">Low</string>
     <string name="priority_5">Very Low</string>
+    <string name="no_nodes">No Nodes Configured</string>
 </resources>

@@ -1,7 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <include
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar" />
 
     <include
         android:layout_width="match_parent"
@@ -10,17 +17,12 @@
         android:paddingBottom="5dp"
         android:paddingTop="5dp" />
 
-    <ListView
-        android:id="@android:id/list"
+
+    <fragment
+        android:id="@+id/listFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="vertical"
-        android:drawSelectorOnTop="false"
-		android:listSelector="@android:color/darker_gray" >
-
-    
-	</ListView>
-
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        class="ca.louisbourque.freenetassistant.MyListFragment" />
 
 </LinearLayout>
