@@ -4,12 +4,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/my_toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="@color/primary"
-        style="@style/Widget.AppCompat.Toolbar.p1" />
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar" />
 
     <ca.louisbourque.freenetassistant.SlidingTabLayout
         android:background="@color/background_material_light"

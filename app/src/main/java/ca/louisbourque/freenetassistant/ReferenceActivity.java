@@ -15,20 +15,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.ActionProvider;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
-public class ReferenceActivity extends Activity {
+public class ReferenceActivity extends ActionBarActivity {
 	
 	private GlobalState gs;
 	private NodeData myNode;
 	private String refStr;
 	private String EncodedStr;
 	private String randomStr;
+    private ShareActionProvider actionProvider;
 
 	@SuppressLint("TrulyRandom")
 	@Override
@@ -37,6 +42,11 @@ public class ReferenceActivity extends Activity {
 		setContentView(R.layout.activity_reference);
 		this.gs = (GlobalState) getApplication();
 		this.myNode = this.gs.getNodeData();
+
+        // Set up the action bar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        // setHasOptionsMenu(true);
+        setSupportActionBar(toolbar);
 		
 		//final ActionBar actionBar = getActionBar();
 		SecureRandom random = new SecureRandom();
@@ -105,11 +115,11 @@ public class ReferenceActivity extends Activity {
 		// Get the menu item.
 	    MenuItem menuItem = menu.findItem(R.id.action_share);
 	    // Get the provider and hold onto it to set/change the share intent.
-	    ShareActionProvider mShareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
+        actionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(menuItem);
 
 	    // Attach an intent to this ShareActionProvider.  You can update this at any time,
 	    // like when the user selects a new piece of data they might like to share.
-	    mShareActionProvider.setShareIntent(shareReference());
+        actionProvider.setShareIntent(shareReference());
 		
 		
 		return super.onCreateOptionsMenu(menu);
