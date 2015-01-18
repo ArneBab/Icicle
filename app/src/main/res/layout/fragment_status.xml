@@ -21,13 +21,13 @@
     <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/basic_node_status"
+        layout="@layout/fragment_basic_node_status"
         android:visibility="gone" />
 
     <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/advanced_node_status"
+        layout="@layout/fragment_advanced_node_status"
         android:visibility="gone" />
     
 </RelativeLayout>

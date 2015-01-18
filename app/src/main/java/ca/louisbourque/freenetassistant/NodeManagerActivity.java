@@ -34,7 +34,7 @@ public class NodeManagerActivity extends ListActivity implements NodeManagerDial
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.node_management_layout);
+		setContentView(R.layout.activity_node_management);
 		this.gs = (GlobalState) getApplication();
 
 		values = this.gs.getLocalNodeList();

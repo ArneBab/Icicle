@@ -19,7 +19,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageButton;
@@ -83,7 +82,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pager);
+		setContentView(R.layout.activity_main);
 		this.gs = (GlobalState) getApplication();
 
 		// Create the adapter that will return a fragment for each of the three primary sections
@@ -408,7 +407,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			mView = inflater.inflate(R.layout.activity_peers, container, false);
+			mView = inflater.inflate(R.layout.fragment_peers, container, false);
 
 			return mView;
 		}
@@ -475,7 +474,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			mView = inflater.inflate(R.layout.activity_uploads, container, false);
+			mView = inflater.inflate(R.layout.fragment_uploads, container, false);
 
 			return mView;
 		}
@@ -701,7 +700,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			mView = inflater.inflate(R.layout.activity_downloads, container, false);
+			mView = inflater.inflate(R.layout.fragment_downloads, container, false);
 			return mView;
 		}
 
@@ -837,7 +836,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			mView = inflater.inflate(R.layout.activity_status, container, false);
+			mView = inflater.inflate(R.layout.fragment_status, container, false);
 
 			return mView;
 		}
