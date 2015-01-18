@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+	<ImageView
+        android:id="@+id/peer_icon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="6dp"
+        android:contentDescription="@string/icon"
+        android:src="@drawable/round_button_green" />
+
+	<RelativeLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/list_selection_background"
+		    android:padding="3dp" >
+
+    	<TextView
+	        android:id="@+id/peer_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:text=""
+	        android:textStyle="bold" />
+	
+	    <TextView
+	        android:id="@+id/peer_address"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/peer_name"
+	        android:text="" />
+
+	</RelativeLayout>
+</LinearLayout>

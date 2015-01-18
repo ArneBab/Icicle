@@ -1,0 +1,903 @@
+package ca.louisbourque.freenetassistant;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.NumberFormat;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import ca.louisbourque.freenetassistant.GlobalState.StateListener;
+import net.pterodactylus.fcp.DataFound;
+import net.pterodactylus.fcp.GetFailed;
+import net.pterodactylus.fcp.Peer;
+import net.pterodactylus.fcp.PersistentGet;
+import net.pterodactylus.fcp.PersistentPut;
+import net.pterodactylus.fcp.PersistentPutDir;
+import net.pterodactylus.fcp.PutFailed;
+import net.pterodactylus.fcp.SimpleProgress;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Typeface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
+	/**
+	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
+	 * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
+	 * derivative, which will keep every loaded fragment in memory. If this becomes too memory
+	 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+	 */
+	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
+
+	/**
+	 * The {@link ViewPager} that will display the three primary sections of the app, one at a
+	 * time.
+	 */
+	ViewPager mViewPager;
+	public GlobalState gs;
+	private MainViewBroadcastReceiver mReceiver;
+
+	public synchronized void updateStatusView(){
+		this.gs.redrawStatus();
+	}
+
+	public synchronized void updateDownloadsView(){
+		this.gs.redrawDownloads();
+	}
+
+
+	public synchronized void updateUploadsView(){
+		this.gs.redrawUploads();
+	}
+
+
+	public synchronized void updatePeersView(){
+		this.gs.redrawPeerList();
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_pager);
+		this.gs = (GlobalState) getApplication();
+
+		// Create the adapter that will return a fragment for each of the three primary sections
+		// of the app.
+		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(),this);
+
+		// Set up the action bar.
+		final ActionBar actionBar = getActionBar();
+		// setHasOptionsMenu(true);
+
+		// Specify that the Home/Up button should not be enabled, since there is no hierarchical
+		// parent.
+		//actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(false);
+
+		// Specify that we will be displaying tabs in the action bar.
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+
+		// Set up the ViewPager, attaching the adapter and setting up a listener for when the
+		// user swipes between sections.
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mAppSectionsPagerAdapter);
+		mViewPager.setOffscreenPageLimit(Constants.numberOfTabs);
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				// When swiping between different app sections, select the corresponding tab.
+				// We can also use ActionBar.Tab#select() to do this if we have a reference to the
+				// Tab.
+				actionBar.setSelectedNavigationItem(position);
+				select_tab(actionBar,position);
+			}
+		});
+
+		// For each of the sections in the app, add a tab to the action bar.
+		for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
+			// Create a tab with text corresponding to the page title defined by the adapter.
+			// Also specify this Activity object, which implements the TabListener interface, as the
+			// listener for when this tab is selected.
+			actionBar.addTab(
+					actionBar.newTab()
+					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
+					//.setIcon(mAppSectionsPagerAdapter.getPageIcon(i))
+					.setTabListener(this));
+		}
+	}
+
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+		if(isFinishing()){
+			this.gs.stopFCPService(false);
+		}
+	}
+
+
+	@Override
+	protected void onPause() {
+		this.gs.setMainActivityVisible(false);
+		unregisterReceiver(mReceiver);
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		this.gs.setMainActivityVisible(true);
+		IntentFilter iFilter = new IntentFilter(Constants.BROADCAST_UPDATE_STATUS);
+		iFilter.addAction(Constants.BROADCAST_UPDATE_UPLOADS);
+		iFilter.addAction(Constants.BROADCAST_UPDATE_DOWNLOADS);
+		iFilter.addAction(Constants.BROADCAST_UPDATE_PEERS);
+		this.mReceiver = new MainViewBroadcastReceiver(this);
+		registerReceiver(this.mReceiver, iFilter);
+		this.gs.startFCPService();
+		//updateStatusView();
+		//updateDownloadsView();
+		//updateUploadsView();
+		//updatePeersView();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			handleSettings();
+			return true;
+		case R.id.action_upload:
+			handleFileUpload();
+			return true;
+		case R.id.action_social:
+			handleSocial();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void handleSettings() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivityForResult(intent,Constants.Activity_Settings);
+	}
+
+	private void handleFileUpload() {
+		Intent intent = new Intent(this, UploadActivity.class);
+		startActivityForResult(intent,Constants.Activity_File_Upload);
+	}
+
+	private void handleSocial() {
+		Intent intent = new Intent(this, ReferenceActivity.class);
+		startActivityForResult(intent,Constants.Activity_Reference);
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		System.out.println("Handling onActivityResult...");
+		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){
+			ActionBar actionBar = getActionBar();
+			actionBar.setSelectedNavigationItem(Constants.PagerPositionUploads);
+		}
+		if(requestCode == Constants.Activity_Settings && resultCode == Activity.RESULT_OK){
+			this.gs.sendRedrawAll();
+		}
+		if(requestCode == Constants.Activity_Reference && resultCode == Activity.RESULT_OK){
+			ActionBar actionBar = getActionBar();
+			actionBar.setSelectedNavigationItem(Constants.PagerPositionPeers);
+		}
+	}
+
+	@Override
+	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	}
+
+	@Override
+	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+		// When the given tab is selected, switch to the corresponding page in the ViewPager.
+		mViewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	}
+
+	/**
+	 * A documented and yet to be fixed bug exists in Android whereby
+	 * if you attempt to set the selected tab of an action bar when the
+	 * bar's tabs have been collapsed into a Spinner due to screen
+	 * real-estate, the spinner item representing the tab may not get
+	 * selected. This bug fix uses reflection to drill into the ActionBar
+	 * and manually select the correct Spinner item 
+	 */
+	private void select_tab(ActionBar b, int pos) {
+	    try {
+	        //do the normal tab selection in case all tabs are visible
+	        b.setSelectedNavigationItem(pos);
+
+	        //now use reflection to select the correct Spinner if
+	        // the bar's tabs have been reduced to a Spinner
+
+	        View action_bar_view = findViewById(getResources().getIdentifier("action_bar", "id", "android"));
+	        Class<?> action_bar_class = action_bar_view.getClass();
+	        Field tab_scroll_view_prop = action_bar_class.getDeclaredField("mTabScrollView");
+	        tab_scroll_view_prop.setAccessible(true);
+	        //get the value of mTabScrollView in our action bar
+	        Object tab_scroll_view = tab_scroll_view_prop.get(action_bar_view);
+	        if (tab_scroll_view == null) return;
+	        Field spinner_prop = tab_scroll_view.getClass().getDeclaredField("mTabSpinner");
+	        spinner_prop.setAccessible(true);
+	        //get the value of mTabSpinner in our scroll view
+	        Object tab_spinner = spinner_prop.get(tab_scroll_view);
+	        if (tab_spinner == null) return;
+	        Method set_selection_method = tab_spinner.getClass().getSuperclass().getDeclaredMethod("setSelection", Integer.TYPE, Boolean.TYPE);
+	        set_selection_method.invoke(tab_spinner, pos, true);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	
+	public void changeTranferPriority(View view){
+		TextView transferName = (TextView)((View) view.getParent()).findViewById(R.id.transfer_name);
+		//TODO: Create a dialog to choose the new priority.
+		
+	}
+	
+	/**
+	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
+	 * sections of the app.
+	 */
+	public static class AppSectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+		private Context context;
+
+		public AppSectionsPagerAdapter(FragmentManager fm, Context context) {
+			super(fm);
+			this.context = context;
+		}
+
+		@Override
+		public Fragment getItem(int i) {
+			System.out.println("getItem - "+i);
+			switch (i) {
+			case 0:
+				return new StatusSectionFragment();
+			case 1:
+				return new DownloadsSectionFragment();
+			case 2:
+				return new UploadsSectionFragment();
+			case 3:
+				return new PeersSectionFragment();
+			default:
+				return new StatusSectionFragment();
+			}
+		}
+
+		@Override
+		public Fragment instantiateItem(ViewGroup v, int i){
+			System.out.println("instantiateItem - "+i);
+			Fragment aFragment = (Fragment) super.instantiateItem(v,i);
+			GlobalState gs = ((MainActivity)context).gs;
+			switch (i) {
+			case 0:
+				gs.setStatusStateListener((StateListener) aFragment);
+				gs.sendRedrawStatus();
+				break;
+			case 1:
+				gs.setDownloadStateListener((StateListener) aFragment);
+				gs.sendRedrawDownloads();
+				break;
+			case 2:
+				gs.setUploadStateListener((StateListener) aFragment);
+				gs.sendRedrawUploads();
+				break;
+			case 3:
+				gs.setPeersStateListener((StateListener) aFragment);
+				gs.sendRedrawPeersList();
+				break;
+			default:
+
+			}
+			return aFragment;
+		}
+
+		public void destroyItem(ViewGroup container, int position, Object object){
+			GlobalState gs = ((MainActivity)context).gs;
+			switch (position) {
+			case 0:
+				gs.setStatusStateListener(null);
+				break;
+			case 1:
+				gs.setDownloadStateListener(null);
+				break;
+			case 2:
+				gs.setUploadStateListener(null);
+				break;
+			case 3:
+				gs.setPeersStateListener(null);
+				break;
+			default:
+
+			}
+			super.destroyItem(container, position, object);
+		}
+
+		@Override
+		public int getCount() {
+			return Constants.numberOfTabs;
+		}
+
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+				return context.getString(R.string.status);
+			case 1:
+				return context.getString(R.string.downloads);
+			case 2:
+				return context.getString(R.string.uploads);
+			case 3:
+				return context.getString(R.string.peers);
+			default:
+				return "";
+			}
+		}
+		
+		public int getPageIcon(int position) {
+			switch (position) {
+			case 0:
+				return R.drawable.ic_action_about;
+			case 1:
+				return R.drawable.ic_action_download;
+			case 2:
+				return R.drawable.ic_action_upload;
+			case 3:
+				return R.drawable.ic_action_group;
+			default:
+				return R.drawable.ic_action_about;
+			}
+		}
+	}
+
+
+
+
+
+
+
+	public static class PeersSectionFragment extends Fragment implements GlobalState.StateListener {
+
+		private View mView;
+
+		public static PeersSectionFragment newInstance() {
+			// Seems pointless, I know, but this static method
+			// Might later be used to pass in arguments via a Bundle
+			return new PeersSectionFragment();
+		}
+
+		public PeersSectionFragment() {
+			// Default, no argument constructor
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			mView = inflater.inflate(R.layout.activity_peers, container, false);
+
+			return mView;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public synchronized void onStateChanged(Bundle data) {
+			System.out.println("onStateChanged: Peers");
+			//TODO
+			//if(gs.getNodeData() == null)
+			//  we don't have full access, display an notice
+			LinearLayout peerListView = (LinearLayout)mView.findViewById(R.id.peer_list_view);
+			peerListView.removeAllViews();
+			if(!data.getBoolean(Constants.IS_CONNECTED)){
+				TextView tv=new TextView(getActivity().getApplicationContext());
+				tv.setText(getResources().getText(R.string.connecting));
+				LinearLayout.LayoutParams params = 
+						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.MATCH_PARENT);
+				tv.setLayoutParams(params);
+				tv.setTextColor(getResources().getColor(R.color.black));
+				peerListView.addView(tv);
+				return;
+			}
+			for (Peer p : (CopyOnWriteArrayList<Peer>)data.getSerializable(Constants.PEERS)) {
+				LinearLayout peerView = (LinearLayout) getLayoutInflater(new Bundle()).inflate(R.layout.peer, peerListView, false);
+				TextView peerName = (TextView) peerView.findViewById(R.id.peer_name);
+				ImageView peerIcon = (ImageView)peerView.findViewById(R.id.peer_icon);
+				if(p.getMyName() != null){
+					peerName.setText(p.getMyName());
+				}else if(p.isOpennet()){
+					peerName.setText(mView.getContext().getString(R.string.unnamed_opennet_peer));
+				}else{
+					peerName.setText(mView.getContext().getString(R.string.unnamed_peer));
+				}
+				if(p.getVolatile("status").equals(Constants.FNconnected)){
+					peerIcon.setColorFilter(getResources().getColor(R.color.green_500));
+				}else if(p.getVolatile("status").equals(Constants.FNbackedoff)){
+					peerIcon.setColorFilter(getResources().getColor(R.color.orange_500));
+				}else{
+					peerIcon.setColorFilter(getResources().getColor(R.color.grey_500));
+				}
+				((TextView) peerView.findViewById(R.id.peer_address)).setText(p.getPhysicalUDP());
+				peerListView.addView(peerView);
+			}
+		}
+
+	}
+
+	public static class UploadsSectionFragment extends Fragment implements GlobalState.StateListener {
+
+		private View mView;
+
+		public static UploadsSectionFragment newInstance() {
+			// Seems pointless, I know, but this static method
+			// Might later be used to pass in arguments via a Bundle
+			return new UploadsSectionFragment();
+		}
+
+		public UploadsSectionFragment() {
+			// Default, no argument constructor
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			mView = inflater.inflate(R.layout.activity_uploads, container, false);
+
+			return mView;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public synchronized void onStateChanged(Bundle data) {
+			System.out.println("onStateChanged: Uploads");
+			LinearLayout uploadListView = (LinearLayout)mView.findViewById(R.id.uploads_list_view);
+			uploadListView.removeAllViews();
+			if(!data.getBoolean(Constants.IS_CONNECTED)){
+				TextView tv=new TextView(getActivity().getApplicationContext());
+				tv.setText(getResources().getText(R.string.connecting));
+				LinearLayout.LayoutParams params = 
+						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.MATCH_PARENT);
+				tv.setLayoutParams(params);
+				tv.setTextColor(getResources().getColor(R.color.black));
+				uploadListView.addView(tv);
+				return;
+			}
+			//Directories
+			for (UploadDir u : (CopyOnWriteArrayList<UploadDir>)data.getSerializable(Constants.UPLOAD_DIRS)) {
+				PersistentPutDir p = u.getPersistentPutDir();
+				LinearLayout transferView = (LinearLayout) getLayoutInflater(new Bundle()).inflate(R.layout.transfer, uploadListView, false);
+				TextView transferName = (TextView) transferView.findViewById(R.id.transfer_name);
+				ImageButton playButton = (ImageButton) transferView.findViewById(R.id.play_button);
+				ImageButton pauseButton = (ImageButton) transferView.findViewById(R.id.pause_button);
+				TextView statusLabel = (TextView) transferView.findViewById(R.id.transfer_status_label);
+				TextView statusText = (TextView) transferView.findViewById(R.id.transfer_percentage);
+				TextView priorityLabel = (TextView) transferView.findViewById(R.id.transfer_priority_label);
+				TextView priorityText = (TextView) transferView.findViewById(R.id.transfer_priority);
+				ImageView transferDone = (ImageView) transferView.findViewById(R.id.transfer_done);
+				transferName.setText(p.getIdentifier());
+				transferName.setHint(p.getIdentifier());
+				if(u.getPriority() == 6){
+					pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.VISIBLE);
+					priorityLabel.setVisibility(View.GONE);
+					priorityText.setVisibility(View.GONE);
+					statusLabel.setText(getResources().getText(R.string.status_paused));
+				}else{
+					pauseButton.setVisibility(View.VISIBLE);
+					playButton.setVisibility(View.GONE);
+					priorityLabel.setVisibility(View.VISIBLE);
+					priorityText.setVisibility(View.VISIBLE);
+					switch(u.getPriority()){
+						case 0:
+							priorityText.setText(getResources().getText(R.string.priority_0));
+							break;
+						case 1:
+							priorityText.setText(getResources().getText(R.string.priority_1));
+							break;
+						case 2:
+							priorityText.setText(getResources().getText(R.string.priority_2));
+							break;
+						case 3:
+							priorityText.setText(getResources().getText(R.string.priority_3));
+							break;
+						case 4:
+							priorityText.setText(getResources().getText(R.string.priority_4));
+							break;
+						case 5:
+							priorityText.setText(getResources().getText(R.string.priority_5));
+							break;
+						default:
+					}
+					statusLabel.setText(getResources().getText(R.string.status_uploading));
+				}
+				long dataLength = u.getDataLength();
+				
+				if(dataLength != 0){
+					((TextView) transferView.findViewById(R.id.transfer_size)).setText(Constants.humanReadableByteCount(dataLength,false));
+				}
+				ProgressBar bar = (ProgressBar) transferView.findViewById(R.id.transfer_progress);
+				SimpleProgress sp = u.getProgress();
+				PutFailed pf = u.getPutFailed();
+				
+				if(u.getPutSuccessful() != null){
+        			bar.setMax(1);
+        			bar.setProgress(1);
+        			bar.setVisibility(View.GONE);
+        			pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+					transferDone.setVisibility(View.VISIBLE);
+					statusLabel.setText(getResources().getText(R.string.status_done));
+					statusText.setText(" - 100%"); 
+        		}else if(pf != null){
+        			bar.setVisibility(View.GONE);
+        			pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+        			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+        			statusLabel.setText(getResources().getText(R.string.status_failed));
+        			statusText.setText(" - "+pf.getCodeDescription());
+        		}else if(sp != null){
+					bar.setMax(sp.getRequired());
+					bar.setProgress(sp.getSucceeded());
+					NumberFormat numberFormat = NumberFormat.getNumberInstance();
+					numberFormat.setMaximumFractionDigits(1);
+					if(sp.isFinalizedTotal()){
+						statusText.setTypeface(null, Typeface.NORMAL);
+						statusText.setText(
+								" - "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}else{
+						statusText.setTypeface(null, Typeface.ITALIC);
+						statusText.setText(" - (" + getResources().getText(R.string.estimated) + "): "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}
+				}
+	    		uploadListView.addView(transferView);
+			}
+
+			//Files
+			for (Upload u : (CopyOnWriteArrayList<Upload>)data.getSerializable(Constants.UPLOADS)) {
+				PersistentPut p = u.getPersistentPut();
+				LinearLayout transferView = (LinearLayout) getLayoutInflater(new Bundle()).inflate(R.layout.transfer, uploadListView, false);
+				TextView transferName = (TextView) transferView.findViewById(R.id.transfer_name);
+				ImageButton playButton = (ImageButton) transferView.findViewById(R.id.play_button);
+				ImageButton pauseButton = (ImageButton) transferView.findViewById(R.id.pause_button);
+				TextView statusLabel = (TextView) transferView.findViewById(R.id.transfer_status_label);
+				TextView statusText = (TextView) transferView.findViewById(R.id.transfer_percentage);
+				TextView priorityLabel = (TextView) transferView.findViewById(R.id.transfer_priority_label);
+				TextView priorityText = (TextView) transferView.findViewById(R.id.transfer_priority);
+				ImageView transferDone = (ImageView) transferView.findViewById(R.id.transfer_done);
+				if(p.getTargetFilename() == null){
+					transferName.setText(p.getIdentifier());
+				}else{
+					transferName.setText(p.getTargetFilename());
+				}
+				transferName.setHint(p.getIdentifier());
+				if(u.getPriority() == 6){
+					pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.VISIBLE);
+					priorityLabel.setVisibility(View.GONE);
+					priorityText.setVisibility(View.GONE);
+					statusLabel.setText(getResources().getText(R.string.status_paused));
+				}else{
+					pauseButton.setVisibility(View.VISIBLE);
+					playButton.setVisibility(View.GONE);
+					priorityLabel.setVisibility(View.VISIBLE);
+					priorityText.setVisibility(View.VISIBLE);
+					switch(u.getPriority()){
+						case 0:
+							priorityText.setText(getResources().getText(R.string.priority_0));
+							break;
+						case 1:
+							priorityText.setText(getResources().getText(R.string.priority_1));
+							break;
+						case 2:
+							priorityText.setText(getResources().getText(R.string.priority_2));
+							break;
+						case 3:
+							priorityText.setText(getResources().getText(R.string.priority_3));
+							break;
+						case 4:
+							priorityText.setText(getResources().getText(R.string.priority_4));
+							break;
+						case 5:
+							priorityText.setText(getResources().getText(R.string.priority_5));
+							break;
+						default:
+					}
+					statusLabel.setText(getResources().getText(R.string.status_uploading));
+				}
+				long dataLength = p.getDataLength();
+				if(dataLength != 0){
+					((TextView) transferView.findViewById(R.id.transfer_size)).setText(Constants.humanReadableByteCount(dataLength,false));
+				}
+				ProgressBar bar = (ProgressBar) transferView.findViewById(R.id.transfer_progress);
+				SimpleProgress sp = u.getProgress();
+				PutFailed pf = u.getPutFailed();
+				
+				if(u.getPutSuccessful() != null){
+        			bar.setMax(1);
+        			bar.setProgress(1);
+        			bar.setVisibility(View.GONE);
+        			pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+					transferDone.setVisibility(View.VISIBLE);
+					statusLabel.setText(getResources().getText(R.string.status_done));
+					statusText.setText(" - 100%"); 
+        		}else if(pf != null){
+        			bar.setVisibility(View.GONE);
+        			pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+        			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+        			statusLabel.setText(getResources().getText(R.string.status_failed));
+        			statusText.setText(" - "+pf.getCodeDescription());
+        		}else if(sp != null){
+					bar.setMax(sp.getRequired());
+					bar.setProgress(sp.getSucceeded());
+					NumberFormat numberFormat = NumberFormat.getNumberInstance();
+					numberFormat.setMaximumFractionDigits(1);
+					if(sp.isFinalizedTotal()){
+						statusText.setTypeface(null, Typeface.NORMAL);
+						statusText.setText(
+								" - "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}else{
+						statusText.setTypeface(null, Typeface.ITALIC);
+						statusText.setText(" - (" + getResources().getText(R.string.estimated) + "): "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}
+				}
+        		
+        		uploadListView.addView(transferView);
+			}
+		}
+
+	}
+
+	public static class DownloadsSectionFragment extends Fragment implements GlobalState.StateListener {
+
+		private View mView;
+
+		public static DownloadsSectionFragment newInstance() {
+			// Seems pointless, I know, but this static method
+			// Might later be used to pass in arguments via a Bundle
+			return new DownloadsSectionFragment();
+		}
+
+		public DownloadsSectionFragment() {
+			// Default, no argument constructor
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			mView = inflater.inflate(R.layout.activity_downloads, container, false);
+			return mView;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public synchronized void onStateChanged(Bundle data) {
+			System.out.println("onStateChanged: Downloads");
+			LinearLayout downloadListView = (LinearLayout)mView.findViewById(R.id.downloads_list_view);
+			downloadListView.removeAllViews();
+			if(!data.getBoolean(Constants.IS_CONNECTED)){
+				TextView tv=new TextView(getActivity().getApplicationContext());
+				tv.setText(getResources().getText(R.string.connecting));
+				LinearLayout.LayoutParams params = 
+						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.MATCH_PARENT);
+				tv.setLayoutParams(params);
+				tv.setTextColor(getResources().getColor(R.color.black));
+				downloadListView.addView(tv);
+				return;
+			}
+			for (Download d : (CopyOnWriteArrayList<Download>)data.getSerializable(Constants.DOWNLOADS)) {
+				PersistentGet p = d.getPersistentGet();
+				LinearLayout transferView = (LinearLayout) getLayoutInflater(new Bundle()).inflate(R.layout.transfer, downloadListView, false);
+				
+				TextView transferName = (TextView) transferView.findViewById(R.id.transfer_name);
+				ImageButton playButton = (ImageButton) transferView.findViewById(R.id.play_button);
+				ImageButton pauseButton = (ImageButton) transferView.findViewById(R.id.pause_button);
+				TextView statusLabel = (TextView) transferView.findViewById(R.id.transfer_status_label);
+				TextView statusText = (TextView) transferView.findViewById(R.id.transfer_percentage);
+				TextView priorityLabel = (TextView) transferView.findViewById(R.id.transfer_priority_label);
+				TextView priorityText = (TextView) transferView.findViewById(R.id.transfer_priority);
+				ImageView transferDone = (ImageView) transferView.findViewById(R.id.transfer_done);
+				
+				transferName.setText(p.getIdentifier());
+				transferName.setHint(p.getIdentifier());
+				if(d.getPriority() == 6){
+					pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.VISIBLE);
+					priorityLabel.setVisibility(View.GONE);
+					priorityText.setVisibility(View.GONE);
+					statusLabel.setText(getResources().getText(R.string.status_paused));
+				}else{
+					pauseButton.setVisibility(View.VISIBLE);
+					playButton.setVisibility(View.GONE);
+					priorityLabel.setVisibility(View.VISIBLE);
+					priorityText.setVisibility(View.VISIBLE);
+					switch(d.getPriority()){
+						case 0:
+							priorityText.setText(getResources().getText(R.string.priority_0));
+							break;
+						case 1:
+							priorityText.setText(getResources().getText(R.string.priority_1));
+							break;
+						case 2:
+							priorityText.setText(getResources().getText(R.string.priority_2));
+							break;
+						case 3:
+							priorityText.setText(getResources().getText(R.string.priority_3));
+							break;
+						case 4:
+							priorityText.setText(getResources().getText(R.string.priority_4));
+							break;
+						case 5:
+							priorityText.setText(getResources().getText(R.string.priority_5));
+							break;
+						default:
+					}
+					statusLabel.setText(getResources().getText(R.string.status_downloading));
+				}
+
+				long dataLength = d.getDataLength();
+				if(dataLength != 0){
+					((TextView) transferView.findViewById(R.id.transfer_size)).setText(Constants.humanReadableByteCount(dataLength,false));
+				}
+				ProgressBar bar = (ProgressBar) transferView.findViewById(R.id.transfer_progress);
+				SimpleProgress sp = d.getProgress();
+				DataFound df = d.getDataFound();
+				GetFailed gf = d.getGetFailed();
+				
+				if(df != null){
+					bar.setMax(1);
+					bar.setProgress(1);
+					bar.setVisibility(View.GONE);
+					pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+					transferDone.setVisibility(View.VISIBLE);
+					statusLabel.setText(getResources().getText(R.string.status_done));
+					statusText.setText(" - 100%"); 
+				}else if(gf != null){
+					bar.setVisibility(View.GONE);
+					pauseButton.setVisibility(View.GONE);
+					playButton.setVisibility(View.GONE);
+					((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+					statusLabel.setText(getResources().getText(R.string.status_failed));
+					statusText.setText(" - "+gf.getCodeDescription());
+				}else if(sp != null){
+					bar.setMax(sp.getRequired());
+					bar.setProgress(sp.getSucceeded());
+					NumberFormat numberFormat = NumberFormat.getNumberInstance();
+					numberFormat.setMaximumFractionDigits(1);
+					if(sp.isFinalizedTotal()){
+						statusText.setTypeface(null, Typeface.NORMAL);
+						statusText.setText(
+								" - "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}else{
+						statusText.setTypeface(null, Typeface.ITALIC);
+						statusText.setText(" - (" + getResources().getText(R.string.estimated) + "): "+numberFormat.format(((float)sp.getSucceeded()/(float)sp.getRequired())*100)+"%");
+					}
+					
+				}
+				
+				
+				downloadListView.addView(transferView);
+			}
+		}
+
+	}
+
+	public static class StatusSectionFragment extends Fragment implements GlobalState.StateListener {
+
+		private View mView;
+
+		public static StatusSectionFragment newInstance() {
+			// Seems pointless, I know, but this static method
+			// Might later be used to pass in arguments via a Bundle
+			return new StatusSectionFragment();
+		}
+
+		public StatusSectionFragment() {
+			// Default, no argument constructor
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			mView = inflater.inflate(R.layout.activity_status, container, false);
+
+			return mView;
+		}
+
+		@Override
+		public synchronized void onStateChanged(Bundle data) {
+			System.out.println("onStateChanged: Status");
+
+			((TextView) mView.findViewById(R.id.status)).setVisibility(View.GONE);
+
+			if(!data.getBoolean(Constants.IS_CONNECTED)){
+				TextView tv = (TextView) mView.findViewById(R.id.status);
+				tv.setVisibility(View.VISIBLE);
+				tv.setText(getResources().getText(R.string.connecting));
+				RelativeLayout.LayoutParams params = 
+						new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+								RelativeLayout.LayoutParams.MATCH_PARENT);
+				tv.setLayoutParams(params);
+				tv.setTextColor(getResources().getColor(R.color.black));
+				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
+				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
+				return;
+			}
+
+			NodeStatus aNodeStatus = (NodeStatus)data.getSerializable(Constants.STATUS);
+			if(aNodeStatus == null){
+				return;
+			}
+
+			if(aNodeStatus.isAdvanced()){
+				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
+				mView.findViewById(R.id.advanced_node_status).setVisibility(View.VISIBLE);
+				((TextView)  mView.findViewById(R.id.status_version_value)).setText(aNodeStatus.getVersion());
+				((TextView)  mView.findViewById(R.id.status_input_value)).setText(String.format("%.2f",aNodeStatus.getRecentInputRate())+" KB/s");
+				((TextView)  mView.findViewById(R.id.status_output_value)).setText(String.format("%.2f",aNodeStatus.getRecentOutputRate())+" KB/s");
+				double uptimeSeconds = aNodeStatus.getUptimeSeconds();
+				double uptimeMinutes = uptimeSeconds/60;
+				double uptimeHours = uptimeMinutes/60;
+				double uptimeDays = uptimeHours/24;
+				if(uptimeDays>1){
+					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeDays)+" Days");
+				}else if(uptimeHours > 1){
+					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeHours)+" Hours");
+				}else if(uptimeMinutes > 1){
+					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeMinutes)+" Minutes");
+				}else{
+					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeSeconds)+" Seconds");
+				}
+			}else{
+				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
+				mView.findViewById(R.id.basic_node_status).setVisibility(View.VISIBLE);
+				((TextView)  mView.findViewById(R.id.basic_status_version_value)).setText(aNodeStatus.getVersion());
+			}
+		}
+
+	}
+
+}

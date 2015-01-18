@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_background"
+    android:columnCount="1"
+    android:orientation="vertical" >
+
+    <RadioGroup
+        android:id="@+id/radio_buttons_key_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radio_button_CHK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="updateKeyType"
+            android:text="@string/CHK" />
+
+        <RadioButton
+            android:id="@+id/radio_button_SSK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="updateKeyType"
+            android:text="@string/SSK_generating" />
+    </RadioGroup>
+        
+
+
+    <TextView
+        android:id="@+id/file_upload_instructions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="@string/file_upload_instructions" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageButton
+            android:id="@+id/file_picker_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="21dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/round_button_green"
+            android:contentDescription="@string/select_file"
+            android:onClick="pickFile"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_action_collection" />
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/thumbnail"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/file_upload_icon_descr"
+        android:onClick="pickFile"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/remove_exif"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_action_about"
+            android:text="@string/remove_exif"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="86dp" >
+
+            <ImageButton
+                android:id="@+id/file_upload_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="21dp"
+                android:background="@drawable/round_button_green"
+                android:contentDescription="@string/action_upload"
+                android:enabled="false"
+                android:onClick="uploadFile"
+                android:src="@drawable/ic_action_upload_light"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

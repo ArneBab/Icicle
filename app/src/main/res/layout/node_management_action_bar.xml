@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/node_management_action_bar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="@string/node_add"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/node_add"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/node_add"
+        android:src="@drawable/ic_action_new"
+        android:paddingBottom="9dp"
+    	android:paddingTop="9dp"  />
+    
+    <ImageButton
+        android:id="@+id/node_accept"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/node_accept"
+        android:src="@drawable/ic_action_accept"
+        android:visibility="invisible"
+        android:paddingBottom="9dp"
+    	android:paddingTop="9dp"  />
+
+    <ImageButton
+        android:id="@+id/node_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/node_edit"
+        android:src="@drawable/ic_action_edit"
+        android:visibility="invisible"
+        android:paddingBottom="9dp"
+    	android:paddingTop="9dp" />
+
+    <ImageButton
+        android:id="@+id/node_share"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/node_share"
+        android:src="@drawable/ic_action_share"
+        android:visibility="invisible"
+        android:paddingBottom="9dp"
+    	android:paddingTop="9dp" />
+
+    <ImageButton
+        android:id="@+id/node_discard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/app_background"
+        android:contentDescription="@string/node_discard"
+        android:src="@drawable/ic_action_discard"
+        android:visibility="invisible"
+        android:paddingBottom="9dp"
+    	android:paddingTop="9dp" />
+
+</LinearLayout>
