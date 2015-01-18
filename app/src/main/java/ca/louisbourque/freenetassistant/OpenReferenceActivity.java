@@ -17,12 +17,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class OpenReferenceActivity extends Activity {
+public class OpenReferenceActivity extends ActionBarActivity {
 
 	public GlobalState gs;
 	private AddPeer aPeer;
@@ -35,6 +37,11 @@ public class OpenReferenceActivity extends Activity {
 	    setContentView(R.layout.activity_open_reference);
 		this.gs = (GlobalState) getApplication();
 		this.gs.startFCPService();
+
+        // Set up the action bar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        // setHasOptionsMenu(true);
+        setSupportActionBar(toolbar);
 		
 	    if (Intent.ACTION_VIEW.equals(action) && type != null) {
 	        //if ("text/plain".equals(type)) {

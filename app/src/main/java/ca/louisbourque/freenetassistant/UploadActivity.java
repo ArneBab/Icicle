@@ -21,12 +21,14 @@ import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
  
-public class UploadActivity extends Activity {
+public class UploadActivity extends ActionBarActivity {
  
 	private static final int SELECT_FILE = 0;
 	private ImageButton thumbnail;
@@ -38,6 +40,10 @@ public class UploadActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_upload);
+        // Set up the action bar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        // setHasOptionsMenu(true);
+        setSupportActionBar(toolbar);
         thumbnail = (ImageButton) findViewById(R.id.thumbnail);
         this.gs = (GlobalState) getApplication();
         this.fileUploadMessage = new FileUploadMessage();

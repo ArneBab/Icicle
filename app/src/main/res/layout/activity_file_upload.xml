@@ -6,6 +6,12 @@
     android:columnCount="1"
     android:orientation="vertical" >
 
+    s<include
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar" />
+
     <RadioGroup
         android:id="@+id/radio_buttons_key_type"
         android:layout_width="match_parent"
