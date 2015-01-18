@@ -17,8 +17,11 @@ import net.pterodactylus.fcp.SimpleProgress;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,7 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener{
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
 	 * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
@@ -57,8 +60,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	ViewPager mViewPager;
 	public GlobalState gs;
 	private MainViewBroadcastReceiver mReceiver;
+    private SlidingTabLayout mSlidingTabLayout;
 
-	public synchronized void updateStatusView(){
+    public synchronized void updateStatusView(){
 		this.gs.redrawStatus();
 	}
 
@@ -87,45 +91,29 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(),this);
 
 		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
 		// setHasOptionsMenu(true);
+        setSupportActionBar(toolbar);
 
-		// Specify that the Home/Up button should not be enabled, since there is no hierarchical
-		// parent.
-		//actionBar.setHomeButtonEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(false);
 
-		// Specify that we will be displaying tabs in the action bar.
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 
 		// Set up the ViewPager, attaching the adapter and setting up a listener for when the
 		// user swipes between sections.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mAppSectionsPagerAdapter);
-		mViewPager.setOffscreenPageLimit(Constants.numberOfTabs);
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				// When swiping between different app sections, select the corresponding tab.
-				// We can also use ActionBar.Tab#select() to do this if we have a reference to the
-				// Tab.
-				actionBar.setSelectedNavigationItem(position);
-				select_tab(actionBar,position);
-			}
-		});
 
-		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
-			// Create a tab with text corresponding to the page title defined by the adapter.
-			// Also specify this Activity object, which implements the TabListener interface, as the
-			// listener for when this tab is selected.
-			actionBar.addTab(
-					actionBar.newTab()
-					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
-					//.setIcon(mAppSectionsPagerAdapter.getPageIcon(i))
-					.setTabListener(this));
-		}
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
+
+        setSlidingTabLayoutContentDescriptions();
+
+        Resources res = getResources();
+        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.primary));
+        mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setViewPager(mViewPager);
+
+		mViewPager.setOffscreenPageLimit(Constants.numberOfTabs);
 	}
 
 	@Override
@@ -186,6 +174,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
+    private void setSlidingTabLayoutContentDescriptions() {
+        for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
+            mSlidingTabLayout.setContentDescription(i,
+                    mAppSectionsPagerAdapter.getPageTitle(i).toString());
+        }
+    }
 
 	private void handleSettings() {
 		Intent intent = new Intent(this, SettingsActivity.class);
@@ -267,14 +262,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 	
 	
-	public void changeTranferPriority(View view){
+	public void changeTransferPriority(View view){
 		TextView transferName = (TextView)((View) view.getParent()).findViewById(R.id.transfer_name);
 		//TODO: Create a dialog to choose the new priority.
 		
 	}
 	
 	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
+	 * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
 	 * sections of the app.
 	 */
 	public static class AppSectionsPagerAdapter extends FragmentStatePagerAdapter {
@@ -381,9 +376,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			case 1:
 				return R.drawable.ic_action_download;
 			case 2:
-				return R.drawable.ic_action_upload;
+				return R.drawable.ic_file_upload_black_36dp;
 			case 3:
-				return R.drawable.ic_action_group;
+				return R.drawable.ic_people_black_36dp;
 			default:
 				return R.drawable.ic_action_about;
 			}

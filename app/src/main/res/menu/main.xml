@@ -1,22 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_action_settings"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_settings_black_36dp"
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/action_upload"
         android:orderInCategory="20"
-        android:icon="@drawable/ic_action_upload"
-        android:showAsAction="always"
+        android:icon="@drawable/ic_file_upload_black_36dp"
+        app:showAsAction="always"
         android:title="@string/action_upload"/>
     <item
         android:id="@+id/action_social"
         android:orderInCategory="10"
-        android:icon="@drawable/ic_action_group"
-        android:showAsAction="always"
+        android:icon="@drawable/ic_people_black_36dp"
+        app:showAsAction="always"
         android:title="@string/title_activity_reference"/>
 
 </menu>
