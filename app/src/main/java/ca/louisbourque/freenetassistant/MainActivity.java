@@ -223,41 +223,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 	}
 
-	/**
-	 * A documented and yet to be fixed bug exists in Android whereby
-	 * if you attempt to set the selected tab of an action bar when the
-	 * bar's tabs have been collapsed into a Spinner due to screen
-	 * real-estate, the spinner item representing the tab may not get
-	 * selected. This bug fix uses reflection to drill into the ActionBar
-	 * and manually select the correct Spinner item 
-	 */
-	private void select_tab(ActionBar b, int pos) {
-	    try {
-	        //do the normal tab selection in case all tabs are visible
-	        b.setSelectedNavigationItem(pos);
-
-	        //now use reflection to select the correct Spinner if
-	        // the bar's tabs have been reduced to a Spinner
-
-	        View action_bar_view = findViewById(getResources().getIdentifier("action_bar", "id", "android"));
-	        Class<?> action_bar_class = action_bar_view.getClass();
-	        Field tab_scroll_view_prop = action_bar_class.getDeclaredField("mTabScrollView");
-	        tab_scroll_view_prop.setAccessible(true);
-	        //get the value of mTabScrollView in our action bar
-	        Object tab_scroll_view = tab_scroll_view_prop.get(action_bar_view);
-	        if (tab_scroll_view == null) return;
-	        Field spinner_prop = tab_scroll_view.getClass().getDeclaredField("mTabSpinner");
-	        spinner_prop.setAccessible(true);
-	        //get the value of mTabSpinner in our scroll view
-	        Object tab_spinner = spinner_prop.get(tab_scroll_view);
-	        if (tab_spinner == null) return;
-	        Method set_selection_method = tab_spinner.getClass().getSuperclass().getDeclaredMethod("setSelection", Integer.TYPE, Boolean.TYPE);
-	        set_selection_method.invoke(tab_spinner, pos, true);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
-	
 	
 	public void changeTransferPriority(View view){
 		TextView transferName = (TextView)((View) view.getParent()).findViewById(R.id.transfer_name);
