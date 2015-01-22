@@ -8,6 +8,7 @@ import java.net.ConnectException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Message;
 import net.pterodactylus.fcp.*;
@@ -59,18 +60,19 @@ public class FreenetUtil extends Thread{
 		try {
 			String identifier;
 			if(msg.getKey().equals(Constants.KEY_TYPE_CHK)){
-				identifier = Constants.KEY_TYPE_CHK+msg.getFilemanagerstring();
+				identifier = Constants.KEY_TYPE_CHK+msg.getName().toString();
 			}else{
-				identifier = Constants.KEY_TYPE_SSK+msg.getFilemanagerstring();
+				identifier = Constants.KEY_TYPE_SSK+msg.getName().toString();
 			}
 			ClientPut cp = new ClientPut(msg.getKey(), identifier, UploadFrom.direct);
-			File file = new File(msg.getFilemanagerstring());
-			cp.setDataLength(file.length());
-			BufferedInputStream payloadInputStream = new BufferedInputStream(new FileInputStream(file));
+			cp.setDataLength(msg.getSize());
+            ContentResolver cR = context.getContentResolver();
+
+			BufferedInputStream payloadInputStream = new BufferedInputStream(cR.openInputStream(msg.getUri()));
 			cp.setPayloadInputStream(payloadInputStream);
 			cp.setGlobal(true);
 			cp.setPersistence(Persistence.forever);
-			cp.setTargetFilename(file.getName());
+			cp.setTargetFilename(msg.getName());
 			cp.setMetadataContentType(msg.getMimeType());
 			fcpConnection.sendMessage(cp);
 		} catch (IOException e) {

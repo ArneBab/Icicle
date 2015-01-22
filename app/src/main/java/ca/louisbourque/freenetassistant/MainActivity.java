@@ -199,15 +199,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		System.out.println("Handling onActivityResult...");
 		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){
-			ActionBar actionBar = getActionBar();
-			actionBar.setSelectedNavigationItem(Constants.PagerPositionUploads);
+            mViewPager.setCurrentItem(Constants.PagerPositionUploads);
 		}
 		if(requestCode == Constants.Activity_Settings && resultCode == Activity.RESULT_OK){
 			this.gs.sendRedrawAll();
 		}
 		if(requestCode == Constants.Activity_Reference && resultCode == Activity.RESULT_OK){
-			ActionBar actionBar = getActionBar();
-			actionBar.setSelectedNavigationItem(Constants.PagerPositionPeers);
+            mViewPager.setCurrentItem(Constants.PagerPositionPeers);
 		}
 	}
 
