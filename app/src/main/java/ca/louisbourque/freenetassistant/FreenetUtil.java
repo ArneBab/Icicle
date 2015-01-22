@@ -60,9 +60,9 @@ public class FreenetUtil extends Thread{
 		try {
 			String identifier;
 			if(msg.getKey().equals(Constants.KEY_TYPE_CHK)){
-				identifier = Constants.KEY_TYPE_CHK+msg.getName().toString();
+				identifier = Constants.KEY_TYPE_CHK+msg.getName();
 			}else{
-				identifier = Constants.KEY_TYPE_SSK+msg.getName().toString();
+				identifier = Constants.KEY_TYPE_SSK+msg.getName();
 			}
 			ClientPut cp = new ClientPut(msg.getKey(), identifier, UploadFrom.direct);
 			cp.setDataLength(msg.getSize());

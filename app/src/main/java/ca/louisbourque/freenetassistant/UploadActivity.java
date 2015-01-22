@@ -72,7 +72,7 @@ public class UploadActivity extends ActionBarActivity {
     public void pickFile(View view) {
         if (Build.VERSION.SDK_INT <19){
             Intent intent = new Intent();
-            intent.setType("image/jpeg");
+            intent.setType("*/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, getResources().getString(R.string.select_file)),SELECT_FILE);
         } else {
@@ -154,15 +154,6 @@ public class UploadActivity extends ActionBarActivity {
                 // bitmap is the resized bitmap
                 Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
                 thumbnail.setImageBitmap(bitmap);
-
-                Cursor returnCursor =
-                        getContentResolver().query(selectedFileUri, null, null, null, null);
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-                returnCursor.moveToFirst();
-                fileUploadMessage.setName(returnCursor.getString(nameIndex));
-                fileUploadMessage.setSize(returnCursor.getLong(sizeIndex));
-
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -177,6 +168,14 @@ public class UploadActivity extends ActionBarActivity {
             //TODO: check for other common file types
             thumbnail.setImageResource(R.drawable.ic_action_photo);
         }
+        Cursor returnCursor =
+                getContentResolver().query(selectedFileUri, null, null, null, null);
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+        fileUploadMessage.setName(returnCursor.getString(nameIndex));
+        fileUploadMessage.setSize(returnCursor.getLong(sizeIndex));
+        returnCursor.close();
         RadioButton chk_rb = (RadioButton) this.findViewById(R.id.radio_button_CHK);
         if(chk_rb.isChecked()){
             fileUploadMessage.setKey(Constants.KEY_TYPE_CHK);
