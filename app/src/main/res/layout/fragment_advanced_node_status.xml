@@ -14,12 +14,15 @@
 
         <TextView
             android:id="@+id/status_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_span="2"
             android:text="@string/status_title_advanced"
-            android:textAlignment="center" />
+            android:layout_span="2"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical|left"
+            android:layout_marginTop="8dp"
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="32dp" />
 
     </TableRow>
 
@@ -30,16 +33,25 @@
 
         <TextView
             android:id="@+id/status_version"
+            android:text="@string/version"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
             android:layout_marginRight="2dp"
-            android:text="@string/version" />
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="32dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/status_version_value"
+            android:text="@string/placeholder_lorem_ipsum_short"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="0dp" />
     </TableRow>
     
     <TableRow
@@ -50,15 +62,24 @@
         <TextView
             android:id="@+id/status_uptime"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
             android:layout_marginRight="2dp"
-            android:text="@string/uptime" />
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="32dp"
+            android:text="@string/uptime"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/status_uptime_value"
+            android:text="@string/placeholder_lorem_ipsum_short"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="0dp"/>
     </TableRow>
     
     <TableRow
@@ -68,16 +89,24 @@
 
         <TextView
             android:id="@+id/status_input"
+            android:text="@string/recentInputRate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
             android:layout_marginRight="2dp"
-            android:text="@string/recentInputRate" />
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="32dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/status_input_value"
+            android:text="@string/placeholder_lorem_ipsum_short"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left" />
     </TableRow>
     
     <TableRow
@@ -87,16 +116,25 @@
 
         <TextView
             android:id="@+id/status_output"
+            android:text="@string/recentOutputRate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
             android:layout_marginRight="2dp"
-            android:text="@string/recentOutputRate" />
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="32dp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/status_output_value"
+            android:text="@string/placeholder_lorem_ipsum_short"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|left"
+            android:textAlignment="textStart"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="0dp" />
     </TableRow>
 
     
