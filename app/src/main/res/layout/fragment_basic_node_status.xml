@@ -22,7 +22,8 @@
             android:layout_marginTop="8dp"
             android:textAlignment="textStart"
             android:gravity="center_vertical|left"
-            android:layout_marginLeft="32dp" />
+            android:layout_marginLeft="32dp"
+            android:textSize="@dimen/abc_text_size_title_material" />
 
     </TableRow>
 
@@ -41,7 +42,8 @@
             android:textAlignment="textStart"
             android:gravity="center_vertical|left"
             android:layout_marginLeft="32dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/abc_text_size_subhead_material" />
 
         <TextView
             android:id="@+id/basic_status_version_value"
@@ -51,7 +53,8 @@
             android:layout_gravity="center_vertical|left"
             android:textAlignment="textStart"
             android:gravity="center_vertical|left"
-            android:layout_marginLeft="0dp" />
+            android:layout_marginLeft="0dp"
+            android:textSize="@dimen/abc_text_size_subhead_material" />
     </TableRow>
     
 

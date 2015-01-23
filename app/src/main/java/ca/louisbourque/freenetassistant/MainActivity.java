@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -385,14 +386,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			LinearLayout peerListView = (LinearLayout)mView.findViewById(R.id.peer_list_view);
 			peerListView.removeAllViews();
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
-				TextView tv=new TextView(getActivity().getApplicationContext());
-				tv.setText(getResources().getText(R.string.connecting));
-				LinearLayout.LayoutParams params = 
-						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.MATCH_PARENT);
-				tv.setLayoutParams(params);
-				tv.setTextColor(getResources().getColor(R.color.black));
-				peerListView.addView(tv);
+                FrameLayout fl = (FrameLayout)getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, peerListView, false);
+				peerListView.addView(fl);
 				return;
 			}
 			for (Peer p : (CopyOnWriteArrayList<Peer>)data.getSerializable(Constants.PEERS)) {
@@ -449,14 +444,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			LinearLayout uploadListView = (LinearLayout)mView.findViewById(R.id.uploads_list_view);
 			uploadListView.removeAllViews();
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
-				TextView tv=new TextView(getActivity().getApplicationContext());
-				tv.setText(getResources().getText(R.string.connecting));
-				LinearLayout.LayoutParams params = 
-						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.MATCH_PARENT);
-				tv.setLayoutParams(params);
-				tv.setTextColor(getResources().getColor(R.color.black));
-				uploadListView.addView(tv);
+                FrameLayout fl = (FrameLayout)getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, uploadListView, false);
+				uploadListView.addView(fl);
 				return;
 			}
 			//Directories
@@ -674,14 +663,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			LinearLayout downloadListView = (LinearLayout)mView.findViewById(R.id.downloads_list_view);
 			downloadListView.removeAllViews();
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
-				TextView tv=new TextView(getActivity().getApplicationContext());
-				tv.setText(getResources().getText(R.string.connecting));
-				LinearLayout.LayoutParams params = 
-						new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.MATCH_PARENT);
-				tv.setLayoutParams(params);
-				tv.setTextColor(getResources().getColor(R.color.black));
-				downloadListView.addView(tv);
+                FrameLayout fl = (FrameLayout)getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, downloadListView, false);
+				downloadListView.addView(fl);
 				return;
 			}
 			for (Download d : (CopyOnWriteArrayList<Download>)data.getSerializable(Constants.DOWNLOADS)) {
@@ -808,17 +791,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public synchronized void onStateChanged(Bundle data) {
 			System.out.println("onStateChanged: Status");
 
-			((TextView) mView.findViewById(R.id.status)).setVisibility(View.GONE);
 
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
-				TextView tv = (TextView) mView.findViewById(R.id.status);
-				tv.setVisibility(View.VISIBLE);
-				tv.setText(getResources().getText(R.string.connecting));
-				RelativeLayout.LayoutParams params = 
-						new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-								RelativeLayout.LayoutParams.MATCH_PARENT);
-				tv.setLayoutParams(params);
-				tv.setTextColor(getResources().getColor(R.color.black));
+                mView.findViewById(R.id.no_connection).setVisibility(View.VISIBLE);
 				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
 				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
 				return;
@@ -830,6 +805,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			}
 
 			if(aNodeStatus.isAdvanced()){
+                mView.findViewById(R.id.no_connection).setVisibility(View.GONE);
 				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
 				mView.findViewById(R.id.advanced_node_status).setVisibility(View.VISIBLE);
 				((TextView)  mView.findViewById(R.id.status_version_value)).setText(aNodeStatus.getVersion());
@@ -849,6 +825,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeSeconds)+" Seconds");
 				}
 			}else{
+                mView.findViewById(R.id.no_connection).setVisibility(View.GONE);
 				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
 				mView.findViewById(R.id.basic_node_status).setVisibility(View.VISIBLE);
 				((TextView)  mView.findViewById(R.id.basic_status_version_value)).setText(aNodeStatus.getVersion());
