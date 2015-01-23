@@ -36,11 +36,11 @@ public class FCPService extends Service {
 						//check status of connection, reconnect if able
 						if(freenet.isAlive()){
 							//if we are connected, but the network type changed and we are wifi only, disconnect
-							if(gs.isWifiOnly() && cm.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI){
+							if(gs.isWifiOnly() && cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() != ConnectivityManager.TYPE_WIFI){
 								freenet.tearDown();
 							}
 						}else{
-							if(!gs.isWifiOnly() || cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI){
+							if(!gs.isWifiOnly() || (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)){
 								switch(freenet.getState()) {
 									case TERMINATED:
 										freenet = new FreenetUtil(getApplicationContext(),queue, gs);
@@ -110,7 +110,7 @@ public class FCPService extends Service {
 		freenet = new FreenetUtil(this,queue, this.gs);
 		refreshThread = new RefreshThread();
 		//only connect if we allow connection on non-wifi or we are on wifi
-		if(!this.gs.isWifiOnly() || cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI){
+		if(!this.gs.isWifiOnly() || (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)){
 			freenet.start();
 			updateStatus();
 			updatePeers();
