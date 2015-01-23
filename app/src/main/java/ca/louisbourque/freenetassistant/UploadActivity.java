@@ -128,7 +128,7 @@ public class UploadActivity extends ActionBarActivity {
         ImageButton uploadButton = (ImageButton) this.findViewById(R.id.file_upload_button);
         ImageButton pickButton = (ImageButton) this.findViewById(R.id.file_picker_button);
         TextView exifRemoved = (TextView) this.findViewById(R.id.remove_exif);
-        exifRemoved.setVisibility(View.GONE);
+        exifRemoved.setVisibility(View.INVISIBLE);
         pickButton.setVisibility(View.GONE);
         uploadButton.setVisibility(View.VISIBLE);
         thumbnail.setVisibility(View.VISIBLE);

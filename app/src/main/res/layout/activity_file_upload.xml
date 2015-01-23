@@ -74,37 +74,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="86dp" >
 
         <TextView
             android:id="@+id/remove_exif"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_action_about"
             android:text="@string/remove_exif"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/file_upload_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="21dp"
+            android:background="@drawable/round_button_green"
+            android:contentDescription="@string/action_upload"
+            android:enabled="false"
+            android:onClick="uploadFile"
+            android:src="@drawable/ic_action_upload_light"
             android:visibility="gone" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="86dp" >
-
-            <ImageButton
-                android:id="@+id/file_upload_button"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="21dp"
-                android:background="@drawable/round_button_green"
-                android:contentDescription="@string/action_upload"
-                android:enabled="false"
-                android:onClick="uploadFile"
-                android:src="@drawable/ic_action_upload_light"
-                android:visibility="gone" />
-        </RelativeLayout>
-
     </LinearLayout>
 
 </LinearLayout>
