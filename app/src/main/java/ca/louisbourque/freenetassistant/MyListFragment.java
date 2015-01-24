@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v4.app.ListFragment;
 import android.widget.TextView;
@@ -85,6 +87,14 @@ public class MyListFragment extends ListFragment {
             TextView peerAddress = (TextView) rowView.findViewById(R.id.peer_address);
             peerName.setText(values.get(position).getName());
             peerAddress.setText(values.get(position).getAddress()+":"+values.get(position).getPort());
+            ImageView peerStatus = (ImageView)rowView.findViewById(R.id.peer_icon);
+            if(gs.getActiveLocalNodeIndex() == position){
+                peerStatus.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_white_36dp));
+                peerStatus.setBackground(getResources().getDrawable(R.drawable.round_button_green));
+                peerStatus.setVisibility(View.VISIBLE);
+            }else{
+                peerStatus.setVisibility(View.INVISIBLE);
+            }
 
             return rowView;
         }

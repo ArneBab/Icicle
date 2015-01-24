@@ -72,6 +72,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
     			if(gs.getActiveLocalNodeIndex()!=selected){
     				gs.setActiveLocalNodeIndex(selected);
     			}
+                mListFragment.notifyDataSetChanged();
             }
         });
 
