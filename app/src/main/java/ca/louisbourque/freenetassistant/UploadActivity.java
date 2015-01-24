@@ -166,7 +166,7 @@ public class UploadActivity extends ActionBarActivity {
             }
         }else{
             //TODO: check for other common file types
-            thumbnail.setImageResource(R.drawable.ic_action_photo);
+            thumbnail.setImageResource(R.drawable.ic_photo_black_48dp);
         }
         Cursor returnCursor =
                 getContentResolver().query(selectedFileUri, null, null, null, null);

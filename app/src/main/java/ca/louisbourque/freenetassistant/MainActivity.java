@@ -335,15 +335,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public int getPageIcon(int position) {
 			switch (position) {
 			case 0:
-				return R.drawable.ic_action_about;
+				return R.drawable.ic_info_outline_black_36dp;
 			case 1:
-				return R.drawable.ic_action_download;
+				return R.drawable.ic_file_download_black_36dp;
 			case 2:
 				return R.drawable.ic_file_upload_black_36dp;
 			case 3:
 				return R.drawable.ic_people_black_36dp;
 			default:
-				return R.drawable.ic_action_about;
+				return R.drawable.ic_info_outline_black_36dp;
 			}
 		}
 	}
@@ -508,14 +508,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				if(u.getPutSuccessful() != null){
         			bar.setMax(1);
         			bar.setProgress(1);
-        			bar.setVisibility(View.GONE);
+        			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
 					transferDone.setVisibility(View.VISIBLE);
 					statusLabel.setText(getResources().getText(R.string.status_done));
 					statusText.setText(" - 100%"); 
         		}else if(pf != null){
-        			bar.setVisibility(View.GONE);
+        			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
         			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
@@ -601,14 +601,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				if(u.getPutSuccessful() != null){
         			bar.setMax(1);
         			bar.setProgress(1);
-        			bar.setVisibility(View.GONE);
+        			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
 					transferDone.setVisibility(View.VISIBLE);
 					statusLabel.setText(getResources().getText(R.string.status_done));
 					statusText.setText(" - 100%"); 
         		}else if(pf != null){
-        			bar.setVisibility(View.GONE);
+        			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
         			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
@@ -729,14 +729,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				if(df != null){
 					bar.setMax(1);
 					bar.setProgress(1);
-					bar.setVisibility(View.GONE);
+					bar.setVisibility(View.INVISIBLE);
 					pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
 					transferDone.setVisibility(View.VISIBLE);
 					statusLabel.setText(getResources().getText(R.string.status_done));
 					statusText.setText(" - 100%"); 
 				}else if(gf != null){
-					bar.setVisibility(View.GONE);
+					bar.setVisibility(View.INVISIBLE);
 					pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
 					((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);

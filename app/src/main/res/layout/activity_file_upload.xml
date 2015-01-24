@@ -58,7 +58,7 @@
             android:contentDescription="@string/select_file"
             android:onClick="pickFile"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_action_collection" />
+            android:src="@drawable/ic_folder_open_white_36dp" />
 
     </RelativeLayout>
 
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_action_about"
+            android:drawableLeft="@drawable/ic_info_outline_black_36dp"
             android:text="@string/remove_exif"
             android:layout_weight="1"
             android:visibility="invisible" />
@@ -95,7 +95,7 @@
             android:contentDescription="@string/action_upload"
             android:enabled="false"
             android:onClick="uploadFile"
-            android:src="@drawable/ic_action_upload_light"
+            android:src="@drawable/ic_file_upload_white_48dp"
             android:visibility="gone" />
     </LinearLayout>
 

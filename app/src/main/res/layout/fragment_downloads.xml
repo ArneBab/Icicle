@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:divider="@drawable/divider"
-        android:dividerPadding="0dp"
+        android:dividerPadding="72dp"
         android:orientation="vertical"
         android:showDividers="middle"  >
         
