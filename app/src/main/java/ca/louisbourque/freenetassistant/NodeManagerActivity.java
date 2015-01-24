@@ -46,8 +46,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
 
-        mListFragment = new MyListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.listFragment, mListFragment).commit();
+        mListFragment = (MyListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
 		
 		this.actionBar = (LinearLayout)findViewById(R.id.node_management_action_bar);
 		ImageButton addButton = (ImageButton)this.actionBar.findViewById(R.id.node_add);

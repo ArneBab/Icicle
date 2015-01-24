@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/app_background">
 
     <include
         android:id="@+id/my_toolbar"
@@ -14,15 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/node_management_action_bar"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" />
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp" />
 
 
     <fragment
         android:id="@+id/listFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="8dp"
         class="ca.louisbourque.freenetassistant.MyListFragment" />
 
 </LinearLayout>

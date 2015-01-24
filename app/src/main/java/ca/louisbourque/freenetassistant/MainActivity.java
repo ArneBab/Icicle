@@ -408,7 +408,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				}else{
 					peerIcon.setColorFilter(getResources().getColor(R.color.grey_500));
 				}
-				((TextView) peerView.findViewById(R.id.peer_address)).setText(p.getPhysicalUDP());
+				((TextView) peerView.findViewById(R.id.peer_address)).setText(p.getPhysicalUDP().replace(";","\n"));
 				peerListView.addView(peerView);
 			}
 		}

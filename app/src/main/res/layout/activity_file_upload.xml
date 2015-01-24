@@ -15,13 +15,15 @@
     <RadioGroup
         android:id="@+id/radio_buttons_key_type"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp">
 
         <RadioButton
             android:id="@+id/radio_button_CHK"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="updateKeyType"
             android:text="@string/CHK" />
@@ -29,7 +31,7 @@
         <RadioButton
             android:id="@+id/radio_button_SSK"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="updateKeyType"
             android:text="@string/SSK_generating" />
@@ -41,19 +43,22 @@
         android:id="@+id/file_upload_instructions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:text="@string/file_upload_instructions" />
+        android:layout_marginTop="8dp"
+        android:text="@string/file_upload_instructions"
+        android:textColor="@color/black"
+        android:textSize="@dimen/abc_text_size_subhead_material"
+        android:layout_marginLeft="16dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <ImageButton
             android:id="@+id/file_picker_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginRight="21dp"
-            android:layout_marginTop="13dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:elevation="4dp"
             android:background="@drawable/round_button_green"
             android:contentDescription="@string/select_file"
             android:onClick="pickFile"
@@ -74,7 +79,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="86dp" >
+        android:layout_height="86dp"
+        android:layout_marginLeft="16dp">
 
         <TextView
             android:id="@+id/remove_exif"
@@ -82,15 +88,17 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/ic_info_outline_black_36dp"
+            android:drawablePadding="16dp"
             android:text="@string/remove_exif"
             android:layout_weight="1"
             android:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/file_upload_button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginRight="21dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginRight="16dp"
+            android:elevation="4dp"
             android:background="@drawable/round_button_green"
             android:contentDescription="@string/action_upload"
             android:enabled="false"

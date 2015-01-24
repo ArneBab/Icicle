@@ -37,10 +37,13 @@ public class MyListFragment extends ListFragment {
         values = this.gs.getLocalNodeList();
         mAdapter = new NodeManagerArrayAdapter(getActivity(),values);
 
-        this.list = (ListView)getActivity().findViewById(android.R.id.list);
-        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        this.list = getListView();
+
 
         setListAdapter(mAdapter);
+        this.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        this.list.setDivider(getResources().getDrawable(R.drawable.divider));
+        this.list.setSelector(getResources().getDrawable(R.drawable.list_selection_background));
     }
 
     @Override
@@ -53,7 +56,7 @@ public class MyListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        list.setItemChecked(position,true);
+        l.setItemChecked(position,true);
         if(listener != null) {
             listener.redrawNodeManagementActionBar();
         }
