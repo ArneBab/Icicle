@@ -106,6 +106,18 @@ public class ReferenceActivity extends ActionBarActivity {
 		super.onDestroy();
         
 	}
+
+    @Override
+    protected void onStart() {
+        this.gs.registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        this.gs.unregisterActivity(this);
+        super.onStop();
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -68,6 +68,18 @@ public class UploadActivity extends ActionBarActivity {
 			uploadButton.setEnabled(true);
 		}
     }
+
+    @Override
+    protected void onStart() {
+        this.gs.registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        this.gs.unregisterActivity(this);
+        super.onStop();
+    }
     
     public void pickFile(View view) {
         if (Build.VERSION.SDK_INT <19){

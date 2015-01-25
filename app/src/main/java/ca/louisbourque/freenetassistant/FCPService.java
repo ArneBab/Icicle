@@ -60,8 +60,12 @@ public class FCPService extends Service {
 						if(gs.isMainActivityVisible()){
 							updateStatus();
 						}
+                        if(gs.serviceShouldStop()){
+                            stopSelf();
+                        }
 					} catch (Exception e) {
 						e.printStackTrace();
+                        break;
 					}
 				}
 			}
@@ -76,15 +80,6 @@ public class FCPService extends Service {
 		}
 		@Override
 		public void handleMessage(Message msg) {
-			if(!refreshThread.isAlive()){
-				refreshThread.start();
-				try {
-					refreshThread.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
 		}
 	}
 
@@ -108,13 +103,14 @@ public class FCPService extends Service {
 		
 		cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		freenet = new FreenetUtil(this,queue, this.gs);
-		refreshThread = new RefreshThread();
 		//only connect if we allow connection on non-wifi or we are on wifi
 		if(!this.gs.isWifiOnly() || (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI)){
 			freenet.start();
 			updateStatus();
 			updatePeers();
 		}
+        refreshThread = new RefreshThread();
+        refreshThread.start();
 	}
 
 	@Override

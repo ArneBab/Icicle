@@ -142,6 +142,18 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
 		
 	}
 	
+    @Override
+    protected void onStart() {
+        this.gs.registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        this.gs.unregisterActivity(this);
+        super.onStop();
+    }
+
 	public void doPositiveClick(LocalNode n, boolean edit) {
 		if(edit){
 		    int selected = list.getCheckedItemPosition();

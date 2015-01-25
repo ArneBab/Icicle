@@ -32,6 +32,7 @@ import net.pterodactylus.fcp.SimpleProgress;
 import net.pterodactylus.fcp.StartedCompression;
 import net.pterodactylus.fcp.URIGenerated;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -102,6 +103,7 @@ public class GlobalState extends Application{
 	SharedPreferences sharedPref;
 	private Intent serviceIntent;
 	private SSKKeypair anSSKeypair;
+    private Activity activeActivity;
 	@SuppressLint("HandlerLeak")
 	private final Handler toastHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -112,7 +114,6 @@ public class GlobalState extends Application{
 	public void onCreate() {
         super.onCreate();
         initializeState();
-        serviceIntent = new Intent(this, FCPService.class);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         loadPreferences();
         
@@ -120,6 +121,7 @@ public class GlobalState extends Application{
 	}
 	
 	private void initializeState(){
+        serviceIntent = new Intent(this, FCPService.class);
 		this.peers = new CopyOnWriteArrayList<Peer>();
 		this.DownloadsList = new CopyOnWriteArrayList<Download>();
 		this.UploadsList = new CopyOnWriteArrayList<Upload>();
@@ -284,7 +286,6 @@ public class GlobalState extends Application{
 	}
 	
 	public void redrawStatus(){
-		System.out.println(">>>redrawStatus()");
 		Bundle data = new Bundle();
 		data.putSerializable(Constants.STATUS, 	this.nodeStatus);
 		data.putBoolean(Constants.IS_CONNECTED, this.isConnected);
@@ -294,7 +295,6 @@ public class GlobalState extends Application{
 	}
 	
 	public void redrawDownloads() {
-		System.out.println(">>>redrawDownloads()");
 		Bundle data = new Bundle();
 		data.putSerializable(Constants.DOWNLOADS, this.DownloadsList);
 		data.putBoolean(Constants.IS_CONNECTED, this.isConnected);
@@ -304,7 +304,6 @@ public class GlobalState extends Application{
 	}
 	
 	public void redrawUploads() {
-		System.out.println(">>>redrawUploads()");
 		Bundle data = new Bundle();
 		data.putSerializable(Constants.UPLOADS, this.UploadsList);
 		data.putSerializable(Constants.UPLOAD_DIRS, this.UploadDirsList);
@@ -315,7 +314,6 @@ public class GlobalState extends Application{
 	}
 	
 	public void redrawPeerList(){
-		System.out.println(">>>redrawPeerList()");
 		Bundle data = new Bundle();
 		data.putSerializable(Constants.PEERS, this.peers);
 		data.putBoolean(Constants.IS_CONNECTED, this.isConnected);
@@ -687,7 +685,7 @@ public class GlobalState extends Application{
 	}
 	
 	public void restartFCPService(boolean force){
-		stopFCPService(force);
+		stopFCPService();
 		initializeState();
 		startFCPService();
 	}
@@ -732,18 +730,29 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 		startService(serviceIntent);
 	}
 	
-	public void stopFCPService(boolean force) {
+	public void stopFCPService() {
 		System.out.println(">>>GlobalState.stopFCPService()");
 		if(serviceIntent == null){
 			return;
 		}
-		if(force){
-			stopService(serviceIntent);
-		}else{
-			//TODO: Only stop the service if nothing is in progress
-			stopService(serviceIntent);
-		}
+	    stopService(serviceIntent);
 	}
+
+    public boolean serviceShouldStop() {
+        return this.activeActivity == null;
+    }
+
+    public void registerActivity(Activity act){
+        System.out.println(">>>GlobalState.registerActivity("+act.toString()+")");
+        this.activeActivity = act;
+        startFCPService();
+    }
+
+    public void unregisterActivity(Activity act){
+        System.out.println(">>>GlobalState.unregisterActivity("+act.toString()+")");
+        if(this.activeActivity == act)
+        this.activeActivity = null;
+    }
 
 	public SSKKeypair getSSKKeypair() {
 		try {

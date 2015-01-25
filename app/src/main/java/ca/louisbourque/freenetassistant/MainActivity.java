@@ -119,11 +119,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
-		if(isFinishing()){
-			this.gs.stopFCPService(false);
-		}
 	}
 
+    @Override
+    protected void onStart() {
+        this.gs.registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        this.gs.unregisterActivity(this);
+        super.onStop();
+    }
 
 	@Override
 	protected void onPause() {
@@ -142,11 +150,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		iFilter.addAction(Constants.BROADCAST_UPDATE_PEERS);
 		this.mReceiver = new MainViewBroadcastReceiver(this);
 		registerReceiver(this.mReceiver, iFilter);
-		this.gs.startFCPService();
-		//updateStatusView();
-		//updateDownloadsView();
-		//updateUploadsView();
-		//updatePeersView();
 	}
 
 	@Override
@@ -198,7 +201,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		System.out.println("Handling onActivityResult...");
 		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){
             mViewPager.setCurrentItem(Constants.PagerPositionUploads);
 		}
@@ -246,7 +248,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		@Override
 		public Fragment getItem(int i) {
-			System.out.println("getItem - "+i);
 			switch (i) {
 			case 0:
 				return new StatusSectionFragment();
@@ -263,7 +264,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		@Override
 		public Fragment instantiateItem(ViewGroup v, int i){
-			System.out.println("instantiateItem - "+i);
 			Fragment aFragment = (Fragment) super.instantiateItem(v,i);
 			GlobalState gs = ((MainActivity)context).gs;
 			switch (i) {
@@ -379,7 +379,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@SuppressWarnings("unchecked")
 		@Override
 		public synchronized void onStateChanged(Bundle data) {
-			System.out.println("onStateChanged: Peers");
 			//TODO
 			//if(gs.getNodeData() == null)
 			//  we don't have full access, display an notice
@@ -440,7 +439,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@SuppressWarnings("unchecked")
 		@Override
 		public synchronized void onStateChanged(Bundle data) {
-			System.out.println("onStateChanged: Uploads");
 			LinearLayout uploadListView = (LinearLayout)mView.findViewById(R.id.uploads_list_view);
 			uploadListView.removeAllViews();
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
@@ -659,7 +657,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		@SuppressWarnings("unchecked")
 		@Override
 		public synchronized void onStateChanged(Bundle data) {
-			System.out.println("onStateChanged: Downloads");
 			LinearLayout downloadListView = (LinearLayout)mView.findViewById(R.id.downloads_list_view);
 			downloadListView.removeAllViews();
 			if(!data.getBoolean(Constants.IS_CONNECTED)){
@@ -789,7 +786,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		@Override
 		public synchronized void onStateChanged(Bundle data) {
-			System.out.println("onStateChanged: Status");
 
 
 			if(!data.getBoolean(Constants.IS_CONNECTED)){

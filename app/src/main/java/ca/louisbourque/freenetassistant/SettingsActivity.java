@@ -17,4 +17,16 @@ public class SettingsActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
         setResult(Activity.RESULT_OK);
     }
+
+    @Override
+    protected void onStart() {
+        ((GlobalState)getApplication()).registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        ((GlobalState)getApplication()).unregisterActivity(this);
+        super.onStop();
+    }
 }

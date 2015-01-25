@@ -55,10 +55,19 @@ public class OpenReferenceActivity extends ActionBarActivity {
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		if(isFinishing()){
-			this.gs.stopFCPService(false);
-		}
 	}
+
+    @Override
+    protected void onStart() {
+        this.gs.registerActivity(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        this.gs.unregisterActivity(this);
+        super.onStop();
+    }
 	
 	void handleSendText(Intent intent) {
 		Uri uri = intent.getData();
