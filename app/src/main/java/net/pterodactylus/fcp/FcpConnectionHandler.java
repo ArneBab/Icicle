@@ -71,7 +71,7 @@ class FcpConnectionHandler implements Runnable {
 			}
 			try {
 				String line = readLine();
-				//System.out.println("read line: " + line);
+				System.out.println("read line: " + line);
 				if (line == null) {
 					break;
 				}
