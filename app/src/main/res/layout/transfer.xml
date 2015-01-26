@@ -67,8 +67,8 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:maxLines="1"
-            android:lines="1"
-            android:ellipsize="start"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textSize="@dimen/abc_text_size_subhead_material" />
 
         <ProgressBar
@@ -99,6 +99,8 @@
             android:layout_alignBottom="@+id/transfer_status_label"
             android:layout_toRightOf="@+id/transfer_status_label"
             android:paddingRight="16dp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:text="@string/placeholder_lorem_ipsum"
             android:textSize="@dimen/abc_text_size_small_material" />
 
