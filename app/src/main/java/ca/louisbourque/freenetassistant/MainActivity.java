@@ -17,8 +17,10 @@ import net.pterodactylus.fcp.SimpleProgress;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
@@ -44,7 +46,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener{
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, PriorityDialog.PriorityDialogListener{
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
 	 * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
@@ -229,11 +231,29 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	
 	public void changeTransferPriority(View view){
 		TextView transferName = (TextView)((View) view.getParent()).findViewById(R.id.transfer_name);
-		//TODO: Create a dialog to choose the new priority.
-		
+        DialogFragment newFragment = PriorityDialog.newInstance(R.string.priority_label,transferName.getHint().toString());
+        newFragment.show(getFragmentManager(), "dialog");
 	}
-	
-	/**
+
+    @Override
+    public void doPositiveClick(String identifier, int priority) {
+        try {
+            Bundle data = new Bundle();
+            data.putString("identifier",identifier);
+            data.putInt("priority",priority);
+            this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgUpdatePriority, 0,data));
+        } catch (InterruptedException e) {
+            //TODO:Show a toast
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void doNegativeClick() {
+
+    }
+
+    /**
 	 * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
 	 * sections of the app.
 	 */

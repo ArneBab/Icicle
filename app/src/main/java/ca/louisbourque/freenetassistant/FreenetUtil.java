@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Message;
 import net.pterodactylus.fcp.*;
 
@@ -162,6 +163,21 @@ public class FreenetUtil extends Thread{
 			this.fcpAdapter.getGlobalState().setConnected(false);
 		}
 	}
+
+    private void updatePriority(Bundle obj) {
+        try {
+            synchronized (fcpAdapter) {
+                ModifyPersistentRequest req = new ModifyPersistentRequest(obj.getString("identifier"),true);
+                req.setPriority(obj.getInt("priority"));
+                fcpConnection.sendMessage(req);
+            }
+        } catch (IOException e) {
+            //failed to connect
+            e.printStackTrace();
+            fcpConnection = null;
+            this.fcpAdapter.getGlobalState().setConnected(false);
+        }
+    }
 	
 	public void run(){
 		System.out.println(">>>FreenetUtil.run()");
@@ -197,6 +213,9 @@ public class FreenetUtil extends Thread{
 					case Constants.MsgGetSSKeypair:
 						generateSSK();
 						break;
+                    case Constants.MsgUpdatePriority:
+                        updatePriority((Bundle) msg.obj);
+                        break;
 					default:
 						break;
 					}

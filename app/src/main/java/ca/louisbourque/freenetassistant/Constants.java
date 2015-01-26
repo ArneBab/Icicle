@@ -12,6 +12,7 @@ public class Constants {
 	public static final int MsgGetPeers = 1004;
 	public static final int MsgFileUpload = 1005;
 	public static final int MsgAddNoderef = 1006;
+    public static final int MsgUpdatePriority = 1007;
 	protected static final Object FNconnected = "CONNECTED";
 	protected static final Object FNbackedoff = "BACKED OFF";
 	public static final int Activity_File_Upload = 20;

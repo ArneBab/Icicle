@@ -59,7 +59,7 @@ public class ModifyPersistentRequest extends FcpMessage {
 	 * @param newPriority
 	 *            The new priority of the request
 	 */
-	public void setPriority(Priority newPriority) {
+	public void setPriority(int newPriority) {
 		setField("PriorityClass", String.valueOf(newPriority));
 	}
 
