@@ -29,7 +29,6 @@ import android.widget.TextView;
 public class ReferenceActivity extends ActionBarActivity {
 	
 	private GlobalState gs;
-	private NodeData myNode;
 	private String refStr;
 	private String EncodedStr;
 	private String randomStr;
@@ -41,8 +40,9 @@ public class ReferenceActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reference);
 		this.gs = (GlobalState) getApplication();
-		this.myNode = this.gs.getNodeData();
-
+		LocalNode an = this.gs.getActiveLocalNode();
+        refStr = an.getNodeReference();
+        EncodedStr = an.getEncodedNodeReference();
         // Set up the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
@@ -51,51 +51,6 @@ public class ReferenceActivity extends ActionBarActivity {
 		//final ActionBar actionBar = getActionBar();
 		SecureRandom random = new SecureRandom();
 		randomStr = new BigInteger(130, random).toString(32);
-		refStr = "";
-		String temp = "";
-		EncodedStr = "";
-		refStr+="identity="+myNode.getIdentity()+"\n";
-		EncodedStr+="identity="+myNode.getIdentity()+"\n";
-		refStr+="lastGoodVersion="+myNode.getLastGoodVersion()+"\n";
-		temp = new String(Base64.encode(myNode.getLastGoodVersion().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="lastGoodVersion=="+temp+"\n";
-		refStr+="location="+myNode.getNodeRef().getLocation()+"\n";
-		temp = new String(Base64.encode(String.valueOf(myNode.getNodeRef().getLocation()).getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="location=="+temp+"\n";
-		refStr+="myName="+myNode.getMyName()+"\n";
-		temp = new String(Base64.encode(myNode.getMyName().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="myName=="+temp+"\n";
-		refStr+="opennet="+myNode.isOpennet()+"\n";
-		EncodedStr+="opennet="+myNode.isOpennet()+"\n";
-		refStr+="sig="+myNode.getSignature()+"\n";
-		EncodedStr+="sig="+myNode.getSignature()+"\n";
-		refStr+="sigP256="+myNode.getField("sigP256")+"\n";
-		EncodedStr+="sigP256="+myNode.getField("sigP256")+"\n";
-		refStr+="version="+myNode.getVersion()+"\n";
-		temp = new String(Base64.encode(myNode.getVersion().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="version=="+temp+"\n";
-		refStr+="ark.number="+myNode.getARK().getNumber()+"\n";
-		EncodedStr+="ark.number="+myNode.getARK().getNumber()+"\n";
-		refStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
-		EncodedStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
-		refStr+="auth.negTypes="+myNode.getField("auth.negTypes")+"\n";
-		temp = new String(Base64.encode(myNode.getField("auth.negTypes").toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="auth.negTypes=="+temp+"\n";
-		refStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
-		EncodedStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
-		refStr+="dsaGroup.p="+myNode.getDSAGroup().getPrime()+"\n";
-		EncodedStr+="dsaGroup.p="+myNode.getDSAGroup().getPrime()+"\n";
-		refStr+="dsaGroup.q="+myNode.getDSAGroup().getSubprime()+"\n";
-		EncodedStr+="dsaGroup.q="+myNode.getDSAGroup().getSubprime()+"\n";
-		refStr+="dsaPubKey.y="+myNode.getDSAPublicKey()+"\n";
-		EncodedStr+="dsaPubKey.y="+myNode.getDSAPublicKey()+"\n";
-		refStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
-		EncodedStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
-		refStr+="physical.udp="+myNode.getPhysicalUDP()+"\n";
-		temp = new String(Base64.encode(myNode.getPhysicalUDP().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-		EncodedStr+="physical.udp=="+temp+"\n";
-		refStr+="End\n";
-		EncodedStr+="End\n";
 		
 		TextView nodeText = (TextView) this.findViewById(R.id.text_reference);
 		nodeText.setText(refStr);

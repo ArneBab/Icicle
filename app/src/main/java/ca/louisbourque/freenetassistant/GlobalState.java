@@ -217,7 +217,9 @@ public class GlobalState extends Application{
 		this.nodeStatus.setRecentOutputRate(Double.parseDouble(newNodeData.getVolatile("recentOutputRate"))/1000);
 		this.nodeStatus.setUptimeSeconds(Double.parseDouble(newNodeData.getVolatile("uptimeSeconds")));
 		this.nodeData = newNodeData;
+        extractNodeReference(newNodeData, this.getActiveLocalNode());
 		sendRedrawStatus();
+        savePreferences();
 	}
 
 
@@ -794,4 +796,54 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 	public NodeData getNodeData() {
 		return this.nodeData;
 	}
+
+    private void extractNodeReference(NodeData myNode, LocalNode activeLocalNode) {
+        String refStr = "";
+        String temp = "";
+        String EncodedStr = "";
+        refStr+="identity="+myNode.getIdentity()+"\n";
+        EncodedStr+="identity="+myNode.getIdentity()+"\n";
+        refStr+="lastGoodVersion="+myNode.getLastGoodVersion()+"\n";
+        temp = new String(Base64.encode(myNode.getLastGoodVersion().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="lastGoodVersion=="+temp+"\n";
+        refStr+="location="+myNode.getNodeRef().getLocation()+"\n";
+        temp = new String(Base64.encode(String.valueOf(myNode.getNodeRef().getLocation()).getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="location=="+temp+"\n";
+        refStr+="myName="+myNode.getMyName()+"\n";
+        temp = new String(Base64.encode(myNode.getMyName().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="myName=="+temp+"\n";
+        refStr+="opennet="+myNode.isOpennet()+"\n";
+        EncodedStr+="opennet="+myNode.isOpennet()+"\n";
+        refStr+="sig="+myNode.getSignature()+"\n";
+        EncodedStr+="sig="+myNode.getSignature()+"\n";
+        refStr+="sigP256="+myNode.getField("sigP256")+"\n";
+        EncodedStr+="sigP256="+myNode.getField("sigP256")+"\n";
+        refStr+="version="+myNode.getVersion()+"\n";
+        temp = new String(Base64.encode(myNode.getVersion().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="version=="+temp+"\n";
+        refStr+="ark.number="+myNode.getARK().getNumber()+"\n";
+        EncodedStr+="ark.number="+myNode.getARK().getNumber()+"\n";
+        refStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
+        EncodedStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
+        refStr+="auth.negTypes="+myNode.getField("auth.negTypes")+"\n";
+        temp = new String(Base64.encode(myNode.getField("auth.negTypes").toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="auth.negTypes=="+temp+"\n";
+        refStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
+        EncodedStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
+        refStr+="dsaGroup.p="+myNode.getDSAGroup().getPrime()+"\n";
+        EncodedStr+="dsaGroup.p="+myNode.getDSAGroup().getPrime()+"\n";
+        refStr+="dsaGroup.q="+myNode.getDSAGroup().getSubprime()+"\n";
+        EncodedStr+="dsaGroup.q="+myNode.getDSAGroup().getSubprime()+"\n";
+        refStr+="dsaPubKey.y="+myNode.getDSAPublicKey()+"\n";
+        EncodedStr+="dsaPubKey.y="+myNode.getDSAPublicKey()+"\n";
+        refStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
+        EncodedStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
+        refStr+="physical.udp="+myNode.getPhysicalUDP()+"\n";
+        temp = new String(Base64.encode(myNode.getPhysicalUDP().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        EncodedStr+="physical.udp=="+temp+"\n";
+        refStr+="End\n";
+        EncodedStr+="End\n";
+        activeLocalNode.setNodeReference(refStr);
+        activeLocalNode.setEncodedNodeReference(EncodedStr);
+    }
 }

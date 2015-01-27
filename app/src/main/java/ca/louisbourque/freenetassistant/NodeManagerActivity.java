@@ -182,11 +182,16 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
 			actionBar.findViewById(R.id.node_discard).setVisibility(View.INVISIBLE);
 			actionBar.findViewById(R.id.node_share).setVisibility(View.INVISIBLE);
 		}else{
+            String nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
+            if(nodeRef == null || nodeRef == ""){
+                actionBar.findViewById(R.id.node_share).setVisibility(View.INVISIBLE);
+            }else{
+                actionBar.findViewById(R.id.node_share).setVisibility(View.VISIBLE);
+            }
 			actionBar.findViewById(R.id.node_add).setVisibility(View.VISIBLE);
 			actionBar.findViewById(R.id.node_accept).setVisibility(View.VISIBLE);
 			actionBar.findViewById(R.id.node_edit).setVisibility(View.VISIBLE);
 			actionBar.findViewById(R.id.node_discard).setVisibility(View.VISIBLE);
-			actionBar.findViewById(R.id.node_share).setVisibility(View.VISIBLE);
 		}
 	}
 	
