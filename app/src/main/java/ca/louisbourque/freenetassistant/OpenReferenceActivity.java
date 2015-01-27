@@ -28,6 +28,7 @@ public class OpenReferenceActivity extends ActionBarActivity {
 
 	public GlobalState gs;
 	private AddPeer aPeer;
+    private String nodeRef;
 	
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,7 +37,6 @@ public class OpenReferenceActivity extends ActionBarActivity {
 	    String type = intent.getType();
 	    setContentView(R.layout.activity_open_reference);
 		this.gs = (GlobalState) getApplication();
-		this.gs.startFCPService();
 
         // Set up the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -45,12 +45,19 @@ public class OpenReferenceActivity extends ActionBarActivity {
 		
 	    if (Intent.ACTION_VIEW.equals(action) && type != null) {
 	        //if ("text/plain".equals(type)) {
-	            handleSendText(intent); // Handle text being sent
+            this.nodeRef = handleSendText(intent); // Handle text being sent
+
 	        //}
 	    } else {
-	        // Handle other intents, such as being started from the home screen
+	        int selected = intent.getIntExtra(Constants.LOCAL_NODE_SELECTED,-1);
+            if(selected >= 0){
+                this.nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
+            }
 	    }
-	
+        if (this.nodeRef != null) {
+            TextView textView = (TextView) findViewById(R.id.NodeRef_value);
+            textView.setText(this.nodeRef);
+        }
 	}
 	@Override
 	public void onDestroy(){
@@ -69,7 +76,7 @@ public class OpenReferenceActivity extends ActionBarActivity {
         super.onStop();
     }
 	
-	void handleSendText(Intent intent) {
+	private String handleSendText(Intent intent) {
 		Uri uri = intent.getData();
 		BufferedReader in;
 		StringBuilder sb = new StringBuilder(10000);
@@ -231,10 +238,7 @@ public class OpenReferenceActivity extends ActionBarActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    if (sb != null) {
-	    	TextView textView = (TextView) findViewById(R.id.NodeRef_value);
-	    	textView.setText(sb.toString());
-	    }
+        return sb.toString();
 	}
 
 	public void cancelReference(View view) {

@@ -24,6 +24,7 @@ public class Constants {
 	protected static final String BROADCAST_UPDATE_DOWNLOADS = "ca.louisbourque.freenetassistant.update_downloads";
 	protected static final String BROADCAST_UPDATE_UPLOADS = "ca.louisbourque.freenetassistant.update_uploads";
 	protected static final String BROADCAST_UPDATE_PEERS = "ca.louisbourque.freenetassistant.update_peers";
+    public static final String LOCAL_NODE_SELECTED = "ca.louisbourque.freenetassistant.local_node_selected";
 	public static final String IS_CONNECTED = "isConnected";
 	public static final String STATUS = "status";
 	public static final String DOWNLOADS = "downloads";

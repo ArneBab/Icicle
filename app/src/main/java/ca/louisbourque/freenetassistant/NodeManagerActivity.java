@@ -9,6 +9,7 @@ import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -90,11 +91,12 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
 		shareButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	int selected = list.getCheckedItemPosition();
-        			if(selected == AdapterView.INVALID_POSITION){
-        				return;
-        			}
-        			//TODO: Once LocalNode gets a NodeRef, use this to share it.
-        			Toast.makeText(getApplicationContext(), "This feature is not yet implemented :-(", Toast.LENGTH_SHORT).show();
+                if(selected == AdapterView.INVALID_POSITION){
+                    return;
+                }
+                Intent intent = new Intent(gs, OpenReferenceActivity.class);
+                intent.putExtra(Constants.LOCAL_NODE_SELECTED,selected);
+                startActivityForResult(intent,Constants.Activity_Reference);
             }
         });
 		

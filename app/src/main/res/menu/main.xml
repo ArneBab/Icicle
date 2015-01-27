@@ -12,11 +12,5 @@
         android:icon="@drawable/ic_file_upload_black_36dp"
         app:showAsAction="always"
         android:title="@string/action_upload"/>
-    <item
-        android:id="@+id/action_social"
-        android:orderInCategory="10"
-        android:icon="@drawable/ic_people_black_36dp"
-        app:showAsAction="always"
-        android:title="@string/title_activity_reference"/>
 
 </menu>

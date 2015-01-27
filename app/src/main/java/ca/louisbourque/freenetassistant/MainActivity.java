@@ -172,9 +172,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		case R.id.action_upload:
 			handleFileUpload();
 			return true;
-		case R.id.action_social:
-			handleSocial();
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -197,20 +194,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		startActivityForResult(intent,Constants.Activity_File_Upload);
 	}
 
-	private void handleSocial() {
-		Intent intent = new Intent(this, ReferenceActivity.class);
-		startActivityForResult(intent,Constants.Activity_Reference);
-	}
-
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){
             mViewPager.setCurrentItem(Constants.PagerPositionUploads);
 		}
 		if(requestCode == Constants.Activity_Settings && resultCode == Activity.RESULT_OK){
 			this.gs.sendRedrawAll();
-		}
-		if(requestCode == Constants.Activity_Reference && resultCode == Activity.RESULT_OK){
-            mViewPager.setCurrentItem(Constants.PagerPositionPeers);
 		}
 	}
 
