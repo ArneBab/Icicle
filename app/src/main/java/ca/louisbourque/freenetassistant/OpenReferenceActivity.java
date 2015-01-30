@@ -81,13 +81,11 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             this.nodeRef = processNFCIntent(intent);
+            findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
 
         }else if (Intent.ACTION_VIEW.equals(action) && type != null) {
-            //if ("text/plain".equals(type)) {
             this.nodeRef = handleSendText(intent); // Handle text being sent
-
             findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
-            //}
         } else {
             int selected = intent.getIntExtra(Constants.LOCAL_NODE_SELECTED,-1);
             if(selected >= 0){
