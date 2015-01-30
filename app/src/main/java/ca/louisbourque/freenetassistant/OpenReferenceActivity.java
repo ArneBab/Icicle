@@ -1,9 +1,17 @@
 package ca.louisbourque.freenetassistant;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import net.pterodactylus.fcp.ARK;
 import net.pterodactylus.fcp.AddPeer;
@@ -14,7 +22,11 @@ import net.pterodactylus.fcp.Version;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
@@ -30,7 +42,13 @@ public class OpenReferenceActivity extends ActionBarActivity {
 	private AddPeer aPeer;
     private String nodeRef;
 	
-	protected void onCreate (Bundle savedInstanceState) {
+    private String encodedNodeRef;
+    NfcAdapter mNfcAdapter;
+    // Flag to indicate that Android Beam is available
+    boolean mAndroidBeamAvailable  = false;
+    private Uri[] mFileUris = new Uri[1];
+
+    protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -42,16 +60,31 @@ public class OpenReferenceActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+
+        // NFC isn't available on the device
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
+            mAndroidBeamAvailable = true;
+            mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        }
 		
 	    if (Intent.ACTION_VIEW.equals(action) && type != null) {
 	        //if ("text/plain".equals(type)) {
             this.nodeRef = handleSendText(intent); // Handle text being sent
 
+            findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
 	        //}
 	    } else {
 	        int selected = intent.getIntExtra(Constants.LOCAL_NODE_SELECTED,-1);
             if(selected >= 0){
                 this.nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
+                this.encodedNodeRef = this.gs.getLocalNodeList().get(selected).getEncodedNodeReference();
+
+                if(mAndroidBeamAvailable){
+                    findViewById(R.id.shareNodeRef).setVisibility(View.VISIBLE);
+                    File outFile = copyFileToInternal();
+                    mFileUris[0] = Uri.fromFile(outFile);
+                    mNfcAdapter.setBeamPushUris(mFileUris,this);
+                }
             }
 	    }
         if (this.nodeRef != null) {
@@ -257,4 +290,61 @@ public class OpenReferenceActivity extends ActionBarActivity {
 		finish();
 		
 	}
+
+    public void shareReference(View view) {
+        startActivity(shareReference());
+    }
+
+    public Intent shareReference(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        File outFile = copyFileToInternal();
+        if(outFile == null) return null;
+        Uri uri = Uri.fromFile(outFile);
+
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        return shareIntent;
+    }
+
+
+    private File copyFileToInternal() {
+        try {
+            InputStream is = new ByteArrayInputStream(encodedNodeRef.getBytes());
+            File refDir = new File(getExternalFilesDir(null), "fref");
+
+            clearFolder(refDir);
+            //Save to a random location, to prevent guess location of ref
+            File outFile = new File(refDir, "myref.fref");
+            if(refDir.mkdirs() && outFile.createNewFile()){
+                OutputStream os = new FileOutputStream(outFile.getAbsolutePath());
+
+                byte[] buff = new byte[1024];
+                int len;
+                while ((len = is.read(buff)) > 0) {
+                    os.write(buff, 0, len);
+                }
+                os.flush();
+                os.close();
+                is.close();
+            }
+            outFile.setReadable(true, false);
+            return outFile;
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: should close streams properly here
+        }
+        return null;
+    }
+
+    private void clearFolder(File dir) {
+
+        File[] files = dir.listFiles();
+        if(files == null){
+            return;
+        }
+        for (File file : files) {
+            file.delete();
+        }
+    }
+
 }

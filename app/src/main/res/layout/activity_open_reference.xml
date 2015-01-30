@@ -59,7 +59,17 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:onClick="addReference"
-            android:text="@string/addNodeRef" />
+            android:text="@string/addNodeRef"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/shareNodeRef"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:onClick="shareReference"
+            android:text="@string/shareNodeRef"
+            android:visibility="gone" />
     </TableRow>
 
 </LinearLayout>

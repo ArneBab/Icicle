@@ -35,6 +35,7 @@
     <string name="NodeRef">Freenet Node Reference:</string>
     <string name="openNodeRef">Open Freenet Node Reference</string>
     <string name="addNodeRef">Add Node Reference</string>
+    <string name="shareNodeRef">Share Node Reference</string>
     <string name="addingNodeRef">Adding Node Reference</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
