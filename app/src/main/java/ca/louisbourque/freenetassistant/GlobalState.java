@@ -806,9 +806,11 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         refStr+="lastGoodVersion="+myNode.getLastGoodVersion()+"\n";
         temp = new String(Base64.encode(myNode.getLastGoodVersion().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
         EncodedStr+="lastGoodVersion=="+temp+"\n";
-        refStr+="location="+myNode.getNodeRef().getLocation()+"\n";
-        temp = new String(Base64.encode(String.valueOf(myNode.getNodeRef().getLocation()).getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
-        EncodedStr+="location=="+temp+"\n";
+        if(myNode.getNodeRef().getLocation() > 0) {
+            refStr += "location=" + myNode.getNodeRef().getLocation() + "\n";
+            temp = new String(Base64.encode(String.valueOf(myNode.getNodeRef().getLocation()).getBytes(), Base64.NO_PADDING | Base64.NO_WRAP));
+            EncodedStr += "location==" + temp + "\n";
+        }
         refStr+="myName="+myNode.getMyName()+"\n";
         temp = new String(Base64.encode(myNode.getMyName().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
         EncodedStr+="myName=="+temp+"\n";
