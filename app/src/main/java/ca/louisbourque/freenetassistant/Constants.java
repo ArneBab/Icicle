@@ -41,6 +41,7 @@ public class Constants {
 	public static final String KEY_TYPE_CHK = "CHK@";
 	public static final String KEY_TYPE_SSK = "SSK@";
 	public static final String KEY_TYPE_DEFAULT = KEY_TYPE_SSK;
+    public static String ToastMessage = "ToastMessage";
 	
 	public static int numberOfTabs = 4;
 	public static int debounceInterval = 500;

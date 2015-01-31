@@ -37,6 +37,7 @@
     <string name="addNodeRef">Add Node Reference</string>
     <string name="shareNodeRef">Share Node Reference</string>
     <string name="addingNodeRef">Adding Node Reference</string>
+    <string name="protocolError">Protocol Error</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="done">Transfer Complete</string>

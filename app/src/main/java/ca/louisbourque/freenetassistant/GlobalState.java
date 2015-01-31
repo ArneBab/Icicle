@@ -24,6 +24,7 @@ import net.pterodactylus.fcp.PersistentPut;
 import net.pterodactylus.fcp.PersistentPutDir;
 import net.pterodactylus.fcp.PersistentRequestModified;
 import net.pterodactylus.fcp.PersistentRequestRemoved;
+import net.pterodactylus.fcp.ProtocolError;
 import net.pterodactylus.fcp.PutFailed;
 import net.pterodactylus.fcp.PutFetchable;
 import net.pterodactylus.fcp.PutSuccessful;
@@ -107,7 +108,11 @@ public class GlobalState extends Application{
 	@SuppressLint("HandlerLeak")
 	private final Handler toastHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			 Toast.makeText(getApplicationContext(),getResources().getString(msg.arg1), msg.arg2).show();
+            if(msg.arg1 == 0){
+                Toast.makeText(getApplicationContext(),msg.getData().getString(Constants.ToastMessage), msg.arg2).show();
+            }else {
+                Toast.makeText(getApplicationContext(), getResources().getString(msg.arg1), msg.arg2).show();
+            }
 		}
 	};
 	
@@ -675,16 +680,26 @@ public class GlobalState extends Application{
 		editor.putInt(Constants.PREF_ACTIVE_LOCAL_NODE, this.activeLocalNode);
 		editor.commit();
 		//Toast.makeText(this, R.string.node_change_active, Toast.LENGTH_SHORT).show();
-		showToast(R.string.node_change_active);
+		showToast(R.string.node_change_active,Toast.LENGTH_SHORT);
 		restartFCPService(true);
 	}
 	
-	public void showToast(int stringMessage){
+	public void showToast(int stringMessage,int length){
 		Message msg = toastHandler.obtainMessage();
 		msg.arg1 = stringMessage;
-		msg.arg2 = Toast.LENGTH_SHORT;
+		msg.arg2 = length;
 		toastHandler.sendMessage(msg);
 	}
+
+    public void showToast(String stringMessage,int length){
+        Message msg = toastHandler.obtainMessage();
+        msg.arg1 = 0;
+        msg.arg2 = length;
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.ToastMessage,stringMessage);
+        msg.setData(bundle);
+        toastHandler.sendMessage(msg);
+    }
 	
 	public void restartFCPService(boolean force){
 		stopFCPService();
@@ -847,5 +862,11 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         EncodedStr+="End\n";
         activeLocalNode.setNodeReference(refStr);
         activeLocalNode.setEncodedNodeReference(EncodedStr);
+    }
+
+    public void handleProtocolError(ProtocolError protocolError) {
+        String msg = getResources().getString(R.string.protocolError)+": "+ protocolError.getCodeDescription();
+        if(!protocolError.getCodeDescription().equals(protocolError.getExtraDescription())) msg += "("+ protocolError.getExtraDescription() + ")";
+        showToast(msg,Toast.LENGTH_LONG);
     }
 }

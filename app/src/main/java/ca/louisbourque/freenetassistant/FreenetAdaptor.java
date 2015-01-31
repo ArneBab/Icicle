@@ -92,7 +92,7 @@ public class FreenetAdaptor extends FcpAdapter {
 	}
 	
 	public void receivedProtocolError(FcpConnection fcpConnection, ProtocolError protocolError) {
-		this.gs.sendRedrawStatus();
+		this.gs.handleProtocolError(protocolError);
 		synchronized (this) {
 			notify();
 		}
