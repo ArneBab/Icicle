@@ -17,7 +17,7 @@
         android:text="@string/NodeRef"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16sp"
+        android:layout_marginLeft="16dp"
         android:textColor="@color/black"
         android:textSize="@dimen/abc_text_size_subhead_material" />
 
@@ -34,14 +34,38 @@
     </ScrollView>
 
     <TableRow
-        android:id="@+id/trust_visibility_row"
+        android:id="@+id/trust_visibility_title_row"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="@string/trust"
+            android:id="@+id/trust_spinner_title"
+            android:textSize="@dimen/abc_text_size_subhead_material"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="@string/visibility"
+            android:id="@+id/visibility_spinner_title"
+            android:textSize="@dimen/abc_text_size_subhead_material"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/trust_visibility_row"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
         <Spinner
             android:layout_width="wrap_content"
@@ -63,8 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="24dp">
+        android:layout_marginBottom="8dp">
 
         <Button
             android:id="@+id/cancelNodeRef"

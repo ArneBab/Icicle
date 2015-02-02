@@ -3,16 +3,12 @@ package ca.louisbourque.freenetassistant;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
 
 import net.pterodactylus.fcp.ARK;
 import net.pterodactylus.fcp.AddPeer;
@@ -54,9 +50,13 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
     NfcAdapter mNfcAdapter;
     // Flag to indicate that Android Beam is available
     boolean mAndroidBeamAvailable  = false;
+    private Bundle mSavedInstanceState;
+    private static final String STATE_TRUST = "trust";
+    private static final String STATE_VISIBILITY = "visibility";
 
     protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
 	    setContentView(R.layout.activity_open_reference);
 		this.gs = (GlobalState) getApplication();
 
@@ -104,6 +104,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
             setupSpinners();
         } else {
             //opening own node
+            findViewById(R.id.trust_visibility_title_row).setVisibility(View.GONE);
             findViewById(R.id.trust_visibility_row).setVisibility(View.GONE);
             int selected = intent.getIntExtra(Constants.LOCAL_NODE_SELECTED,-1);
             if(selected >= 0){
@@ -122,12 +123,23 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        if(aPeer != null) {
+            savedInstanceState.putString(STATE_TRUST, aPeer.getField("Trust"));
+            savedInstanceState.putString(STATE_VISIBILITY, aPeer.getField("Visibility"));
+        }
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     private void setupSpinners() {
         this.lnTrust =(Spinner) findViewById(R.id.trust_spinner);
         this.lnVisibility =(Spinner) findViewById(R.id.visibility_spinner);
-        ArrayAdapter<String> adapterT = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Constants.TrustValues);
+        ArrayAdapter<String> adapterT = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Constants.TrustValues);
         this.lnTrust.setAdapter(adapterT);
-        ArrayAdapter<String> adapterV = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Constants.VisibilityValues);
+        ArrayAdapter<String> adapterV = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Constants.VisibilityValues);
         this.lnVisibility.setAdapter(adapterV);
         this.lnTrust.setSelection(Constants.TrustValues.indexOf(this.aPeer.getField("Trust")));
         this.lnVisibility.setSelection(Constants.VisibilityValues.indexOf(this.aPeer.getField("Visibility")));
@@ -208,10 +220,6 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
                 sb.append(str).append("\n");
 
             }
-			/*System.out.println("dsaPubKey.y: "+aPeer.getField("dsaPubKey.y"));
-			System.out.println("dsaGroup.g: "+aPeer.getField("dsaGroup.g"));
-			System.out.println("dsaGroup.p: "+aPeer.getField("dsaGroup.p"));
-			System.out.println("dsaGroup.q: "+aPeer.getField("dsaGroup.q"));*/
             in.close();
 
 		} catch (IOException e) {
@@ -360,9 +368,13 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         if(sigP256 != null){
             aPeer.setField("sigP256", sigP256);
         }
-        aPeer.setField("Trust", Constants.DEFAULT_TRUST);
-        aPeer.setField("Visibility", Constants.DEFAULT_VISIBILITY);
-
+        if(mSavedInstanceState != null){
+            aPeer.setField("Trust", mSavedInstanceState.getString(STATE_TRUST,Constants.DEFAULT_TRUST));
+            aPeer.setField("Visibility", mSavedInstanceState.getString(STATE_VISIBILITY,Constants.DEFAULT_VISIBILITY));
+        }else {
+            aPeer.setField("Trust", Constants.DEFAULT_TRUST);
+            aPeer.setField("Visibility", Constants.DEFAULT_VISIBILITY);
+        }
         return in;
     }
 
@@ -379,7 +391,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 	public void addReference(View view) {
 		try {
             saveNodeRef();
-			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgAddNoderef,0,(Object)this.aPeer));
+			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgAddNoderef,0,this.aPeer));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -399,7 +411,6 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 
     public Intent shareReference(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
         File outFile = copyFileToInternal();
         if(outFile == null) return null;
@@ -409,7 +420,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         return shareIntent;
     }
 
-
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private File copyFileToInternal() {
         InputStream is;
         OutputStream os;
@@ -440,6 +451,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         return null;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearFolder(File dir) {
 
         File[] files = dir.listFiles();
@@ -453,7 +465,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
-        NdefMessage msg = new NdefMessage(
+        return new NdefMessage(
                 new NdefRecord[] { NdefRecord.createMime(
                         "application/vnd.ca.louisbourque.freenetassistant", this.encodedNodeRef.getBytes(Charset.forName("US-ASCII")))
                         /**
@@ -466,6 +478,5 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
                          */
                         //,NdefRecord.createApplicationRecord("com.example.android.beam")
                 });
-        return msg;
     }
 }

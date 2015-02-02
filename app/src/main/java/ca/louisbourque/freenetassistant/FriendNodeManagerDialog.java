@@ -29,21 +29,17 @@ public class FriendNodeManagerDialog extends DialogFragment {
     
     public static FriendNodeManagerDialog newInstance(int title, FriendNode n) {
     	FriendNodeManagerDialog frag = new FriendNodeManagerDialog();
-    	frag.setFriendNode(n);
         Bundle args = new Bundle();
         args.putInt("title", title);
+        args.putSerializable("friendNode",n);
         frag.setArguments(args);
         return frag;
     }
-
-	private void setFriendNode(FriendNode n) {
-		this.friendNode = n;
-		
-	}
 	
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int title = getArguments().getInt("title");
+        this.friendNode = (FriendNode) getArguments().getSerializable("friendNode");
         mView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.friend_node_dialog_layout, null, false);
         
         
