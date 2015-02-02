@@ -5,6 +5,7 @@ import android.app.AlertDialog.Builder;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import net.pterodactylus.fcp.AddPeer;
 
 public class FriendNodeManagerActivity extends ActionBarActivity implements FriendNodeManagerDialog.NodeManagerDialogListener,FriendNodeListFragment.OnItemSelectedListener {
 
@@ -93,6 +96,9 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case R.id.action_upload:
+                handleNodeUpload();
+                return true;
             case R.id.action_edit:
                 handleNodeEdit();
                 return true;
@@ -101,6 +107,15 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void handleNodeUpload() {
+        try {
+            AddPeer aPeer = this.gs.processStringIntoNode(gs.getFriendNodes().get(list.getCheckedItemPosition()).getNodeReference());
+            this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgAddNoderef, 0,aPeer));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -117,9 +132,11 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
         if(this.menu == null) return;
 		int selected = list.getCheckedItemPosition();
 		if(selected == AdapterView.INVALID_POSITION){
+            this.menu.findItem(R.id.action_upload).setVisible(false);
             this.menu.findItem(R.id.action_edit).setVisible(false);
             this.menu.findItem(R.id.action_delete).setVisible(false);
 		}else{
+            this.menu.findItem(R.id.action_upload).setVisible(true);
             this.menu.findItem(R.id.action_edit).setVisible(true);
             this.menu.findItem(R.id.action_delete).setVisible(true);
 		}

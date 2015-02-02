@@ -13,19 +13,13 @@ public class FriendNode implements Serializable {
     private String trust;
     private String visibility;
     private String nodeReference;
-    private String encodedNodeReference;
 
-	public FriendNode(){
-		new FriendNode("","","","");
-	}
-
-	public FriendNode(String name, String identity, String trust, String visibility){
+	public FriendNode(String name, String identity, String trust, String visibility, String nodeReference){
 		this.name = name;
         this.identity = identity;
         this.trust = trust;
         this.visibility = visibility;
-        this.nodeReference = "";
-        this.encodedNodeReference = "";
+        this.nodeReference = nodeReference;
 	}
 
 	public String getName() {
@@ -66,14 +60,6 @@ public class FriendNode implements Serializable {
 
     public void setNodeReference(String nodeReference) {
         this.nodeReference = nodeReference;
-    }
-
-    public String getEncodedNodeReference() {
-        return encodedNodeReference;
-    }
-
-    public void setEncodedNodeReference(String encodedNodeReference) {
-        this.encodedNodeReference = encodedNodeReference;
     }
 
     public String toString()

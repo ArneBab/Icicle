@@ -11,13 +11,18 @@ import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import net.pterodactylus.fcp.ARK;
+import net.pterodactylus.fcp.AddPeer;
+import net.pterodactylus.fcp.DSAGroup;
 import net.pterodactylus.fcp.DataFound;
 import net.pterodactylus.fcp.FcpMessage;
+import net.pterodactylus.fcp.FcpUtils;
 import net.pterodactylus.fcp.FinishedCompression;
 import net.pterodactylus.fcp.GetFailed;
 import net.pterodactylus.fcp.IdentifierCollision;
 import net.pterodactylus.fcp.NodeData;
 import net.pterodactylus.fcp.NodeHello;
+import net.pterodactylus.fcp.NodeRef;
 import net.pterodactylus.fcp.Peer;
 import net.pterodactylus.fcp.PersistentGet;
 import net.pterodactylus.fcp.PersistentPut;
@@ -32,6 +37,8 @@ import net.pterodactylus.fcp.SSKKeypair;
 import net.pterodactylus.fcp.SimpleProgress;
 import net.pterodactylus.fcp.StartedCompression;
 import net.pterodactylus.fcp.URIGenerated;
+import net.pterodactylus.fcp.Version;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
@@ -97,7 +104,6 @@ public class GlobalState extends Application{
 	};
 	private Debouncer debounceBroadcasts = new Debouncer(mFreenetHandler, Constants.debounceInterval);
 	private NodeStatus nodeStatus;
-	private NodeData nodeData;
 	private CopyOnWriteArrayList<Peer> peers;
 	private CopyOnWriteArrayList<Download> DownloadsList;
 	private CopyOnWriteArrayList<Upload> UploadsList;
@@ -128,18 +134,18 @@ public class GlobalState extends Application{
 	
 	private void initializeState(){
         serviceIntent = new Intent(this, FCPService.class);
-		this.peers = new CopyOnWriteArrayList<Peer>();
-		this.DownloadsList = new CopyOnWriteArrayList<Download>();
-		this.UploadsList = new CopyOnWriteArrayList<Upload>();
-		this.UploadDirsList = new CopyOnWriteArrayList<UploadDir>();
+		this.peers = new CopyOnWriteArrayList<>();
+		this.DownloadsList = new CopyOnWriteArrayList<>();
+		this.UploadsList = new CopyOnWriteArrayList<>();
+		this.UploadDirsList = new CopyOnWriteArrayList<>();
 		this.nodeStatus = null;
 		this.setConnected(false);
 	}
 	
 	public void savePreferences() {
 		Editor editor = sharedPref.edit();
-		String encodedLocal = null;
-        String encodedFriends = null;
+		String encodedLocal;
+        String encodedFriends;
 		  
 		  try {
               ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -170,7 +176,7 @@ public class GlobalState extends Application{
 	public void loadPreferences() {
 		String strLocalNodes = sharedPref.getString(Constants.PREF_LOCAL_NODES, "");
 		if(strLocalNodes.equals("")){
-			this.localNodes = new CopyOnWriteArrayList<LocalNode>();
+			this.localNodes = new CopyOnWriteArrayList<>();
 		}else{
 			byte[] bytes = Base64.decode(strLocalNodes.getBytes(),Base64.DEFAULT);
 			  try {
@@ -178,12 +184,12 @@ public class GlobalState extends Application{
 			   this.localNodes = (CopyOnWriteArrayList<LocalNode>)objectInputStream.readObject();
 			  } catch (IOException | ClassNotFoundException | ClassCastException e) {
 				  e.printStackTrace();
-				  this.localNodes = new CopyOnWriteArrayList<LocalNode>();
+				  this.localNodes = new CopyOnWriteArrayList<>();
 			  }
 		}
         String strFriendNodes = sharedPref.getString(Constants.PREF_FRIEND_NODES, "");
         if(strFriendNodes.equals("")){
-            this.friendNodes = new CopyOnWriteArrayList<FriendNode>();
+            this.friendNodes = new CopyOnWriteArrayList<>();
         }else{
             byte[] bytes = Base64.decode(strFriendNodes.getBytes(),Base64.DEFAULT);
             try {
@@ -191,7 +197,7 @@ public class GlobalState extends Application{
                 this.friendNodes = (CopyOnWriteArrayList<FriendNode>)objectInputStream.readObject();
             } catch (IOException | ClassNotFoundException | ClassCastException e) {
                 e.printStackTrace();
-                this.friendNodes = new CopyOnWriteArrayList<FriendNode>();
+                this.friendNodes = new CopyOnWriteArrayList<>();
             }
         }
 		this.activeLocalNode = sharedPref.getInt(Constants.PREF_ACTIVE_LOCAL_NODE, 0);
@@ -224,10 +230,6 @@ public class GlobalState extends Application{
 		return deviceID;
 	}
 
-	public NodeStatus getNodeStatus() {
-		return nodeStatus;
-	}
-
 	public void setNodeHello(NodeHello nodeHello) {
 		this.nodeStatus = new NodeStatus(false,nodeHello.getVersion());
 	}
@@ -237,7 +239,6 @@ public class GlobalState extends Application{
 		this.nodeStatus.setRecentInputRate(Double.parseDouble(newNodeData.getVolatile("recentInputRate"))/1000);
 		this.nodeStatus.setRecentOutputRate(Double.parseDouble(newNodeData.getVolatile("recentOutputRate"))/1000);
 		this.nodeStatus.setUptimeSeconds(Double.parseDouble(newNodeData.getVolatile("uptimeSeconds")));
-		this.nodeData = newNodeData;
         extractNodeReference(newNodeData, this.getActiveLocalNode());
 		sendRedrawStatus();
         savePreferences();
@@ -344,34 +345,7 @@ public class GlobalState extends Application{
 			peersListener.onStateChanged(data);
         }
 	}
-	
-	
-	
-	public CopyOnWriteArrayList<Peer> getPeers() {
-		return peers;
-	}
-	
-	public CopyOnWriteArrayList<Download> getDownloadList() {
-		return this.DownloadsList;
-	}
-	
-	public CopyOnWriteArrayList<Upload> getUploadList() {
-		return this.UploadsList;
-	}
-	
-	public CopyOnWriteArrayList<UploadDir> getUploadDirList() {
-		return this.UploadDirsList;
-	}
-	
-	public Peer getPeer(String identifier){
-		for(int i=0;i<this.peers.size();i++){
-	        if(this.peers.get(i).getIdentity().equals(identifier)){
-	            return this.peers.get(i);
-		        }
-		}
-		return null;
-	}
-	
+
 	public Download getDownload(String identifier){
 		for(int i=0;i<this.DownloadsList.size();i++){
 	        if(this.DownloadsList.get(i).getPersistentGet().getIdentifier().equals(identifier)){
@@ -694,10 +668,10 @@ public class GlobalState extends Application{
 	public void onActiveNodeChanged() {
 		Editor editor = sharedPref.edit();
 		editor.putInt(Constants.PREF_ACTIVE_LOCAL_NODE, this.activeLocalNode);
-		editor.commit();
+		editor.apply();
 		//Toast.makeText(this, R.string.node_change_active, Toast.LENGTH_SHORT).show();
 		showToast(R.string.node_change_active,Toast.LENGTH_SHORT);
-		restartFCPService(true);
+		restartFCPService();
 	}
 	
 	public void showToast(int stringMessage,int length){
@@ -717,7 +691,7 @@ public class GlobalState extends Application{
         toastHandler.sendMessage(msg);
     }
 	
-	public void restartFCPService(boolean force){
+	public void restartFCPService(){
 		stopFCPService();
 		initializeState();
 		startFCPService();
@@ -726,17 +700,15 @@ public class GlobalState extends Application{
 public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 		Editor editor = sharedPref.edit();
 		editor.putInt(Constants.PREF_REFRESH_RATE, integer);
-		editor.commit();
+		editor.apply();
 		if(need_to_reset_loop){
-			restartFCPService(false);
+			restartFCPService();
 		}
 	}
 
 	public int getRefresh_rate() {
 		return refresh_rate;
 	}
-
-
 
 	public void setRefresh_rate(int refresh_rate) {
 		//if the new refresh rate is shorter than the old one, restart the service. Otherwise may need to wait a while for new refresh rate to take effect.
@@ -755,7 +727,7 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 		this.wifiOnly = wifiOnly;
 		Editor editor = sharedPref.edit();
 		editor.putBoolean(Constants.PREF_WIFI_ONLY, wifiOnly);
-		editor.commit();
+		editor.apply();
 	}
 
 	public void startFCPService() {
@@ -824,13 +796,9 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 		//Identifier Collision was not caused by an upload
 	}
 
-	public NodeData getNodeData() {
-		return this.nodeData;
-	}
-
     private void extractNodeReference(NodeData myNode, LocalNode activeLocalNode) {
         String refStr = "";
-        String temp = "";
+        String temp;
         String EncodedStr = "";
         refStr+="identity="+myNode.getIdentity()+"\n";
         EncodedStr+="identity="+myNode.getIdentity()+"\n";
@@ -882,7 +850,7 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 
     public void handleProtocolError(ProtocolError protocolError) {
         String msg = getResources().getString(R.string.protocolError)+": "+ protocolError.getCodeDescription();
-        if(!protocolError.getCodeDescription().equals(protocolError.getExtraDescription())) msg += "("+ protocolError.getExtraDescription() + ")";
+        if(!protocolError.getCodeDescription().equals(protocolError.getExtraDescription())) msg += " ("+ protocolError.getExtraDescription() + ")";
         showToast(msg,Toast.LENGTH_LONG);
     }
 
@@ -897,5 +865,150 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 
     public CopyOnWriteArrayList<FriendNode> getFriendNodes(){
         return this.friendNodes;
+    }
+
+    public AddPeer processStringIntoNode(String in){
+        String arkPubURI = null;
+        String arkPrivURI = null;
+        String arkNumber = null;
+        String dsaGroupG = null;
+        String dsaGroupP = null;
+        String dsaGroupQ = null;
+        String ecdsaP256pub = null;
+        String sigP256 = null;
+
+        NodeRef aNode = new NodeRef();
+        //hack for case when Location is not set in NodeRef
+        aNode.setLocation(-1);
+        String str2;
+        String[] array = in.split("\\r?\\n");
+
+        for (String anArray : array) {
+            if (anArray.startsWith("identity=")) {
+                if (anArray.charAt(9) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(10), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(9);
+                aNode.setIdentity(str2);
+            } else if (anArray.startsWith("opennet=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(8);
+                aNode.setOpennet(Boolean.valueOf(str2));
+            } else if (anArray.startsWith("myName=")) {
+                if (anArray.charAt(7) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(8), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(7);
+                aNode.setName(str2);
+            } else if (anArray.startsWith("location=")) {
+                if (anArray.charAt(9) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(10), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(9);
+                aNode.setLocation(Double.valueOf(str2));
+            } else if (anArray.startsWith("physical.udp=")) {
+                if (anArray.charAt(13) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(14), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(13);
+                aNode.setPhysicalUDP(str2);
+            } else if (anArray.startsWith("ark.pubURI=")) {
+
+                arkPubURI = anArray.substring(11);
+            } else if (anArray.startsWith("ark.privURI=")) {
+                if (anArray.charAt(12) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(13), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(12);
+                arkPrivURI = str2;
+            } else if (anArray.startsWith("ark.number=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(11);
+                arkNumber = str2;
+            } else if (anArray.startsWith("dsaPubKey.y=")) {
+                if (anArray.charAt(12) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(13), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(12);
+                aNode.setDSAPublicKey(str2);
+            } else if (anArray.startsWith("dsaGroup.g=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(11);
+                dsaGroupG = str2;
+            } else if (anArray.startsWith("dsaGroup.p=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(11);
+                dsaGroupP = str2;
+            } else if (anArray.startsWith("dsaGroup.q=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(11);
+                dsaGroupQ = str2;
+            } else if (anArray.startsWith("auth.negTypes=")) {
+                if (anArray.charAt(14) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(15), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(14);
+                aNode.setNegotiationTypes(FcpUtils.decodeMultiIntegerField(str2));
+            } else if (anArray.startsWith("version=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(8);
+                aNode.setVersion(new Version(str2));
+            } else if (anArray.startsWith("lastGoodVersion=")) {
+                if (anArray.charAt(16) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(17), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(16);
+                aNode.setLastGoodVersion(new Version(str2));
+            } else if (anArray.startsWith("testnet=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(8);
+                aNode.setTestnet(Boolean.valueOf(str2));
+            } else if (anArray.startsWith("sig=")) {
+                if (anArray.charAt(4) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(5), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(4);
+                aNode.setSignature(str2);
+            } else if (anArray.startsWith("ecdsa.P256.pub=")) {
+                if (anArray.charAt(15) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(16), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(15);
+                ecdsaP256pub = str2;
+            } else if (anArray.startsWith("sigP256=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
+                else
+                    str2 = anArray.substring(8);
+                sigP256 = str2;
+            }
+
+        }
+        aNode.setARK(new ARK(arkPubURI,arkPrivURI,arkNumber));
+        aNode.setDSAGroup(new DSAGroup(dsaGroupG,dsaGroupP,dsaGroupQ));
+        AddPeer aPeer = new AddPeer(aNode);
+        if(ecdsaP256pub != null){
+            aPeer.setField("ecdsa.P256.pub", ecdsaP256pub);
+        }
+        if(sigP256 != null){
+            aPeer.setField("sigP256", sigP256);
+        }
+        aPeer.setField("Trust",Constants.DEFAULT_TRUST);
+        aPeer.setField("Visibility",Constants.DEFAULT_VISIBILITY);
+        return aPeer;
     }
 }
