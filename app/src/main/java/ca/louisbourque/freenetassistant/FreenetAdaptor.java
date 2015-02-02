@@ -1,6 +1,5 @@
 package ca.louisbourque.freenetassistant;
 
-import ca.louisbourque.freenetassistant.GlobalState;
 import net.pterodactylus.fcp.AllData;
 import net.pterodactylus.fcp.ConfigData;
 import net.pterodactylus.fcp.DataFound;

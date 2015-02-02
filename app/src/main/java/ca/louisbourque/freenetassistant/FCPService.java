@@ -15,8 +15,7 @@ import android.os.Process;
 import android.os.Message;
 
 public class FCPService extends Service {
-	private Looper mServiceLooper;
-	private ServiceHandler mServiceHandler;
+    private ServiceHandler mServiceHandler;
 	private FreenetUtil freenet;
 	private RefreshThread refreshThread;
 	public BlockingQueue<Message> queue;
@@ -94,10 +93,10 @@ public class FCPService extends Service {
 		thread.start();
 
 		// Get the HandlerThread's Looper and use it for our Handler
-		mServiceLooper = thread.getLooper();
+        Looper mServiceLooper = thread.getLooper();
 		mServiceHandler = new ServiceHandler(mServiceLooper);
 
-		queue = new ArrayBlockingQueue<Message>(1024);
+		queue = new ArrayBlockingQueue<>(1024);
 		this.gs = (GlobalState) getApplication();
 		this.gs.setQueue(queue);
 		
@@ -154,25 +153,23 @@ public class FCPService extends Service {
 		try {
 			queue.put(Message.obtain(null, 0, Constants.MsgGetNode, 0));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/* This function is no longer used - persistent requests are automatically refreshed on connect, and updated while connected
 	public void updatePersistentRequests(){
 		try {
 			queue.put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public void updatePeers(){
 		try {
 			queue.put(Message.obtain(null, 0, Constants.MsgGetPeers, 0));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

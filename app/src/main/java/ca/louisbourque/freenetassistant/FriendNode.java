@@ -58,10 +58,6 @@ public class FriendNode implements Serializable {
         return nodeReference;
     }
 
-    public void setNodeReference(String nodeReference) {
-        this.nodeReference = nodeReference;
-    }
-
     public String toString()
 	    {
 	        return "[FriendNode: name=" + name +

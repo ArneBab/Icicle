@@ -1,7 +1,5 @@
 package ca.louisbourque.freenetassistant;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,7 +25,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.app.FragmentTransaction;
@@ -340,21 +337,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				return "";
 			}
 		}
-		
-		public int getPageIcon(int position) {
-			switch (position) {
-			case 0:
-				return R.drawable.ic_info_outline_black_36dp;
-			case 1:
-				return R.drawable.ic_file_download_black_36dp;
-			case 2:
-				return R.drawable.ic_file_upload_black_36dp;
-			case 3:
-				return R.drawable.ic_people_black_36dp;
-			default:
-				return R.drawable.ic_info_outline_black_36dp;
-			}
-		}
 	}
 
 
@@ -367,13 +349,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		private View mView;
 
-		public static PeersSectionFragment newInstance() {
-			// Seems pointless, I know, but this static method
-			// Might later be used to pass in arguments via a Bundle
-			return new PeersSectionFragment();
-		}
-
-		public PeersSectionFragment() {
+        public PeersSectionFragment() {
 			// Default, no argument constructor
 		}
 
@@ -427,13 +403,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		private View mView;
 
-		public static UploadsSectionFragment newInstance() {
-			// Seems pointless, I know, but this static method
-			// Might later be used to pass in arguments via a Bundle
-			return new UploadsSectionFragment();
-		}
-
-		public UploadsSectionFragment() {
+        public UploadsSectionFragment() {
 			// Default, no argument constructor
 		}
 
@@ -525,7 +495,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
-        			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+        			transferView.findViewById(R.id.transfer_failed).setVisibility(View.VISIBLE);
         			statusLabel.setText(getResources().getText(R.string.status_failed));
         			statusText.setText(" - "+pf.getCodeDescription());
         		}else if(sp != null){
@@ -618,7 +588,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         			bar.setVisibility(View.INVISIBLE);
         			pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
-        			((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+        			transferView.findViewById(R.id.transfer_failed).setVisibility(View.VISIBLE);
         			statusLabel.setText(getResources().getText(R.string.status_failed));
         			statusText.setText(" - "+pf.getCodeDescription());
         		}else if(sp != null){
@@ -645,12 +615,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public static class DownloadsSectionFragment extends Fragment implements GlobalState.StateListener {
 
 		private View mView;
-
-		public static DownloadsSectionFragment newInstance() {
-			// Seems pointless, I know, but this static method
-			// Might later be used to pass in arguments via a Bundle
-			return new DownloadsSectionFragment();
-		}
 
 		public DownloadsSectionFragment() {
 			// Default, no argument constructor
@@ -745,7 +709,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					bar.setVisibility(View.INVISIBLE);
 					pauseButton.setVisibility(View.GONE);
 					playButton.setVisibility(View.GONE);
-					((ImageView) transferView.findViewById(R.id.transfer_failed)).setVisibility(View.VISIBLE);
+					transferView.findViewById(R.id.transfer_failed).setVisibility(View.VISIBLE);
 					statusLabel.setText(getResources().getText(R.string.status_failed));
 					statusText.setText(" - "+gf.getCodeDescription());
 				}else if(sp != null){
@@ -774,12 +738,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public static class StatusSectionFragment extends Fragment implements GlobalState.StateListener {
 
 		private View mView;
-
-		public static StatusSectionFragment newInstance() {
-			// Seems pointless, I know, but this static method
-			// Might later be used to pass in arguments via a Bundle
-			return new StatusSectionFragment();
-		}
 
 		public StatusSectionFragment() {
 			// Default, no argument constructor

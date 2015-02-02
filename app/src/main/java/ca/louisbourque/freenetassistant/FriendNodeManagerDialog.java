@@ -17,7 +17,6 @@ public class FriendNodeManagerDialog extends DialogFragment {
         public void doNegativeClick();
 	}
 
-    private LinearLayout mView;
     private FriendNode friendNode;
     private EditText lnName;
     private Spinner lnTrust;
@@ -40,7 +39,7 @@ public class FriendNodeManagerDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int title = getArguments().getInt("title");
         this.friendNode = (FriendNode) getArguments().getSerializable("friendNode");
-        mView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.friend_node_dialog_layout, null, false);
+        LinearLayout mView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.friend_node_dialog_layout, null, false);
         
         
         this.lnName =(EditText) mView.findViewById(R.id.node_name_value);
@@ -49,9 +48,9 @@ public class FriendNodeManagerDialog extends DialogFragment {
         
         
         lnName.setText(friendNode.getName());
-        ArrayAdapter<String> adapterT = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Constants.TrustValues);
+        ArrayAdapter<String> adapterT = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Constants.TrustValues);
         this.lnTrust.setAdapter(adapterT);
-        ArrayAdapter<String> adapterV = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Constants.VisibilityValues);
+        ArrayAdapter<String> adapterV = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Constants.VisibilityValues);
         this.lnVisibility.setAdapter(adapterV);
         this.lnTrust.setSelection(Constants.TrustValues.indexOf(this.friendNode.getTrust()));
         this.lnVisibility.setSelection(Constants.VisibilityValues.indexOf(this.friendNode.getVisibility()));
