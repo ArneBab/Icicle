@@ -23,7 +23,6 @@ public class FriendNodeListFragment extends ListFragment {
     }
     private OnItemSelectedListener listener;
     private CopyOnWriteArrayList<FriendNode> values;
-    private GlobalState gs;
     // This is the Adapter being used to display the list's data
     private NodeManagerArrayAdapter mAdapter;
     private int lastChecked = -1;
@@ -31,8 +30,8 @@ public class FriendNodeListFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.gs = (GlobalState) getActivity().getApplication();
-        values = this.gs.getFriendNodes();
+        GlobalState gs = (GlobalState) getActivity().getApplication();
+        values = gs.getFriendNodes();
         mAdapter = new NodeManagerArrayAdapter(getActivity(),values);
 
         ListView list = getListView();

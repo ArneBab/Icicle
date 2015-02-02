@@ -10,7 +10,7 @@ import android.os.Handler;
 
 public class Debouncer {
 	  private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
-	  private final ConcurrentHashMap<Runnable, TimerTask> delayedMap = new ConcurrentHashMap<Runnable, TimerTask>();
+	  private final ConcurrentHashMap<Runnable, TimerTask> delayedMap = new ConcurrentHashMap<>();
 	  private final Handler mFreenetHandler;
 	  private final int interval;
 

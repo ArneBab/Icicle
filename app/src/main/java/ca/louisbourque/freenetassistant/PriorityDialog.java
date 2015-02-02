@@ -6,7 +6,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
@@ -16,8 +15,6 @@ public class PriorityDialog extends DialogFragment {
         public void doPositiveClick(String identifier, int priority);
         public void doNegativeClick();
 	}
-
-    private LinearLayout mView;
 
     public PriorityDialog() {
     }
@@ -34,7 +31,7 @@ public class PriorityDialog extends DialogFragment {
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int title = getArguments().getInt("title");
-        mView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.priority_dialog_layout, null, false);
+        LinearLayout mView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.priority_dialog_layout, null, false);
 
         final AlertDialog ad = new AlertDialog.Builder(getActivity())
                 .setTitle(title)

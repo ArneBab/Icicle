@@ -1,8 +1,6 @@
 package ca.louisbourque.freenetassistant;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.concurrent.BlockingQueue;
@@ -20,7 +18,7 @@ public class FreenetUtil extends Thread{
 	private FcpConnection fcpConnection;
 	private FreenetAdaptor fcpAdapter;
 	private Context context;
-	BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
+	BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
 	
 	public FreenetUtil(Context context,BlockingQueue<Message> queue, GlobalState gs){
 		this.context = context;
@@ -86,7 +84,7 @@ public class FreenetUtil extends Thread{
 	
 	public void generateSSK() {
 		try {
-			synchronized (fcpAdapter) {
+			synchronized (this) {
 				fcpConnection.sendMessage(new GenerateSSK());
 				fcpAdapter.wait();
 			}
@@ -103,7 +101,7 @@ public class FreenetUtil extends Thread{
 	
 	public void getNode() {
 		try {
-			synchronized (fcpAdapter) {
+			synchronized (this) {
 				fcpConnection.sendMessage(new GetNode(false, false, true));
 				fcpAdapter.wait();
 			}
@@ -120,7 +118,7 @@ public class FreenetUtil extends Thread{
 	
 	public void getPersistentRequests() {
 		try {
-			synchronized (fcpAdapter) {
+			synchronized (this) {
 				fcpConnection.sendMessage(new ListPersistentRequests());
 				fcpAdapter.wait();
 			}
@@ -138,7 +136,7 @@ public class FreenetUtil extends Thread{
 	public void getPeers() {
 		try {
 			String identifier = String.valueOf(System.currentTimeMillis());
-			synchronized (fcpAdapter) {
+			synchronized (this) {
 				fcpConnection.sendMessage(new ListPeers(identifier,false,true));
 				fcpAdapter.wait();
 			}
@@ -166,7 +164,7 @@ public class FreenetUtil extends Thread{
 
     private void updatePriority(Bundle obj) {
         try {
-            synchronized (fcpAdapter) {
+            synchronized (this) {
                 ModifyPersistentRequest req = new ModifyPersistentRequest(obj.getString("identifier"),true);
                 req.setPriority(obj.getInt("priority"));
                 fcpConnection.sendMessage(req);

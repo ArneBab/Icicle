@@ -28,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mListPreference = (ListPreference)getPreferenceScreen().findPreference(PREF_KEY_REFRESH_RATE);
         mWifiOnlyPref = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_KEY_WIFI_ONLY);
         this.gs = (GlobalState) getActivity().getApplication();
-        Preference button = (Preference)findPreference(PREF_KEY_NODES);
+        Preference button = findPreference(PREF_KEY_NODES);
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference arg0) { 
@@ -37,7 +37,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                             return true;
                         }
                     });
-        Preference friendButton = (Preference)findPreference(PREF_KEY_FRIEND_NODES);
+        Preference friendButton = findPreference(PREF_KEY_FRIEND_NODES);
         friendButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference arg0) {

@@ -9,18 +9,14 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import net.pterodactylus.fcp.NodeData;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,19 +25,17 @@ import android.widget.TextView;
 public class ReferenceActivity extends ActionBarActivity {
 	
 	private GlobalState gs;
-	private String refStr;
-	private String EncodedStr;
+    private String EncodedStr;
 	private String randomStr;
-    private ShareActionProvider actionProvider;
 
-	@SuppressLint("TrulyRandom")
+    @SuppressLint("TrulyRandom")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_reference);
 		this.gs = (GlobalState) getApplication();
 		LocalNode an = this.gs.getActiveLocalNode();
-        refStr = an.getNodeReference();
+        String refStr = an.getNodeReference();
         EncodedStr = an.getEncodedNodeReference();
         // Set up the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -82,7 +76,7 @@ public class ReferenceActivity extends ActionBarActivity {
 		// Get the menu item.
 	    MenuItem menuItem = menu.findItem(R.id.action_share);
 	    // Get the provider and hold onto it to set/change the share intent.
-        actionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(menuItem);
+        ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
 	    // Attach an intent to this ShareActionProvider.  You can update this at any time,
 	    // like when the user selects a new piece of data they might like to share.
@@ -94,7 +88,6 @@ public class ReferenceActivity extends ActionBarActivity {
 	
 	public Intent shareReference(){
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
-	    shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 	    shareIntent.setType("text/plain");
 	    copyFileToInternal();
 	    Uri uri = Uri.parse("content://ca.louisbourque.freenetassistant.fref/fref/"+randomStr+"/myref.fref");

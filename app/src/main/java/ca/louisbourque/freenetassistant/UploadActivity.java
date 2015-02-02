@@ -1,14 +1,10 @@
 package ca.louisbourque.freenetassistant;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import net.pterodactylus.fcp.SSKKeypair;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -24,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -109,7 +104,7 @@ public class UploadActivity extends ActionBarActivity {
     		uploadButton.setEnabled(anSSKey != null);
     		editor.putString(Constants.PREF_UPLOAD_KEY, Constants.KEY_TYPE_SSK);
     	}
-    	 editor.commit();
+    	 editor.apply();
     	 if(anSSKey != null){
     		 RadioButton ssk_rb = (RadioButton) this.findViewById(R.id.radio_button_SSK);
     		 ssk_rb.setText(R.string.SSK);
@@ -122,10 +117,10 @@ public class UploadActivity extends ActionBarActivity {
     	super.onActivityResult(requestCode, resultCode, data);
     	if(resultCode != RESULT_OK || data == null) return;
         if (requestCode != SELECT_FILE && requestCode != SELECT_FILE_KITKAT) return;
-        Uri selectedFileUri = null;
+        Uri selectedFileUri;
         if (requestCode == SELECT_FILE) {
             selectedFileUri = data.getData();
-        } else if (requestCode == SELECT_FILE_KITKAT) {
+        } else {
             selectedFileUri = data.getData();
             final int takeFlags = data.getFlags()
                     & (Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -156,7 +151,7 @@ public class UploadActivity extends ActionBarActivity {
         if(fileUploadMessage.getMimeType().startsWith("image/")){
             try {
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                InputStream is = null;
+                InputStream is;
                 is = cR.openInputStream(selectedFileUri);
                 BitmapFactory.decodeStream(is,null,options);
                 is.close();
@@ -166,9 +161,6 @@ public class UploadActivity extends ActionBarActivity {
                 // bitmap is the resized bitmap
                 Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
                 thumbnail.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -208,7 +200,7 @@ public class UploadActivity extends ActionBarActivity {
     
     public void executeMultipartPost() throws Exception {
 		try {
-			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgFileUpload,0,(Object)fileUploadMessage));
+			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgFileUpload,0,fileUploadMessage));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
