@@ -44,6 +44,11 @@
             android:parentActivityName="ca.louisbourque.freenetassistant.SettingsActivity">
         </activity>
         <activity
+            android:name="ca.louisbourque.freenetassistant.FriendNodeManagerActivity"
+            android:label="@string/pref_friend_nodes_title"
+            android:parentActivityName="ca.louisbourque.freenetassistant.SettingsActivity">
+        </activity>
+        <activity
             android:name="ca.louisbourque.freenetassistant.OpenReferenceActivity"
             android:label="@string/openNodeRef" >
 	        <intent-filter>

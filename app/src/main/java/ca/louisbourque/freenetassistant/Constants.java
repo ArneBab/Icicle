@@ -2,6 +2,8 @@ package ca.louisbourque.freenetassistant;
 
 import android.annotation.SuppressLint;
 
+import java.util.ArrayList;
+
 public class Constants {
 	
 	public static final String ACTION 	= "ca.louisbourque.timagebrowser.action";
@@ -32,6 +34,7 @@ public class Constants {
 	public static final String PEERS = "peers";
 	public static final String UPLOAD_DIRS = "uploadDirs";
 	public static final String PREF_LOCAL_NODES = "localNodes";
+    public static final String PREF_FRIEND_NODES = "friendNodes";
 	public static final String PREF_ACTIVE_LOCAL_NODE = "activeLocalNode";
 	public static final String PREF_UPLOAD_KEY = "uploadKey";
 	public static final String PREF_REFRESH_RATE = "refresh_rate";
@@ -41,10 +44,15 @@ public class Constants {
 	public static final String KEY_TYPE_CHK = "CHK@";
 	public static final String KEY_TYPE_SSK = "SSK@";
 	public static final String KEY_TYPE_DEFAULT = KEY_TYPE_SSK;
+    public static final String DEFAULT_TRUST = "NORMAL";
+    public static final String DEFAULT_VISIBILITY = "NO";
     public static String ToastMessage = "ToastMessage";
 	
 	public static int numberOfTabs = 4;
 	public static int debounceInterval = 500;
+
+    public static ArrayList<String> TrustValues = new ArrayList<String>(){{add("HIGH");add("NORMAL");add("LOW");}};
+    public static ArrayList<String> VisibilityValues = new ArrayList<String>(){{add("YES");add("NAME_ONLY");add("NO");}};
 	
 	//http://stackoverflow.com/a/3758880
 	@SuppressLint("DefaultLocale")

@@ -34,18 +34,22 @@
     <string name="file_upload_instructions_another">Tap thumbnail to choose another file</string>
     <string name="NodeRef">Freenet Node Reference:</string>
     <string name="openNodeRef">Open Freenet Node Reference</string>
-    <string name="addNodeRef">Add Node Reference</string>
+    <string name="addNodeRef">Save and Add Node Reference</string>
     <string name="shareNodeRef">Share Node Reference</string>
+    <string name="saveNodeRef">Save Node Reference</string>
     <string name="addingNodeRef">Adding Node Reference</string>
+    <string name="savingNodeRef">Saving Node Reference</string>
     <string name="protocolError">Protocol Error</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
     <string name="done">Transfer Complete</string>
     <string name="failed">Transfer Failed</string>
 	<string name="pref_wifi_only_title">Wi-Fi Only</string>
 	<string name="pref_wifi_only_desc">Connect to Freenet Node over Wifi Only</string>
 	<string name="node_settings_dialog_name">Freenet Nodes</string>
-	<string name="pref_nodes_title">Manage Nodes</string>
+	<string name="pref_nodes_title">Manage My Nodes</string>
+    <string name="pref_friend_nodes_title">Manage Friend Nodes</string>
 	<string name="node_name_label">Name</string>
 	<string name="node_name_hint">My Node</string>
 	<string name="node_address_label">Address</string>
@@ -76,4 +80,6 @@
     <string name="priority_4">Low</string>
     <string name="priority_5">Very Low</string>
     <string name="no_nodes">No Nodes Configured</string>
+    <string name="trust">Trust</string>
+    <string name="visibility">Visibility</string>
 </resources>

@@ -29,7 +29,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcelable;
@@ -37,6 +36,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,8 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 	public GlobalState gs;
 	private AddPeer aPeer;
     private String nodeRef;
+    private Spinner lnTrust;
+    private Spinner lnVisibility;
 	
     private String encodedNodeRef;
     NfcAdapter mNfcAdapter;
@@ -80,13 +84,27 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         String type = intent.getType();
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            //opening friend node from NFC
             this.nodeRef = processNFCIntent(intent);
-            findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
+            if(this.gs.isConnected()) {
+                findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
+            }else {
+                findViewById(R.id.saveNodeRef).setVisibility(View.VISIBLE);
+            }
+            setupSpinners();
 
         }else if (Intent.ACTION_VIEW.equals(action) && type != null) {
+            //opening friend node from intent
             this.nodeRef = handleSendText(intent); // Handle text being sent
-            findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
+            if(this.gs.isConnected()) {
+                findViewById(R.id.addNodeRef).setVisibility(View.VISIBLE);
+            }else {
+                findViewById(R.id.saveNodeRef).setVisibility(View.VISIBLE);
+            }
+            setupSpinners();
         } else {
+            //opening own node
+            findViewById(R.id.trust_visibility_row).setVisibility(View.GONE);
             int selected = intent.getIntExtra(Constants.LOCAL_NODE_SELECTED,-1);
             if(selected >= 0){
                 this.nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
@@ -102,6 +120,43 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
             TextView textView = (TextView) findViewById(R.id.NodeRef_value);
             textView.setText(this.nodeRef);
         }
+    }
+
+    private void setupSpinners() {
+        this.lnTrust =(Spinner) findViewById(R.id.trust_spinner);
+        this.lnVisibility =(Spinner) findViewById(R.id.visibility_spinner);
+        ArrayAdapter<String> adapterT = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Constants.TrustValues);
+        this.lnTrust.setAdapter(adapterT);
+        ArrayAdapter<String> adapterV = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, Constants.VisibilityValues);
+        this.lnVisibility.setAdapter(adapterV);
+        this.lnTrust.setSelection(Constants.TrustValues.indexOf(this.aPeer.getField("Trust")));
+        this.lnVisibility.setSelection(Constants.VisibilityValues.indexOf(this.aPeer.getField("Visibility")));
+
+        this.lnTrust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                aPeer.setField("Trust", lnTrust.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // do nothing
+            }
+
+        });
+
+        this.lnVisibility.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                aPeer.setField("Visibility", lnVisibility.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // do nothing
+            }
+
+        });
     }
 
     @Override
@@ -160,7 +215,6 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
             in.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return processStringIntoNode(sb.toString());
@@ -182,117 +236,117 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         String str2;
         String[] array = in.split("\\r?\\n");
 
-        for(int i = 0;i<array.length;i++){
-            if(array[i].startsWith("identity=")){
-                if(array[i].charAt(9) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(10), Base64.DEFAULT));
+        for (String anArray : array) {
+            if (anArray.startsWith("identity=")) {
+                if (anArray.charAt(9) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(10), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(9);
+                    str2 = anArray.substring(9);
                 aNode.setIdentity(str2);
-            }else if(array[i].startsWith("opennet=")){
-                if(array[i].charAt(8) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(9), Base64.DEFAULT));
+            } else if (anArray.startsWith("opennet=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(8);
+                    str2 = anArray.substring(8);
                 aNode.setOpennet(Boolean.valueOf(str2));
-            }else if(array[i].startsWith("myName=")){
-                if(array[i].charAt(7) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(8), Base64.DEFAULT));
+            } else if (anArray.startsWith("myName=")) {
+                if (anArray.charAt(7) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(8), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(7);
+                    str2 = anArray.substring(7);
                 aNode.setName(str2);
-            }else if(array[i].startsWith("location=")){
-                if(array[i].charAt(9) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(10), Base64.DEFAULT));
+            } else if (anArray.startsWith("location=")) {
+                if (anArray.charAt(9) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(10), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(9);
+                    str2 = anArray.substring(9);
                 aNode.setLocation(Double.valueOf(str2));
-            }else if(array[i].startsWith("physical.udp=")){
-                if(array[i].charAt(13) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(14), Base64.DEFAULT));
+            } else if (anArray.startsWith("physical.udp=")) {
+                if (anArray.charAt(13) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(14), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(13);
+                    str2 = anArray.substring(13);
                 aNode.setPhysicalUDP(str2);
-            }else if(array[i].startsWith("ark.pubURI=")){
+            } else if (anArray.startsWith("ark.pubURI=")) {
 
-                arkPubURI = array[i].substring(11);
-            }else if(array[i].startsWith("ark.privURI=")){
-                if(array[i].charAt(12) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(13), Base64.DEFAULT));
+                arkPubURI = anArray.substring(11);
+            } else if (anArray.startsWith("ark.privURI=")) {
+                if (anArray.charAt(12) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(13), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(12);
+                    str2 = anArray.substring(12);
                 arkPrivURI = str2;
-            }else if(array[i].startsWith("ark.number=")){
-                if(array[i].charAt(11) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(12), Base64.DEFAULT));
+            } else if (anArray.startsWith("ark.number=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(11);
+                    str2 = anArray.substring(11);
                 arkNumber = str2;
-            }else if(array[i].startsWith("dsaPubKey.y=")){
-                if(array[i].charAt(12) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(13), Base64.DEFAULT));
+            } else if (anArray.startsWith("dsaPubKey.y=")) {
+                if (anArray.charAt(12) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(13), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(12);
+                    str2 = anArray.substring(12);
                 aNode.setDSAPublicKey(str2);
-            }else if(array[i].startsWith("dsaGroup.g=")){
-                if(array[i].charAt(11) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(12), Base64.DEFAULT));
+            } else if (anArray.startsWith("dsaGroup.g=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(11);
+                    str2 = anArray.substring(11);
                 dsaGroupG = str2;
-            }else if(array[i].startsWith("dsaGroup.p=")){
-                if(array[i].charAt(11) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(12), Base64.DEFAULT));
+            } else if (anArray.startsWith("dsaGroup.p=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(11);
+                    str2 = anArray.substring(11);
                 dsaGroupP = str2;
-            }else if(array[i].startsWith("dsaGroup.q=")){
-                if(array[i].charAt(11) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(12), Base64.DEFAULT));
+            } else if (anArray.startsWith("dsaGroup.q=")) {
+                if (anArray.charAt(11) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(12), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(11);
+                    str2 = anArray.substring(11);
                 dsaGroupQ = str2;
-            }else if(array[i].startsWith("auth.negTypes=")){
-                if(array[i].charAt(14) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(15), Base64.DEFAULT));
+            } else if (anArray.startsWith("auth.negTypes=")) {
+                if (anArray.charAt(14) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(15), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(14);
+                    str2 = anArray.substring(14);
                 aNode.setNegotiationTypes(FcpUtils.decodeMultiIntegerField(str2));
-            }else if(array[i].startsWith("version=")){
-                if(array[i].charAt(8) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(9), Base64.DEFAULT));
+            } else if (anArray.startsWith("version=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(8);
+                    str2 = anArray.substring(8);
                 aNode.setVersion(new Version(str2));
-            }else if(array[i].startsWith("lastGoodVersion=")){
-                if(array[i].charAt(16) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(17), Base64.DEFAULT));
+            } else if (anArray.startsWith("lastGoodVersion=")) {
+                if (anArray.charAt(16) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(17), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(16);
+                    str2 = anArray.substring(16);
                 aNode.setLastGoodVersion(new Version(str2));
-            }else if(array[i].startsWith("testnet=")){
-                if(array[i].charAt(8) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(9), Base64.DEFAULT));
+            } else if (anArray.startsWith("testnet=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(8);
+                    str2 = anArray.substring(8);
                 aNode.setTestnet(Boolean.valueOf(str2));
-            }else if(array[i].startsWith("sig=")){
-                if(array[i].charAt(4) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(5), Base64.DEFAULT));
+            } else if (anArray.startsWith("sig=")) {
+                if (anArray.charAt(4) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(5), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(4);
+                    str2 = anArray.substring(4);
                 aNode.setSignature(str2);
-            }else if(array[i].startsWith("ecdsa.P256.pub=")){
-                if(array[i].charAt(15) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(16), Base64.DEFAULT));
+            } else if (anArray.startsWith("ecdsa.P256.pub=")) {
+                if (anArray.charAt(15) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(16), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(15);
+                    str2 = anArray.substring(15);
                 ecdsaP256pub = str2;
-            }else if(array[i].startsWith("sigP256=")){
-                if(array[i].charAt(8) == '=')
-                    str2 = new String(Base64.decode(array[i].substring(9), Base64.DEFAULT));
+            } else if (anArray.startsWith("sigP256=")) {
+                if (anArray.charAt(8) == '=')
+                    str2 = new String(Base64.decode(anArray.substring(9), Base64.DEFAULT));
                 else
-                    str2 = array[i].substring(8);
+                    str2 = anArray.substring(8);
                 sigP256 = str2;
             }
 
@@ -306,9 +360,8 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         if(sigP256 != null){
             aPeer.setField("sigP256", sigP256);
         }
-        //TODO: Make these user-selected
-        aPeer.setField("Trust", "NORMAL");
-        aPeer.setField("Visibility", "NO");
+        aPeer.setField("Trust", Constants.DEFAULT_TRUST);
+        aPeer.setField("Visibility", Constants.DEFAULT_VISIBILITY);
 
         return in;
     }
@@ -316,19 +369,29 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 	public void cancelReference(View view) {
 		finish();
 	}
-	
+
+    public void saveReference(View view) {
+        saveNodeRef();
+        Toast.makeText(this, R.string.savingNodeRef, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
 	public void addReference(View view) {
 		try {
+            saveNodeRef();
 			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgAddNoderef,0,(Object)this.aPeer));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setResult(Activity.RESULT_OK);
 		Toast.makeText(this, R.string.addingNodeRef, Toast.LENGTH_SHORT).show();
 		finish();
-		
 	}
+
+    public void saveNodeRef(){
+        FriendNode ref = new FriendNode(this.aPeer.getField("myName"),this.aPeer.getField("identity"),this.aPeer.getField("Trust"),this.aPeer.getField("Visibility"));
+        this.gs.addFriendNode(ref);
+    }
 
     public void shareReference(View view) {
         startActivity(shareReference());
@@ -348,15 +411,17 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 
 
     private File copyFileToInternal() {
+        InputStream is;
+        OutputStream os;
         try {
-            InputStream is = new ByteArrayInputStream(encodedNodeRef.getBytes());
+            is = new ByteArrayInputStream(encodedNodeRef.getBytes());
             File refDir = new File(getExternalFilesDir(null), "fref");
 
             clearFolder(refDir);
             //Save to a random location, to prevent guess location of ref
             File outFile = new File(refDir, "myref.fref");
             if(refDir.mkdirs() && outFile.createNewFile()){
-                OutputStream os = new FileOutputStream(outFile.getAbsolutePath());
+                os = new FileOutputStream(outFile.getAbsolutePath());
 
                 byte[] buff = new byte[1024];
                 int len;
@@ -370,7 +435,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
             outFile.setReadable(true, false);
             return outFile;
         } catch (IOException e) {
-            e.printStackTrace(); // TODO: should close streams properly here
+            e.printStackTrace();
         }
         return null;
     }

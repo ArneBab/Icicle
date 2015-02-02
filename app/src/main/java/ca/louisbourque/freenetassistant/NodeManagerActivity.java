@@ -1,37 +1,25 @@
 package ca.louisbourque.freenetassistant;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.DialogFragment;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class NodeManagerActivity extends ActionBarActivity implements NodeManagerDialog.NodeManagerDialogListener,MyListFragment.OnItemSelectedListener {
+public class NodeManagerActivity extends ActionBarActivity implements NodeManagerDialog.NodeManagerDialogListener,MyNodeListFragment.OnItemSelectedListener {
 
 	private GlobalState gs;
 	private LinearLayout actionBar;
 	private ListView list;
-    MyListFragment mListFragment;
+    MyNodeListFragment mListFragment;
 	private Builder discardDialog;
 
 	@Override
@@ -47,7 +35,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
 
-        mListFragment = (MyListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
+        mListFragment = (MyNodeListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
 		
 		this.actionBar = (LinearLayout)findViewById(R.id.node_management_action_bar);
 		ImageButton addButton = (ImageButton)this.actionBar.findViewById(R.id.node_add);
@@ -96,7 +84,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
                 }
                 Intent intent = new Intent(gs, OpenReferenceActivity.class);
                 intent.putExtra(Constants.LOCAL_NODE_SELECTED,selected);
-                startActivityForResult(intent,Constants.Activity_Reference);
+                startActivityForResult(intent, Constants.Activity_Reference);
             }
         });
 		
@@ -185,7 +173,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
 			actionBar.findViewById(R.id.node_share).setVisibility(View.INVISIBLE);
 		}else{
             String nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
-            if(nodeRef == null || nodeRef == ""){
+            if(nodeRef == null || nodeRef.equals("")){
                 actionBar.findViewById(R.id.node_share).setVisibility(View.INVISIBLE);
             }else{
                 actionBar.findViewById(R.id.node_share).setVisibility(View.VISIBLE);

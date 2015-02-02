@@ -17,6 +17,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	private CheckBoxPreference mWifiOnlyPref;
 	private String PREF_KEY_REFRESH_RATE = "pref_key_refresh_rate";
 	private String PREF_KEY_WIFI_ONLY = "pref_key_wifi_only";
+    private String PREF_KEY_NODES = "pref_key_nodes";
+    private String PREF_KEY_FRIEND_NODES = "pref_key_friend_nodes";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         mListPreference = (ListPreference)getPreferenceScreen().findPreference(PREF_KEY_REFRESH_RATE);
         mWifiOnlyPref = (CheckBoxPreference) getPreferenceScreen().findPreference(PREF_KEY_WIFI_ONLY);
         this.gs = (GlobalState) getActivity().getApplication();
-        Preference button = (Preference)findPreference("pref_key_nodes");
+        Preference button = (Preference)findPreference(PREF_KEY_NODES);
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         @Override
                         public boolean onPreferenceClick(Preference arg0) { 
@@ -35,6 +37,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                             return true;
                         }
                     });
+        Preference friendButton = (Preference)findPreference(PREF_KEY_FRIEND_NODES);
+        friendButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference arg0) {
+                Intent intent = new Intent(getActivity(), FriendNodeManagerActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
     
     @Override

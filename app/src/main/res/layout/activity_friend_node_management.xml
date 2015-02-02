@@ -11,19 +11,11 @@
         android:layout_height="wrap_content"
         layout="@layout/toolbar" />
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/node_management_action_bar"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp" />
-
-
     <fragment
         android:id="@+id/listFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        class="ca.louisbourque.freenetassistant.MyNodeListFragment" />
+        class="ca.louisbourque.freenetassistant.FriendNodeListFragment" />
 
 </LinearLayout>

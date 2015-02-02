@@ -58,6 +58,7 @@ public class GlobalState extends Application{
 	private StateListener peersListener;
 	
 	private CopyOnWriteArrayList<LocalNode> localNodes;
+    private CopyOnWriteArrayList<FriendNode> friendNodes;
 	private int activeLocalNode;
 	private String deviceID;
 	private int refresh_rate;
@@ -137,24 +138,32 @@ public class GlobalState extends Application{
 	
 	public void savePreferences() {
 		Editor editor = sharedPref.edit();
-		String encoded = null;
+		String encodedLocal = null;
+        String encodedFriends = null;
 		  
 		  try {
-		   ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		   ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-		   objectOutputStream.writeObject(this.localNodes);
-		   objectOutputStream.close();
-		   encoded = new String(Base64.encode(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
+              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+              ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+              objectOutputStream.writeObject(this.localNodes);
+              objectOutputStream.close();
+              encodedLocal = new String(Base64.encode(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
+              byteArrayOutputStream = new ByteArrayOutputStream();
+              objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+              objectOutputStream.writeObject(this.friendNodes);
+              objectOutputStream.close();
+              encodedFriends = new String(Base64.encode(byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
+
 		  } catch (IOException e) {
 		   e.printStackTrace();
 		   return;
 		  }
 		
-		  editor.putString(Constants.PREF_LOCAL_NODES, encoded.toString());
+		  editor.putString(Constants.PREF_LOCAL_NODES, encodedLocal);
+          editor.putString(Constants.PREF_FRIEND_NODES, encodedFriends);
 		  editor.putInt(Constants.PREF_ACTIVE_LOCAL_NODE, this.activeLocalNode);
 		  editor.putInt(Constants.PREF_REFRESH_RATE, this.refresh_rate);
 		  editor.putBoolean(Constants.PREF_WIFI_ONLY, this.wifiOnly);
-		  editor.commit();
+		  editor.apply();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -167,17 +176,24 @@ public class GlobalState extends Application{
 			  try {
 			   ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
 			   this.localNodes = (CopyOnWriteArrayList<LocalNode>)objectInputStream.readObject();
-			  } catch (IOException e) {
-				  e.printStackTrace();
-				  this.localNodes = new CopyOnWriteArrayList<LocalNode>();
-			  } catch (ClassNotFoundException e) {
-				  e.printStackTrace();
-				  this.localNodes = new CopyOnWriteArrayList<LocalNode>();
-			  } catch (ClassCastException e) {
+			  } catch (IOException | ClassNotFoundException | ClassCastException e) {
 				  e.printStackTrace();
 				  this.localNodes = new CopyOnWriteArrayList<LocalNode>();
 			  }
 		}
+        String strFriendNodes = sharedPref.getString(Constants.PREF_FRIEND_NODES, "");
+        if(strFriendNodes.equals("")){
+            this.friendNodes = new CopyOnWriteArrayList<FriendNode>();
+        }else{
+            byte[] bytes = Base64.decode(strFriendNodes.getBytes(),Base64.DEFAULT);
+            try {
+                ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
+                this.friendNodes = (CopyOnWriteArrayList<FriendNode>)objectInputStream.readObject();
+            } catch (IOException | ClassNotFoundException | ClassCastException e) {
+                e.printStackTrace();
+                this.friendNodes = new CopyOnWriteArrayList<FriendNode>();
+            }
+        }
 		this.activeLocalNode = sharedPref.getInt(Constants.PREF_ACTIVE_LOCAL_NODE, 0);
 		this.refresh_rate = sharedPref.getInt(Constants.PREF_REFRESH_RATE, 0);
 		this.deviceID = sharedPref.getString(Constants.PREF_DEVICE_ID,"");
@@ -187,7 +203,7 @@ public class GlobalState extends Application{
 			Random random = new Random();
 			this.deviceID = new BigInteger(130, random).toString(32);
 			editor.putString(Constants.PREF_DEVICE_ID,this.deviceID);
-			editor.commit();
+			editor.apply();
 		}
 	}
 	
@@ -843,7 +859,7 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         refStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
         EncodedStr+="ark.pubURI="+myNode.getARK().getPublicURI()+"\n";
         refStr+="auth.negTypes="+myNode.getField("auth.negTypes")+"\n";
-        temp = new String(Base64.encode(myNode.getField("auth.negTypes").toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        temp = new String(Base64.encode(myNode.getField("auth.negTypes").getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
         EncodedStr+="auth.negTypes=="+temp+"\n";
         refStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
         EncodedStr+="dsaGroup.g="+myNode.getDSAGroup().getBase()+"\n";
@@ -856,7 +872,7 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         refStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
         EncodedStr+="ecdsa.P256.pub="+myNode.getField("ecdsa.P256.pub")+"\n";
         refStr+="physical.udp="+myNode.getPhysicalUDP()+"\n";
-        temp = new String(Base64.encode(myNode.getPhysicalUDP().toString().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
+        temp = new String(Base64.encode(myNode.getPhysicalUDP().getBytes(), Base64.NO_PADDING|Base64.NO_WRAP));
         EncodedStr+="physical.udp=="+temp+"\n";
         refStr+="End\n";
         EncodedStr+="End\n";
@@ -868,5 +884,18 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         String msg = getResources().getString(R.string.protocolError)+": "+ protocolError.getCodeDescription();
         if(!protocolError.getCodeDescription().equals(protocolError.getExtraDescription())) msg += "("+ protocolError.getExtraDescription() + ")";
         showToast(msg,Toast.LENGTH_LONG);
+    }
+
+    public void addFriendNode(FriendNode ref) {
+        if(!this.friendNodes.contains(ref)) {
+            this.friendNodes.add(ref);
+        }else{
+            this.friendNodes.set(this.friendNodes.lastIndexOf(ref), ref);
+        }
+        this.savePreferences();
+    }
+
+    public CopyOnWriteArrayList<FriendNode> getFriendNodes(){
+        return this.friendNodes;
     }
 }

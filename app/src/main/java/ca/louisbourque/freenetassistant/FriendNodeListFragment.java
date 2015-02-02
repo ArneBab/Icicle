@@ -2,50 +2,46 @@ package ca.louisbourque.freenetassistant;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.support.v4.app.ListFragment;
 import android.widget.TextView;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class MyListFragment extends ListFragment {
+public class FriendNodeListFragment extends ListFragment {
 
 
 
     public interface OnItemSelectedListener {
-        public void redrawNodeManagementActionBar();
+        public void redrawFriendNodeManagement();
     }
     private OnItemSelectedListener listener;
-    private CopyOnWriteArrayList<LocalNode> values;
+    private CopyOnWriteArrayList<FriendNode> values;
     private GlobalState gs;
     // This is the Adapter being used to display the list's data
     private NodeManagerArrayAdapter mAdapter;
-    private ListView list;
+    private int lastChecked = -1;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.gs = (GlobalState) getActivity().getApplication();
-        values = this.gs.getLocalNodeList();
+        values = this.gs.getFriendNodes();
         mAdapter = new NodeManagerArrayAdapter(getActivity(),values);
 
-        this.list = getListView();
+        ListView list = getListView();
 
 
         setListAdapter(mAdapter);
-        this.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        this.list.setDivider(getResources().getDrawable(R.drawable.divider));
-        this.list.setSelector(getResources().getDrawable(R.drawable.list_selection_background));
+        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        list.setDivider(getResources().getDrawable(R.drawable.divider));
+        list.setSelector(getResources().getDrawable(R.drawable.list_selection_background));
     }
 
     @Override
@@ -58,17 +54,23 @@ public class MyListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        l.setItemChecked(position,true);
+        if(lastChecked == position){
+            l.setItemChecked(position, false);
+            lastChecked = -1;
+        }else {
+            l.setItemChecked(position, true);
+            lastChecked = position;
+        }
         if(listener != null) {
-            listener.redrawNodeManagementActionBar();
+            listener.redrawFriendNodeManagement();
         }
     }
 
     private class NodeManagerArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
-        private CopyOnWriteArrayList<LocalNode> values;
+        private CopyOnWriteArrayList<FriendNode> values;
 
-        public NodeManagerArrayAdapter(Context context, CopyOnWriteArrayList<LocalNode> values) {
+        public NodeManagerArrayAdapter(Context context, CopyOnWriteArrayList<FriendNode> values) {
             super(context, R.layout.peer);
             this.context = context;
             this.values = values;
@@ -82,19 +84,17 @@ public class MyListFragment extends ListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.peer, parent, false);
+            View rowView = convertView;
+            if (rowView == null) {
+                rowView = inflater.inflate(R.layout.peer, parent, false);
+            }
             TextView peerName = (TextView) rowView.findViewById(R.id.peer_name);
             TextView peerAddress = (TextView) rowView.findViewById(R.id.peer_address);
             peerName.setText(values.get(position).getName());
-            peerAddress.setText(values.get(position).getAddress()+":"+values.get(position).getPort());
+            peerAddress.setText(getResources().getString(R.string.trust) + ": " + values.get(position).getTrust()+"\n"+
+                    getResources().getString(R.string.visibility) + ": " + values.get(position).getVisibility());
             ImageView peerStatus = (ImageView)rowView.findViewById(R.id.peer_icon);
-            if(gs.getActiveLocalNodeIndex() == position){
-                peerStatus.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_white_36dp));
-                peerStatus.setBackground(getResources().getDrawable(R.drawable.round_button_green));
-                peerStatus.setVisibility(View.VISIBLE);
-            }else{
-                peerStatus.setVisibility(View.INVISIBLE);
-            }
+            peerStatus.setVisibility(View.INVISIBLE);
 
             return rowView;
         }
@@ -104,7 +104,7 @@ public class MyListFragment extends ListFragment {
         mAdapter.notifyDataSetChanged();
     }
 
-    public CopyOnWriteArrayList<LocalNode> getValues() {
+    public CopyOnWriteArrayList<FriendNode> getValues() {
         return values;
     }
 }

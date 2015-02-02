@@ -34,6 +34,29 @@
     </ScrollView>
 
     <TableRow
+        android:id="@+id/trust_visibility_row"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:id="@+id/trust_spinner" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:id="@+id/visibility_spinner" />
+    </TableRow>
+
+    <TableRow
         android:id="@+id/button_row"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
@@ -52,6 +75,15 @@
             android:layout_weight=".5"
             android:onClick="cancelReference"
             android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/saveNodeRef"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:onClick="saveReference"
+            android:text="@string/saveNodeRef"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/addNodeRef"
