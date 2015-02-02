@@ -84,7 +84,7 @@ public class FreenetUtil extends Thread{
 	
 	public void generateSSK() {
 		try {
-			synchronized (this) {
+			synchronized (fcpAdapter) {
 				fcpConnection.sendMessage(new GenerateSSK());
 				fcpAdapter.wait();
 			}
@@ -101,7 +101,7 @@ public class FreenetUtil extends Thread{
 	
 	public void getNode() {
 		try {
-			synchronized (this) {
+			synchronized (fcpAdapter) {
 				fcpConnection.sendMessage(new GetNode(false, false, true));
 				fcpAdapter.wait();
 			}
@@ -118,7 +118,7 @@ public class FreenetUtil extends Thread{
 	
 	public void getPersistentRequests() {
 		try {
-			synchronized (this) {
+			synchronized (fcpAdapter) {
 				fcpConnection.sendMessage(new ListPersistentRequests());
 				fcpAdapter.wait();
 			}
@@ -136,7 +136,7 @@ public class FreenetUtil extends Thread{
 	public void getPeers() {
 		try {
 			String identifier = String.valueOf(System.currentTimeMillis());
-			synchronized (this) {
+			synchronized (fcpAdapter) {
 				fcpConnection.sendMessage(new ListPeers(identifier,false,true));
 				fcpAdapter.wait();
 			}
@@ -164,7 +164,7 @@ public class FreenetUtil extends Thread{
 
     private void updatePriority(Bundle obj) {
         try {
-            synchronized (this) {
+            synchronized (fcpAdapter) {
                 ModifyPersistentRequest req = new ModifyPersistentRequest(obj.getString("identifier"),true);
                 req.setPriority(obj.getInt("priority"));
                 fcpConnection.sendMessage(req);
