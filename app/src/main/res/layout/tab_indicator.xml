@@ -18,7 +18,7 @@
     android:paddingRight="7dp"
     android:layout_height="48dp"
     android:gravity="center"
-    android:textColor="@color/black"
+    android:textColor="@color/white"
     android:textSize="@dimen/abc_text_size_menu_material"
     android:textAllCaps="false"
     android:ellipsize="end"

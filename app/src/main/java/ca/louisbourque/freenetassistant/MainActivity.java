@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         setSlidingTabLayoutContentDescriptions();
 
         Resources res = getResources();
-        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.primary));
+        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.accent));
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
 

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/my_toolbar"
@@ -11,10 +12,11 @@
         layout="@layout/toolbar" />
 
     <ca.louisbourque.freenetassistant.SlidingTabLayout
-        android:background="@color/background_material_light"
+        android:background="@color/primary"
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:elevation="5dp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
