@@ -12,5 +12,11 @@
         android:icon="@drawable/ic_file_upload_white_36dp"
         app:showAsAction="always"
         android:title="@string/action_upload"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="10"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_refresh_white_36dp"
+        android:title="@string/action_refresh"/>
 
 </menu>

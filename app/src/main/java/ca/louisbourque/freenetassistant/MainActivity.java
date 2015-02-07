@@ -163,6 +163,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
+        case R.id.action_refresh:
+            handleRefresh();
+            return true;
 		case R.id.action_settings:
 			handleSettings();
 			return true;
@@ -178,6 +181,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
             mSlidingTabLayout.setContentDescription(i,
                     mAppSectionsPagerAdapter.getPageTitle(i).toString());
+        }
+    }
+
+    private void handleRefresh(){
+        try {
+            switch(mViewPager.getCurrentItem()){
+                case 0://Status
+                    gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetNode, 0));
+                    break;
+                case 1://Downloads
+                    gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    break;
+                case 2://Uploads
+                    gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    break;
+                case 3://Peers
+                    gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPeers, 0));
+                    break;
+            }
+        } catch (InterruptedException ignored) {
         }
     }
 
