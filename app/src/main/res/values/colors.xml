@@ -307,8 +307,8 @@
     <color name="blue_grey_900">#263238</color>
 
     <!-- Colors for the app -->
-    <color name="primary">@color/indigo_500</color>
-    <color name="primary_dark">@color/indigo_700</color>
+    <color name="primary">@color/blue_700</color>
+    <color name="primary_dark">@color/blue_900</color>
     <color name="accent">@color/pink_A200</color>
 
 </resources>
