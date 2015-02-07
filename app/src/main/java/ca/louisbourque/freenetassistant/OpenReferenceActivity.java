@@ -194,6 +194,20 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         super.onStop();
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Because app crashes sometimes without the try->catch
+        try {
+            File refDir = new File(getExternalFilesDir(null), "fref");
+            if(refDir.exists()){
+                //delete shared FREF file
+                clearFolder(refDir);
+            }
+        } catch (Exception ignored) {
+        }
+
+    }
+
+
     /**
      * Parses the NDEF Message from the intent and prints to the TextView
      */
@@ -262,7 +276,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
     }
 
     public void shareReference(View view) {
-        startActivity(shareReference());
+        startActivityForResult(shareReference(),1);
     }
 
     public Intent shareReference(){
@@ -273,6 +287,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         Uri uri = Uri.fromFile(outFile);
 
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        outFile.deleteOnExit();
         return shareIntent;
     }
 
@@ -283,11 +298,13 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         try {
             is = new ByteArrayInputStream(encodedNodeRef.getBytes());
             File refDir = new File(getExternalFilesDir(null), "fref");
-
+            if(!refDir.exists()){
+                refDir.mkdirs();
+            }
             clearFolder(refDir);
             //Save to a random location, to prevent guess location of ref
             File outFile = new File(refDir, "myref.fref");
-            if(refDir.mkdirs() && outFile.createNewFile()){
+            if(outFile.createNewFile()){
                 os = new FileOutputStream(outFile.getAbsolutePath());
 
                 byte[] buff = new byte[1024];
@@ -309,13 +326,11 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearFolder(File dir) {
-
-        File[] files = dir.listFiles();
-        if(files == null){
-            return;
-        }
-        for (File file : files) {
-            file.delete();
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(dir, children[i]).delete();
+            }
         }
     }
 
