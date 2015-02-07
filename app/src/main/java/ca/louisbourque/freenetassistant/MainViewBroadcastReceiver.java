@@ -8,6 +8,11 @@ public class MainViewBroadcastReceiver extends BroadcastReceiver {
 	
 	private MainActivity activity;
 
+
+    public MainViewBroadcastReceiver(){
+        super();
+    }
+
 	public MainViewBroadcastReceiver(MainActivity mainActivity){
 		super();
 		this.activity = mainActivity;
