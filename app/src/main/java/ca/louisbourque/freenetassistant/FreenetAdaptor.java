@@ -116,7 +116,9 @@ public class FreenetAdaptor extends FcpAdapter {
 	}
 	
 	public void receivedEndListPersistentRequests(FcpConnection fcpConnection, EndListPersistentRequests endListPersistentRequests) {
-		//do nothing
+        synchronized (this) {
+            notify();
+        }
 	}
 	
 	public void receivedPersistentRequestRemoved(FcpConnection fcpConnection, PersistentRequestRemoved persistentRequestRemoved) {
