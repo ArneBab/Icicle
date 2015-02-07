@@ -77,15 +77,6 @@
     	<receiver
    			android:name="ca.louisbourque.freenetassistant.MainViewBroadcastReceiver">
 		</receiver>
-        <activity
-            android:name="ca.louisbourque.freenetassistant.ReferenceActivity"
-            android:label="@string/title_activity_reference" >
-        </activity>
-        <provider
-        android:name="ReferenceContentProvider"
-        android:authorities="ca.louisbourque.freenetassistant.fref"
-        android:exported="true"
-        />
     </application>
 
 </manifest>
