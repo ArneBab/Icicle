@@ -20,8 +20,6 @@ public class Constants {
 	public static final int Activity_File_Upload = 20;
 	public static final int Activity_Settings = 21;
 	public static final int Activity_Reference = 22;
-	public static final int PagerPositionUploads = 2;
-	public static final int PagerPositionPeers = 3;
 	protected static final String BROADCAST_UPDATE_STATUS = "ca.louisbourque.freenetassistant.update_status";
 	protected static final String BROADCAST_UPDATE_DOWNLOADS = "ca.louisbourque.freenetassistant.update_downloads";
 	protected static final String BROADCAST_UPDATE_UPLOADS = "ca.louisbourque.freenetassistant.update_uploads";
@@ -49,6 +47,10 @@ public class Constants {
     public static String ToastMessage = "ToastMessage";
 	
 	public static int numberOfTabs = 4;
+    public static final int TAB_STATUS = 0;
+    public static final int TAB_DOWNLOADS = 1;
+    public static final int TAB_UPLOADS = 2;
+    public static final int TAB_PEERS = 3;
 	public static int debounceInterval = 500;
 
     public static ArrayList<String> TrustValues = new ArrayList<String>(){{add("HIGH");add("NORMAL");add("LOW");}};

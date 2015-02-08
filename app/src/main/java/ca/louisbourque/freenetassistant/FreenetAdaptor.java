@@ -85,6 +85,7 @@ public class FreenetAdaptor extends FcpAdapter {
 	}
 	
 	public void receivedEndListPeers(FcpConnection fcpConnection, EndListPeers endListPeers) {
+        this.gs.sendRedrawPeersList();
 		synchronized (this) {
 			notify();
 		}
@@ -116,6 +117,8 @@ public class FreenetAdaptor extends FcpAdapter {
 	}
 	
 	public void receivedEndListPersistentRequests(FcpConnection fcpConnection, EndListPersistentRequests endListPersistentRequests) {
+        this.gs.sendRedrawDownloads();
+        this.gs.sendRedrawUploads();
         synchronized (this) {
             notify();
         }

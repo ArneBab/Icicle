@@ -19,6 +19,7 @@ import android.app.DialogFragment;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
@@ -60,6 +61,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 	public GlobalState gs;
 	private MainViewBroadcastReceiver mReceiver;
     private SlidingTabLayout mSlidingTabLayout;
+    private static SwipeRefreshLayout swipeLayoutStatus;
+    private static SwipeRefreshLayout swipeLayoutDownloads;
+    private static SwipeRefreshLayout swipeLayoutUploads;
+    private static SwipeRefreshLayout swipeLayoutPeers;
 
     public synchronized void updateStatusView(){
 		this.gs.redrawStatus();
@@ -164,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
         case R.id.action_refresh:
-            handleRefresh();
+            handleRefresh(mViewPager.getCurrentItem());
             return true;
 		case R.id.action_settings:
 			handleSettings();
@@ -184,20 +189,24 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-    private void handleRefresh(){
+    private void handleRefresh(int tab){
         try {
-            switch(mViewPager.getCurrentItem()){
-                case 0://Status
+            switch(tab){
+                case Constants.TAB_STATUS:
                     gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetNode, 0));
+                    swipeLayoutStatus.setRefreshing(true);
                     break;
-                case 1://Downloads
+                case Constants.TAB_DOWNLOADS:
                     gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    swipeLayoutDownloads.setRefreshing(true);
                     break;
-                case 2://Uploads
+                case Constants.TAB_UPLOADS:
                     gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    swipeLayoutUploads.setRefreshing(true);
                     break;
-                case 3://Peers
+                case Constants.TAB_PEERS:
                     gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPeers, 0));
+                    swipeLayoutPeers.setRefreshing(true);
                     break;
             }
         } catch (InterruptedException ignored) {
@@ -216,7 +225,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){
-            mViewPager.setCurrentItem(Constants.PagerPositionUploads);
+            mViewPager.setCurrentItem(Constants.TAB_UPLOADS);
 		}
 		if(requestCode == Constants.Activity_Settings && resultCode == Activity.RESULT_OK){
 			this.gs.sendRedrawAll();
@@ -380,7 +389,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			mView = inflater.inflate(R.layout.fragment_peers, container, false);
-
+            swipeLayoutPeers = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container_peers);
+            swipeLayoutPeers.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    GlobalState gs = ((MainActivity)getActivity()).gs;
+                    try {
+                        gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPeers, 0));
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            });
+            swipeLayoutPeers.setColorSchemeResources(R.color.primary,
+                    R.color.accent);
 			return mView;
 		}
 
@@ -418,6 +439,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				((TextView) peerView.findViewById(R.id.peer_address)).setText(p.getPhysicalUDP().replace(";","\n"));
 				peerListView.addView(peerView);
 			}
+            swipeLayoutPeers.setRefreshing(false);
 		}
 
 	}
@@ -434,7 +456,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			mView = inflater.inflate(R.layout.fragment_uploads, container, false);
-
+            swipeLayoutUploads = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container_uploads);
+            swipeLayoutUploads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    GlobalState gs = ((MainActivity)getActivity()).gs;
+                    try {
+                        gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            });
+            swipeLayoutUploads.setColorSchemeResources(R.color.primary,
+                    R.color.accent);
 			return mView;
 		}
 
@@ -631,6 +665,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         		
         		uploadListView.addView(transferView);
 			}
+            swipeLayoutUploads.setRefreshing(false);
 		}
 
 	}
@@ -647,6 +682,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			mView = inflater.inflate(R.layout.fragment_downloads, container, false);
+            swipeLayoutDownloads = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container_downloads);
+            swipeLayoutDownloads.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    GlobalState gs = ((MainActivity)getActivity()).gs;
+                    try {
+                        gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetPersistentRequests, 0));
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            });
+            swipeLayoutDownloads.setColorSchemeResources(R.color.primary,
+                    R.color.accent);
 			return mView;
 		}
 
@@ -754,6 +802,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				
 				downloadListView.addView(transferView);
 			}
+            swipeLayoutDownloads.setRefreshing(false);
 		}
 
 	}
@@ -770,7 +819,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			mView = inflater.inflate(R.layout.fragment_status, container, false);
-
+            swipeLayoutStatus = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container_status);
+            swipeLayoutStatus.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    GlobalState gs = ((MainActivity)getActivity()).gs;
+                    try {
+                        gs.getQueue().put(Message.obtain(null, 0, Constants.MsgGetNode, 0));
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+            });
+            swipeLayoutStatus.setColorSchemeResources(R.color.primary,
+                    R.color.accent);
 			return mView;
 		}
 
@@ -816,6 +877,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 				mView.findViewById(R.id.basic_node_status).setVisibility(View.VISIBLE);
 				((TextView)  mView.findViewById(R.id.basic_status_version_value)).setText(aNodeStatus.getVersion());
 			}
+            swipeLayoutStatus.setRefreshing(false);
 		}
 
 	}
