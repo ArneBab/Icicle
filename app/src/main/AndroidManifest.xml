@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.louisbourque.freenetassistant"
+    package="co.loubo.icicle"
     android:versionCode="1"
     android:versionName="0.1" >
 
@@ -13,14 +13,14 @@
     <uses-feature android:name="android.hardware.nfc" android:required="false" />
 
     <application
-        android:name="ca.louisbourque.freenetassistant.GlobalState"
+        android:name="co.loubo.icicle.GlobalState"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <service android:name="ca.louisbourque.freenetassistant.FCPService" />
+        <service android:name="co.loubo.icicle.FCPService" />
         <activity
-            android:name="ca.louisbourque.freenetassistant.MainActivity"
+            android:name="co.loubo.icicle.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,27 +29,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ca.louisbourque.freenetassistant.UploadActivity"
+            android:name="co.loubo.icicle.UploadActivity"
             android:label="@string/action_upload"
-            android:parentActivityName="ca.louisbourque.freenetassistant.MainActivity" >
+            android:parentActivityName="co.loubo.icicle.MainActivity" >
         </activity>
         <activity
-            android:name="ca.louisbourque.freenetassistant.SettingsActivity"
+            android:name="co.loubo.icicle.SettingsActivity"
             android:label="@string/action_settings" 
-            android:parentActivityName="ca.louisbourque.freenetassistant.MainActivity">
+            android:parentActivityName="co.loubo.icicle.MainActivity">
         </activity>
         <activity
-            android:name="ca.louisbourque.freenetassistant.NodeManagerActivity"
+            android:name="co.loubo.icicle.NodeManagerActivity"
             android:label="@string/pref_nodes_title" 
-            android:parentActivityName="ca.louisbourque.freenetassistant.SettingsActivity">
+            android:parentActivityName="co.loubo.icicle.SettingsActivity">
         </activity>
         <activity
-            android:name="ca.louisbourque.freenetassistant.FriendNodeManagerActivity"
+            android:name="co.loubo.icicle.FriendNodeManagerActivity"
             android:label="@string/pref_friend_nodes_title"
-            android:parentActivityName="ca.louisbourque.freenetassistant.SettingsActivity">
+            android:parentActivityName="co.loubo.icicle.SettingsActivity">
         </activity>
         <activity
-            android:name="ca.louisbourque.freenetassistant.OpenReferenceActivity"
+            android:name="co.loubo.icicle.OpenReferenceActivity"
             android:label="@string/openNodeRef" >
 	        <intent-filter>
 		        <action android:name="android.intent.action.VIEW" />
@@ -71,11 +71,11 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="application/vnd.ca.louisbourque.freenetassistant"/>
+                <data android:mimeType="application/vnd.co.loubo.icycle"/>
             </intent-filter>
     	</activity>
     	<receiver
-   			android:name="ca.louisbourque.freenetassistant.MainViewBroadcastReceiver">
+   			android:name="co.loubo.icicle.MainViewBroadcastReceiver">
 		</receiver>
     </application>
 

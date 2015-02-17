@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         layout="@layout/toolbar" />
 
-    <ca.louisbourque.freenetassistant.SlidingTabLayout
+    <co.loubo.icicle.SlidingTabLayout
         android:background="@color/primary"
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"

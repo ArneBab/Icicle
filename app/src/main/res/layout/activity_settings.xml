@@ -13,7 +13,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="ca.louisbourque.freenetassistant.SettingsFragment"
+        android:name="co.loubo.icicle.SettingsFragment"
         android:id="@+id/settings_content" />
 
 </LinearLayout>

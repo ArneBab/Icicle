@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "ca.louisbourque.freenetassistant"
+        applicationId "co.loubo.icycle"
         minSdkVersion 16
         targetSdkVersion 21
     }
