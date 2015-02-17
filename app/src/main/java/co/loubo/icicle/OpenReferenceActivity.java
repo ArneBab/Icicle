@@ -338,7 +338,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
     public NdefMessage createNdefMessage(NfcEvent event) {
         return new NdefMessage(
                 new NdefRecord[] { NdefRecord.createMime(
-                        "application/vnd.co.loubo.icycle", this.encodedNodeRef.getBytes(Charset.forName("US-ASCII")))
+                        "application/vnd.co.loubo.icicle", this.encodedNodeRef.getBytes(Charset.forName("US-ASCII")))
                         /**
                          * The Android Application Record (AAR) is commented out. When a device
                          * receives a push with an AAR in it, the application specified in the AAR

@@ -5,8 +5,7 @@ import android.annotation.SuppressLint;
 import java.util.ArrayList;
 
 public class Constants {
-	
-	public static final String ACTION 	= "ca.louisbourque.timagebrowser.action";
+
 	public static final int	MsgEXIT		= 1000;
 	public static final int MsgGetNode = 1001;
 	public static final int MsgGetSSKeypair = 1002;
@@ -20,11 +19,11 @@ public class Constants {
 	public static final int Activity_File_Upload = 20;
 	public static final int Activity_Settings = 21;
 	public static final int Activity_Reference = 22;
-	protected static final String BROADCAST_UPDATE_STATUS = "co.loubo.icycle.update_status";
-	protected static final String BROADCAST_UPDATE_DOWNLOADS = "co.loubo.icycle.update_downloads";
-	protected static final String BROADCAST_UPDATE_UPLOADS = "co.loubo.icycle.update_uploads";
-	protected static final String BROADCAST_UPDATE_PEERS = "co.loubo.icycle.update_peers";
-    public static final String LOCAL_NODE_SELECTED = "co.loubo.icycle.local_node_selected";
+	protected static final String BROADCAST_UPDATE_STATUS = "co.loubo.icicle.update_status";
+	protected static final String BROADCAST_UPDATE_DOWNLOADS = "co.loubo.icicle.update_downloads";
+	protected static final String BROADCAST_UPDATE_UPLOADS = "co.loubo.icicle.update_uploads";
+	protected static final String BROADCAST_UPDATE_PEERS = "co.loubo.icicle.update_peers";
+    public static final String LOCAL_NODE_SELECTED = "co.loubo.icicle.local_node_selected";
 	public static final String IS_CONNECTED = "isConnected";
 	public static final String STATUS = "status";
 	public static final String DOWNLOADS = "downloads";

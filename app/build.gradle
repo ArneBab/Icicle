@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "co.loubo.icycle"
+        applicationId "co.loubo.icicle"
         minSdkVersion 16
         targetSdkVersion 21
     }
