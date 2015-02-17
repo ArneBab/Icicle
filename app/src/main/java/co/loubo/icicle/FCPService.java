@@ -28,10 +28,6 @@ public class FCPService extends Service {
 			while (true) {
 				synchronized (this) {
 					try {
-						if(gs.getRefresh_rate() == 0){
-							wait(10000);
-							continue;
-						}
 						//check status of connection, reconnect if able
 						if(freenet.isAlive()){
 							//if we are connected, but the network type changed and we are wifi only, disconnect
@@ -51,11 +47,15 @@ public class FCPService extends Service {
 								
 							}else{
 								//wait for the network to become available
-								wait(5000);
+                                Thread.sleep(5000);
 								continue;
 							}
 						}
-						wait(gs.getRefresh_rate()*1000);
+                        if(gs.getRefresh_rate() == 0){
+                            Thread.sleep(10000);
+                            continue;
+                        }
+                        Thread.sleep(gs.getRefresh_rate()*1000);
 						if(gs.isMainActivityVisible()){
 							updateStatus();
 						}
@@ -79,6 +79,11 @@ public class FCPService extends Service {
 		}
 		@Override
 		public void handleMessage(Message msg) {
+            switch(refreshThread.getState()){
+                case TERMINATED:
+                    refreshThread = new RefreshThread();
+                    refreshThread.start();
+            }
 		}
 	}
 
