@@ -71,7 +71,7 @@
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="application/vnd.co.loubo.icycle"/>
+                <data android:mimeType="application/vnd.co.loubo.icicle"/>
             </intent-filter>
     	</activity>
     	<receiver
