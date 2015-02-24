@@ -731,12 +731,12 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
 	}
 
 	public void startFCPService() {
-		System.out.println(">>>GlobalState.startFCPService()");
+		//System.out.println(">>>GlobalState.startFCPService()");
 		startService(serviceIntent);
 	}
 	
 	public void stopFCPService() {
-		System.out.println(">>>GlobalState.stopFCPService()");
+		//System.out.println(">>>GlobalState.stopFCPService()");
 		if(serviceIntent == null){
 			return;
 		}
@@ -748,13 +748,13 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
     }
 
     public void registerActivity(Activity act){
-        System.out.println(">>>GlobalState.registerActivity("+act.toString()+")");
+        //System.out.println(">>>GlobalState.registerActivity("+act.toString()+")");
         this.activeActivity = act;
         startFCPService();
     }
 
     public void unregisterActivity(Activity act){
-        System.out.println(">>>GlobalState.unregisterActivity("+act.toString()+")");
+        //System.out.println(">>>GlobalState.unregisterActivity("+act.toString()+")");
         if(this.activeActivity == act)
         this.activeActivity = null;
     }

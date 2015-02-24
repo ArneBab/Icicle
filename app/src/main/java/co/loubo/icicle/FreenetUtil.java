@@ -46,7 +46,7 @@ public class FreenetUtil extends Thread{
 
 	
 	protected void tearDown() {
-		System.out.println(">>>FreenetUtil.tearDown()");
+		//System.out.println(">>>FreenetUtil.tearDown()");
 		if(fcpConnection != null){
 			fcpConnection.close();
 		}
@@ -178,7 +178,7 @@ public class FreenetUtil extends Thread{
     }
 	
 	public void run(){
-		System.out.println(">>>FreenetUtil.run()");
+		//System.out.println(">>>FreenetUtil.run()");
 		try {
 			setUp();
 		} catch (Exception e) {
