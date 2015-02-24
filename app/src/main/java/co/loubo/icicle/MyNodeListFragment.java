@@ -2,6 +2,7 @@ package co.loubo.icicle;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,8 +94,12 @@ public class MyNodeListFragment extends ListFragment {
             peerAddress.setText(values.get(position).getAddress()+":"+values.get(position).getPort());
             ImageView peerStatus = (ImageView)rowView.findViewById(R.id.peer_icon);
             if(gs.getActiveLocalNodeIndex() == position){
-                peerStatus.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_white_36dp));
-                peerStatus.setBackground(getResources().getDrawable(R.drawable.round_button_green));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    peerStatus.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_white_36dp));
+                    peerStatus.setBackground(getResources().getDrawable(R.drawable.round_button_green));
+                }else{
+                    peerStatus.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_black_36dp));
+                }
                 peerStatus.setVisibility(View.VISIBLE);
             }else{
                 peerStatus.setVisibility(View.INVISIBLE);

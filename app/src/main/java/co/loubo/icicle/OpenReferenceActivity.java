@@ -18,6 +18,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcelable;
@@ -57,8 +58,10 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
 
-        // NFC isn't available on the device
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
+        // NFC is available on the device
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)
+                //MIME-typed NFC NdefRecords are only supported in API 16
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mAndroidBeamAvailable = true;
             mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         }
@@ -110,9 +113,9 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
             if(selected >= 0){
                 this.nodeRef = this.gs.getLocalNodeList().get(selected).getNodeReference();
                 this.encodedNodeRef = this.gs.getLocalNodeList().get(selected).getEncodedNodeReference();
+                findViewById(R.id.shareNodeRef).setVisibility(View.VISIBLE);
 
                 if(mAndroidBeamAvailable){
-                    findViewById(R.id.shareNodeRef).setVisibility(View.VISIBLE);
                     mNfcAdapter.setNdefPushMessageCallback(this, this);
                 }
             }
