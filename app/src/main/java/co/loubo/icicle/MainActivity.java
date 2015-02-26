@@ -26,6 +26,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.app.FragmentTransaction;
@@ -837,14 +839,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 		@Override
 		public synchronized void onStateChanged(Bundle data) {
-
-
-			if(!data.getBoolean(Constants.IS_CONNECTED)){
-                mView.findViewById(R.id.no_connection).setVisibility(View.VISIBLE);
-				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
-				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
-				return;
-			}
+            swipeLayoutStatus.setRefreshing(false);
+            RelativeLayout statusView = (RelativeLayout)mView.findViewById(R.id.activity_status);
+            statusView.removeAllViews();
+            if(!data.getBoolean(Constants.IS_CONNECTED)){
+                FrameLayout fl = (FrameLayout)getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, statusView, false);
+                statusView.addView(fl);
+                return;
+            }
 
 			NodeStatus aNodeStatus = (NodeStatus)data.getSerializable(Constants.STATUS);
 			if(aNodeStatus == null){
@@ -852,9 +854,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 			}
 
 			if(aNodeStatus.isAdvanced()){
-                mView.findViewById(R.id.no_connection).setVisibility(View.GONE);
-				mView.findViewById(R.id.basic_node_status).setVisibility(View.GONE);
-				mView.findViewById(R.id.advanced_node_status).setVisibility(View.VISIBLE);
+                TableLayout tl = (TableLayout)getLayoutInflater(null).inflate(R.layout.fragment_advanced_node_status, statusView, false);
+                statusView.addView(tl);
 				((TextView)  mView.findViewById(R.id.status_version_value)).setText(aNodeStatus.getVersion());
 				((TextView)  mView.findViewById(R.id.status_input_value)).setText(String.format("%.2f",aNodeStatus.getRecentInputRate())+" KB/s");
 				((TextView)  mView.findViewById(R.id.status_output_value)).setText(String.format("%.2f",aNodeStatus.getRecentOutputRate())+" KB/s");
@@ -872,12 +873,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 					((TextView)  mView.findViewById(R.id.status_uptime_value)).setText(String.format("%.0f",uptimeSeconds)+" Seconds");
 				}
 			}else{
-                mView.findViewById(R.id.no_connection).setVisibility(View.GONE);
-				mView.findViewById(R.id.advanced_node_status).setVisibility(View.GONE);
-				mView.findViewById(R.id.basic_node_status).setVisibility(View.VISIBLE);
+                TableLayout tl = (TableLayout)getLayoutInflater(null).inflate(R.layout.fragment_basic_node_status, statusView, false);
+                statusView.addView(tl);
 				((TextView)  mView.findViewById(R.id.basic_status_version_value)).setText(aNodeStatus.getVersion());
 			}
-            swipeLayoutStatus.setRefreshing(false);
 		}
 
 	}
