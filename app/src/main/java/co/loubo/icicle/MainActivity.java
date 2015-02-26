@@ -273,6 +273,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     }
 
+    public void manageLocalNodes(View view){
+        startActivity(new Intent(this,NodeManagerActivity.class));
+    }
+
     /**
 	 * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
 	 * sections of the app.
@@ -843,7 +847,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             RelativeLayout statusView = (RelativeLayout)mView.findViewById(R.id.activity_status);
             statusView.removeAllViews();
             if(!data.getBoolean(Constants.IS_CONNECTED)){
-                FrameLayout fl = (FrameLayout)getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, statusView, false);
+                FrameLayout fl;
+                if(data.getBoolean(Constants.HAS_LOCAL_NODES)) {
+                    fl = (FrameLayout) getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, statusView, false);
+                }else{
+                    fl = (FrameLayout) getLayoutInflater(null).inflate(R.layout.fragment_no_node, statusView, false);
+                }
                 statusView.addView(fl);
                 return;
             }

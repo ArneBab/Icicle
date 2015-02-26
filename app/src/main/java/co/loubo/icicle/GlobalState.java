@@ -313,6 +313,7 @@ public class GlobalState extends Application{
 		Bundle data = new Bundle();
 		data.putSerializable(Constants.STATUS, 	this.nodeStatus);
 		data.putBoolean(Constants.IS_CONNECTED, this.isConnected);
+        data.putBoolean(Constants.HAS_LOCAL_NODES, this.localNodes.size() > 0);
 		if (statusListener != null) {
 			statusListener.onStateChanged(data);
         }

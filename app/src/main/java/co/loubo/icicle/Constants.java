@@ -25,6 +25,7 @@ public class Constants {
 	protected static final String BROADCAST_UPDATE_PEERS = "co.loubo.icicle.update_peers";
     public static final String LOCAL_NODE_SELECTED = "co.loubo.icicle.local_node_selected";
 	public static final String IS_CONNECTED = "isConnected";
+    public static final String HAS_LOCAL_NODES = "has_local_nodes";
 	public static final String STATUS = "status";
 	public static final String DOWNLOADS = "downloads";
 	public static final String UPLOADS = "uploads";
