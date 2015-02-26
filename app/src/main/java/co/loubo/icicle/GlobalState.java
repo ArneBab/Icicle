@@ -203,7 +203,7 @@ public class GlobalState extends Application{
 		this.activeLocalNode = sharedPref.getInt(Constants.PREF_ACTIVE_LOCAL_NODE, 0);
 		this.refresh_rate = sharedPref.getInt(Constants.PREF_REFRESH_RATE, 0);
 		this.deviceID = sharedPref.getString(Constants.PREF_DEVICE_ID,"");
-		this.wifiOnly = sharedPref.getBoolean(Constants.PREF_WIFI_ONLY, false);
+		this.wifiOnly = sharedPref.getBoolean(Constants.PREF_WIFI_ONLY, true);
 		if(this.deviceID.equals("")){
 			Editor editor = sharedPref.edit();
 			Random random = new Random();
