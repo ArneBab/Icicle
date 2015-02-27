@@ -36,6 +36,7 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListFragment = (FriendNodeListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
 

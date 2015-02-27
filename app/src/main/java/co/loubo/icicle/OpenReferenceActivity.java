@@ -57,6 +57,7 @@ public class OpenReferenceActivity extends ActionBarActivity implements NfcAdapt
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // NFC is available on the device
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)

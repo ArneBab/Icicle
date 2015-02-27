@@ -45,6 +45,7 @@ public class UploadActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         thumbnail = (ImageButton) findViewById(R.id.thumbnail);
         this.gs = (GlobalState) getApplication();
         this.fileUploadMessage = new FileUploadMessage();

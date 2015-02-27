@@ -15,6 +15,7 @@ public class SettingsActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setResult(Activity.RESULT_OK);
     }
 

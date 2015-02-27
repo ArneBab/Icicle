@@ -34,6 +34,7 @@ public class NodeManagerActivity extends ActionBarActivity implements NodeManage
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mListFragment = (MyNodeListFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
 		
