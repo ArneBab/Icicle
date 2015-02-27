@@ -42,11 +42,17 @@
             android:name="co.loubo.icicle.NodeManagerActivity"
             android:label="@string/pref_nodes_title" 
             android:parentActivityName="co.loubo.icicle.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.loubo.icicle.SettingsActivity"/>
         </activity>
         <activity
             android:name="co.loubo.icicle.FriendNodeManagerActivity"
             android:label="@string/pref_friend_nodes_title"
             android:parentActivityName="co.loubo.icicle.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.loubo.icicle.SettingsActivity"/>
         </activity>
         <activity
             android:name="co.loubo.icicle.OpenReferenceActivity"
