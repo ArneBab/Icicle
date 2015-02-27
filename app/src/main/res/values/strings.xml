@@ -40,6 +40,7 @@
     <string name="shareNodeRef">Share Node Reference</string>
     <string name="saveNodeRef">Save Node Reference</string>
     <string name="addingNodeRef">Adding Node Reference</string>
+    <string name="addingFriendNodeRef">Adding Friend Node Reference</string>
     <string name="savingNodeRef">Saving Node Reference</string>
     <string name="protocolError">Protocol Error</string>
     <string name="save">Save</string>
@@ -50,8 +51,8 @@
 	<string name="pref_wifi_only_title">Wi-Fi Only</string>
 	<string name="pref_wifi_only_desc">Connect to Freenet Node over Wifi Only</string>
 	<string name="node_settings_dialog_name">Freenet Nodes</string>
-	<string name="pref_nodes_title">Manage My Nodes</string>
-    <string name="pref_friend_nodes_title">Manage Friend Nodes</string>
+	<string name="pref_nodes_title">My Nodes</string>
+    <string name="pref_friend_nodes_title">Friend Nodes</string>
 	<string name="node_name_label">Name</string>
 	<string name="node_name_hint">My Node</string>
 	<string name="node_address_label">Address</string>

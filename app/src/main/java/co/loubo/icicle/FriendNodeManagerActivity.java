@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.pterodactylus.fcp.AddPeer;
 
@@ -115,6 +116,7 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
         try {
             AddPeer aPeer = this.gs.processStringIntoNode(gs.getFriendNodes().get(list.getCheckedItemPosition()).getNodeReference());
             this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgAddNoderef, 0,aPeer));
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.addingFriendNodeRef), Toast.LENGTH_SHORT).show();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
