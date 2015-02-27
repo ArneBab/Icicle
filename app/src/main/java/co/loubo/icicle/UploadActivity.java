@@ -8,6 +8,7 @@ import net.pterodactylus.fcp.SSKKeypair;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -20,6 +21,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -158,20 +161,86 @@ public class UploadActivity extends ActionBarActivity {
                 is.close();
                 is = cR.openInputStream(selectedFileUri);
                 // here w and h are the desired width and height
-                options.inSampleSize = Math.max(options.outWidth/512, options.outHeight/512);
+                options.inSampleSize = Math.max(options.outWidth/getWindow().getDecorView().getWidth(), options.outHeight/getWindow().getDecorView().getHeight());
                 // bitmap is the resized bitmap
                 Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
                 thumbnail.setImageBitmap(bitmap);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                Bitmap b = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.ic_photo_black_48dp);
+                thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
             }
             if(fileUploadMessage.getMimeType().equals("image/jpeg")){
                 exifRemoved.setVisibility(View.VISIBLE);
             }
+        }else if(fileUploadMessage.getMimeType().startsWith("video/")){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(this, selectedFileUri) ) {
+                final String docId = DocumentsContract.getDocumentId(selectedFileUri);
+                final String strID = docId.split(":")[1];
+                long id = Long.valueOf(strID);
+                ContentResolver crThumb = getContentResolver();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 1;
+                Bitmap curThumb = MediaStore.Video.Thumbnails.getThumbnail(crThumb, id, MediaStore.Video.Thumbnails.MINI_KIND, options);
+                if(curThumb!= null) {
+                    thumbnail.setImageBitmap(curThumb);
+                }else{
+                    Bitmap b = BitmapFactory.decodeResource(getResources(),
+                            R.drawable.ic_videocam_black_48dp);
+                    thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
+                }
+            }else{
+                Bitmap b = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.ic_videocam_black_48dp);
+                thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
+            }
+        }else if(fileUploadMessage.getMimeType().startsWith("audio/")) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(this, selectedFileUri) ) {
+                final String docId = DocumentsContract.getDocumentId(selectedFileUri);
+                final String strID = docId.split(":")[1];
+                long id = Long.valueOf(strID);
+                String selection = MediaStore.Audio.Media._ID + " = " + id + "";
+
+                Cursor cursor = getContentResolver().query(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{
+                                MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ALBUM_ID},
+                        selection, null, null);
+
+                if (cursor.moveToFirst()) {
+                    long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+
+                    Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+                    Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
+                    try {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        InputStream is;
+                        is = cR.openInputStream(albumArtUri);
+                        BitmapFactory.decodeStream(is,null,options);
+                        is.close();
+                        is = cR.openInputStream(albumArtUri);
+
+                        options.inSampleSize = Math.max(options.outWidth/getWindow().getDecorView().getWidth(), options.outHeight/getWindow().getDecorView().getHeight());
+                        // bitmap is the resized bitmap
+                        Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
+                        thumbnail.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        Bitmap b = BitmapFactory.decodeResource(getResources(),
+                                R.drawable.ic_headset_black_48dp);
+                        thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
+                    }
+                }else{
+                    Bitmap b = BitmapFactory.decodeResource(getResources(),
+                            R.drawable.ic_headset_black_48dp);
+                    thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
+                }
+                cursor.close();
+            }else{
+                Bitmap b = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.ic_headset_black_48dp);
+                thumbnail.setImageBitmap(Bitmap.createScaledBitmap(b, 96, 96, false));
+            }
         }else{
-            //TODO: check for other common file types
-            thumbnail.setImageResource(R.drawable.ic_photo_black_48dp);
+            thumbnail.setImageResource(R.drawable.ic_insert_drive_file_black_48dp);
         }
         Cursor returnCursor =
                 getContentResolver().query(selectedFileUri, null, null, null, null);
