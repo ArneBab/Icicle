@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     private static SwipeRefreshLayout swipeLayoutDownloads;
     private static SwipeRefreshLayout swipeLayoutUploads;
     private static SwipeRefreshLayout swipeLayoutPeers;
+    private static Menu menu;
 
     public synchronized void updateStatusView(){
 		this.gs.redrawStatus();
@@ -163,6 +164,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		// Inflate the menu items for use in the action bar
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -847,6 +849,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             RelativeLayout statusView = (RelativeLayout)mView.findViewById(R.id.activity_status);
             statusView.removeAllViews();
             if(!data.getBoolean(Constants.IS_CONNECTED)){
+                if(menu != null) {
+                    menu.findItem(R.id.action_upload).setVisible(false);
+                }
                 FrameLayout fl;
                 if(data.getBoolean(Constants.HAS_LOCAL_NODES)) {
                     fl = (FrameLayout) getLayoutInflater(null).inflate(R.layout.fragment_no_connectivity, statusView, false);
@@ -857,6 +862,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return;
             }
 
+            if(menu != null) {
+                menu.findItem(R.id.action_upload).setVisible(true);
+            }
 			NodeStatus aNodeStatus = (NodeStatus)data.getSerializable(Constants.STATUS);
 			if(aNodeStatus == null){
 				return;
