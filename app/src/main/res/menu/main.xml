@@ -7,16 +7,17 @@
         android:icon="@drawable/ic_settings_white_36dp"
         android:title="@string/action_settings"/>
     <item
-        android:id="@+id/action_upload"
-        android:orderInCategory="20"
-        android:icon="@drawable/ic_file_upload_white_36dp"
-        app:showAsAction="always"
-        android:title="@string/action_upload"/>
-    <item
         android:id="@+id/action_refresh"
-        android:orderInCategory="10"
+        android:orderInCategory="20"
         app:showAsAction="always"
         android:icon="@drawable/ic_refresh_white_36dp"
         android:title="@string/action_refresh"/>
+    <item
+        android:id="@+id/action_upload"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_file_upload_white_36dp"
+        app:showAsAction="always"
+        android:visible="false"
+        android:title="@string/action_upload"/>
 
 </menu>
