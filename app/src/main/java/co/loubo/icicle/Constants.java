@@ -44,6 +44,7 @@ public class Constants {
 	public static final String KEY_TYPE_DEFAULT = KEY_TYPE_SSK;
     public static final String DEFAULT_TRUST = "NORMAL";
     public static final String DEFAULT_VISIBILITY = "NO";
+    public static final String CHECKED_ITEM = "CheckedItem";
     public static String ToastMessage = "ToastMessage";
 	
 	public static int numberOfTabs = 4;
