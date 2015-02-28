@@ -39,6 +39,7 @@ public class UploadActivity extends ActionBarActivity {
 	private FileUploadMessage fileUploadMessage;
 	private GlobalState gs;
 	private SSKKeypair anSSKey;
+    private Uri selectedFileUri;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,20 @@ public class UploadActivity extends ActionBarActivity {
 			radioButton.setChecked(true);
 			uploadButton.setEnabled(true);
 		}
+        if(savedInstanceState != null){
+            selectedFileUri = savedInstanceState.getParcelable(Constants.SELECTED_URI);
+            if(selectedFileUri != null){
+                onFileSelected();
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if(selectedFileUri != null) {
+            outState.putParcelable(Constants.SELECTED_URI, selectedFileUri);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -115,13 +130,11 @@ public class UploadActivity extends ActionBarActivity {
     	 }
     }
     
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	super.onActivityResult(requestCode, resultCode, data);
     	if(resultCode != RESULT_OK || data == null) return;
         if (requestCode != SELECT_FILE && requestCode != SELECT_FILE_KITKAT) return;
-        Uri selectedFileUri;
         if (requestCode == SELECT_FILE) {
             selectedFileUri = data.getData();
         } else {
@@ -131,11 +144,17 @@ public class UploadActivity extends ActionBarActivity {
                     | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             // Check for the freshest data.
 
-            //noinspection ResourceType
-            getContentResolver().takePersistableUriPermission(selectedFileUri, takeFlags);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                //noinspection ResourceType
+                getContentResolver().takePersistableUriPermission(selectedFileUri, takeFlags);
+            }
         }
         if(selectedFileUri == null) return;
+        onFileSelected();
+    }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    protected void onFileSelected(){
         ImageButton uploadButton = (ImageButton) this.findViewById(R.id.file_upload_button);
         ImageButton pickButton = (ImageButton) this.findViewById(R.id.file_picker_button);
         TextView exifRemoved = (TextView) this.findViewById(R.id.remove_exif);
@@ -161,7 +180,7 @@ public class UploadActivity extends ActionBarActivity {
                 is.close();
                 is = cR.openInputStream(selectedFileUri);
                 // here w and h are the desired width and height
-                options.inSampleSize = Math.max(options.outWidth/getWindow().getDecorView().getWidth(), options.outHeight/getWindow().getDecorView().getHeight());
+                options.inSampleSize = Math.max(options.outWidth/512, options.outHeight/512);
                 // bitmap is the resized bitmap
                 Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
                 thumbnail.setImageBitmap(bitmap);
@@ -219,7 +238,7 @@ public class UploadActivity extends ActionBarActivity {
                         is.close();
                         is = cR.openInputStream(albumArtUri);
 
-                        options.inSampleSize = Math.max(options.outWidth/getWindow().getDecorView().getWidth(), options.outHeight/getWindow().getDecorView().getHeight());
+                        options.inSampleSize = Math.max(options.outWidth/512, options.outHeight/512);
                         // bitmap is the resized bitmap
                         Bitmap bitmap = BitmapFactory.decodeStream(is,null,options);
                         thumbnail.setImageBitmap(bitmap);
@@ -250,13 +269,6 @@ public class UploadActivity extends ActionBarActivity {
         fileUploadMessage.setName(returnCursor.getString(nameIndex));
         fileUploadMessage.setSize(returnCursor.getLong(sizeIndex));
         returnCursor.close();
-        RadioButton chk_rb = (RadioButton) this.findViewById(R.id.radio_button_CHK);
-        if(chk_rb.isChecked()){
-            fileUploadMessage.setKey(Constants.KEY_TYPE_CHK);
-        }else{
-            fileUploadMessage.setKey(anSSKey.getInsertURI()+fileUploadMessage.getName());
-        }
-
     }
     
     public void uploadFile(View view) {
@@ -269,6 +281,12 @@ public class UploadActivity extends ActionBarActivity {
     }
     
     public void executeMultipartPost() throws Exception {
+        RadioButton chk_rb = (RadioButton) this.findViewById(R.id.radio_button_CHK);
+        if(chk_rb.isChecked()){
+            fileUploadMessage.setKey(Constants.KEY_TYPE_CHK);
+        }else{
+            fileUploadMessage.setKey(anSSKey.getInsertURI()+fileUploadMessage.getName());
+        }
 		try {
 			this.gs.getQueue().put(Message.obtain(null, 0, Constants.MsgFileUpload,0,fileUploadMessage));
 		} catch (InterruptedException e) {
