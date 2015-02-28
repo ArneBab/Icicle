@@ -42,6 +42,19 @@ public class MyNodeListFragment extends ListFragment {
         list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list.setDivider(getResources().getDrawable(R.drawable.divider));
         list.setSelector(getResources().getDrawable(R.drawable.list_selection_background));
+
+        if(savedInstanceState!= null) {
+            list.setItemChecked(savedInstanceState.getInt(Constants.CHECKED_ITEM), true);
+            if (listener != null) {
+                listener.redrawNodeManagementActionBar();
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CHECKED_ITEM,getListView().getCheckedItemPosition());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

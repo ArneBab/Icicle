@@ -91,6 +91,7 @@ public class FriendNodeManagerActivity extends ActionBarActivity implements Frie
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.friend_node_manager_menu, menu);
+        redrawFriendNodeManagement();
         return super.onCreateOptionsMenu(menu);
     }
 
