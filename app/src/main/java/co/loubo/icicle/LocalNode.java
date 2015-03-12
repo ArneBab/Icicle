@@ -15,7 +15,7 @@ public class LocalNode implements Serializable {
     private String encodedNodeReference;
 	
 	public LocalNode(){
-		new LocalNode("","",0);
+		this("","",0);
 	}
 	
 	public LocalNode(String name, String address, int port){
