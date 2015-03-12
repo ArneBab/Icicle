@@ -37,6 +37,9 @@
             android:name="co.loubo.icicle.SettingsActivity"
             android:label="@string/action_settings" 
             android:parentActivityName="co.loubo.icicle.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.loubo.icicle.MainActivity"/>
         </activity>
         <activity
             android:name="co.loubo.icicle.NodeManagerActivity"
