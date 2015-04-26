@@ -275,7 +275,27 @@ public class FcpAdapter implements FcpListener {
 		/* empty. */
 	}
 
-	/**
+    @Override
+    public void receivedTextFeed(FcpConnection fcpConnection, TextFeed textFeed) {
+        /* empty. */
+    }
+
+    @Override
+    public void receivedBookmarkFeed(FcpConnection fcpConnection, BookmarkFeed bookmarkFeed) {
+        /* empty. */
+    }
+
+    @Override
+    public void receivedURIFeed(FcpConnection fcpConnection, URIFeed uriFeed) {
+        /* empty. */
+    }
+
+    @Override
+    public void receivedFeed(FcpConnection fcpConnection, Feed feed) {
+        /* empty. */
+    }
+
+    /**
 	 * {@inheritDoc}
 	 */
 	public void receivedMessage(FcpConnection fcpConnection, FcpMessage fcpMessage) {

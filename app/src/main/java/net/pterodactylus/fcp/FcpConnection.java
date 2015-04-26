@@ -632,6 +632,30 @@ public class FcpConnection implements Closeable {
 		}
 	}
 
+    private void fireReceivedTextFeed(TextFeed textFeed) {
+        for (FcpListener fcpListener : fcpListeners) {
+            fcpListener.receivedTextFeed(this, textFeed);
+        }
+    }
+
+    private void fireReceivedBookmarkFeed(BookmarkFeed bookmarkFeed) {
+        for (FcpListener fcpListener : fcpListeners) {
+            fcpListener.receivedBookmarkFeed(this, bookmarkFeed);
+        }
+    }
+
+    private void fireReceivedURIFeed(URIFeed uriFeed) {
+        for (FcpListener fcpListener : fcpListeners) {
+            fcpListener.receivedURIFeed(this, uriFeed);
+        }
+    }
+
+    private void fireReceivedFeed(Feed feed) {
+        for (FcpListener fcpListener : fcpListeners) {
+            fcpListener.receivedFeed(this, feed);
+        }
+    }
+
 	/**
 	 * Notifies all registered listeners that a message has been received.
 	 * 
@@ -811,7 +835,39 @@ public class FcpConnection implements Closeable {
 			fireReceivedNodeHello(new NodeHello(fcpMessage));
 		} else if ("CloseConnectionDuplicateClientName".equals(messageName)) {
 			fireReceivedCloseConnectionDuplicateClientName(new CloseConnectionDuplicateClientName(fcpMessage));
-		} else {
+		} else if ("TextFeed".equals(messageName)) {
+            LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+            fireReceivedTextFeed(new TextFeed(fcpMessage, payloadInputStream));
+            try {
+                payloadInputStream.consume();
+            } catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+            }
+        } else if ("BookmarkFeed".equals(messageName)) {
+            LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+            fireReceivedBookmarkFeed(new BookmarkFeed(fcpMessage, payloadInputStream));
+            try {
+                payloadInputStream.consume();
+            } catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+            }
+        } else if ("URIFeed".equals(messageName)) {
+            LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+            fireReceivedURIFeed(new URIFeed(fcpMessage, payloadInputStream));
+            try {
+                payloadInputStream.consume();
+            } catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+            }
+        } else if ("Feed".equals(messageName)) {
+            LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+            fireReceivedFeed(new Feed(fcpMessage, payloadInputStream));
+            try {
+                payloadInputStream.consume();
+            } catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+            }
+        } else {
 			fireMessageReceived(fcpMessage);
 		}
 	}

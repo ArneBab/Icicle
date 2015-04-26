@@ -164,7 +164,7 @@ public class FcpUtils {
 	 */
 	public static long safeParseLong(String value, long defaultValue) {
 		try {
-			return Integer.valueOf(value);
+			return Long.valueOf(value);
 		} catch (NumberFormatException nfe1) {
 			return defaultValue;
 		}
