@@ -181,6 +181,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		case R.id.action_upload:
 			handleFileUpload();
 			return true;
+        case R.id.action_messages:
+            handleMessages();
+            return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -226,6 +229,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		Intent intent = new Intent(this, UploadActivity.class);
 		startActivityForResult(intent,Constants.Activity_File_Upload);
 	}
+
+    private void handleMessages() {
+        Intent intent = new Intent(this, ListMessagesActivity.class);
+        startActivityForResult(intent,Constants.Activity_Messages);
+    }
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == Constants.Activity_File_Upload && resultCode == Activity.RESULT_OK){

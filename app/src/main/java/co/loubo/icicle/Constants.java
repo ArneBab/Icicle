@@ -19,6 +19,7 @@ public class Constants {
 	public static final int Activity_File_Upload = 20;
 	public static final int Activity_Settings = 21;
 	public static final int Activity_Reference = 22;
+    public static final int Activity_Messages = 23;
 	protected static final String BROADCAST_UPDATE_STATUS = "co.loubo.icicle.update_status";
 	protected static final String BROADCAST_UPDATE_DOWNLOADS = "co.loubo.icicle.update_downloads";
 	protected static final String BROADCAST_UPDATE_UPLOADS = "co.loubo.icicle.update_uploads";
@@ -46,6 +47,7 @@ public class Constants {
     public static final String DEFAULT_VISIBILITY = "NO";
     public static final String CHECKED_ITEM = "CheckedItem";
     public static final String SELECTED_URI = "SelectedUri";
+    public static final String SELF = "Me";
     public static String ToastMessage = "ToastMessage";
 	
 	public static int numberOfTabs = 4;

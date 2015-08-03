@@ -1,6 +1,7 @@
 package co.loubo.icicle;
 
 import net.pterodactylus.fcp.AllData;
+import net.pterodactylus.fcp.BookmarkFeed;
 import net.pterodactylus.fcp.ConfigData;
 import net.pterodactylus.fcp.DataFound;
 import net.pterodactylus.fcp.EndListPeerNotes;
@@ -10,6 +11,7 @@ import net.pterodactylus.fcp.FCPPluginReply;
 import net.pterodactylus.fcp.FcpAdapter;
 import net.pterodactylus.fcp.FcpConnection;
 import net.pterodactylus.fcp.FcpMessage;
+import net.pterodactylus.fcp.Feed;
 import net.pterodactylus.fcp.FinishedCompression;
 import net.pterodactylus.fcp.GetFailed;
 import net.pterodactylus.fcp.IdentifierCollision;
@@ -34,9 +36,14 @@ import net.pterodactylus.fcp.StartedCompression;
 import net.pterodactylus.fcp.SubscribedUSKUpdate;
 import net.pterodactylus.fcp.TestDDAComplete;
 import net.pterodactylus.fcp.TestDDAReply;
+import net.pterodactylus.fcp.TextFeed;
+import net.pterodactylus.fcp.URIFeed;
 import net.pterodactylus.fcp.URIGenerated;
 import net.pterodactylus.fcp.UnknownNodeIdentifier;
 import net.pterodactylus.fcp.UnknownPeerNoteType;
+
+import java.io.IOException;
+import java.util.Date;
 
 public class FreenetAdaptor extends FcpAdapter {
 	
@@ -97,8 +104,42 @@ public class FreenetAdaptor extends FcpAdapter {
 			notify();
 		}
 	}
-	
-	public void receivedSSKKeypair(FcpConnection fcpConnection, SSKKeypair sskKeypair) {
+
+    @Override
+    public void receivedTextFeed(FcpConnection fcpConnection, TextFeed textFeed) {
+        byte[] text = new byte[(int)textFeed.getTextLength()];
+        byte[] textMessage = new byte[(int)textFeed.getMessageTextLength()];
+        try {
+            int readText = textFeed.getPayloadInputStream().read(text,0,(int)textFeed.getTextLength());
+            int readTextMessage = textFeed.getPayloadInputStream().read(textMessage,0,(int)textFeed.getMessageTextLength());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.gs.addToMessageList(new FreenetMessage(new Date(textFeed.getTimeReceived()),new String(textMessage),textFeed.getSourceNodeName(),Constants.SELF));
+    }
+
+    @Override
+    public void receivedBookmarkFeed(FcpConnection fcpConnection, BookmarkFeed bookmarkFeed) {
+        this.gs.addToMessageList(new FreenetMessage(new Date(bookmarkFeed.getTimeReceived()),bookmarkFeed.getLinkName()+": "+bookmarkFeed.getURI(),bookmarkFeed.getSourceNodeName(),Constants.SELF));
+    }
+
+    @Override
+    public void receivedURIFeed(FcpConnection fcpConnection, URIFeed uriFeed) {
+        this.gs.addToMessageList(new FreenetMessage(new Date(uriFeed.getTimeReceived()),uriFeed.getURI(),uriFeed.getSourceNodeName(),Constants.SELF));
+    }
+
+    @Override
+    public void receivedFeed(FcpConnection fcpConnection, Feed feed) {
+        byte[] data = new byte[(int)feed.getDataLength()];
+        try {
+            int readData = feed.getPayloadInputStream().read(data,0,(int)feed.getTextLength());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.gs.addToMessageList(new FreenetMessage(new Date(feed.getUpdatedTime()),new String(data),feed.getSourceNodeName(),Constants.SELF));
+    }
+
+    public void receivedSSKKeypair(FcpConnection fcpConnection, SSKKeypair sskKeypair) {
 		this.gs.setSSKeypair(sskKeypair);
 		synchronized (this) {
 			notify();

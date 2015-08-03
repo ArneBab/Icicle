@@ -75,6 +75,7 @@
 	<string name="icon">Icon</string>
     <string name="title_activity_reference">Freenet Reference</string>
     <string name="action_share">Share</string>
+    <string name="action_messages">Messages</string>
     <string name="priority_label">Priority: </string>
     <string name="priority_0">Emergency</string>
     <string name="priority_1">Very High</string>
@@ -85,4 +86,5 @@
     <string name="no_nodes">No Nodes Configured</string>
     <string name="trust">Trust</string>
     <string name="visibility">Visibility</string>
+    <string name="title_activity_list_messages">Messages</string>
 </resources>

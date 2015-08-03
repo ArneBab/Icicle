@@ -108,6 +108,7 @@ public class GlobalState extends Application{
 	private CopyOnWriteArrayList<Download> DownloadsList;
 	private CopyOnWriteArrayList<Upload> UploadsList;
 	private CopyOnWriteArrayList<UploadDir> UploadDirsList;
+    private CopyOnWriteArrayList<FreenetMessage> messageList;
 	SharedPreferences sharedPref;
 	private Intent serviceIntent;
 	private SSKKeypair anSSKeypair;
@@ -138,6 +139,7 @@ public class GlobalState extends Application{
 		this.DownloadsList = new CopyOnWriteArrayList<>();
 		this.UploadsList = new CopyOnWriteArrayList<>();
 		this.UploadDirsList = new CopyOnWriteArrayList<>();
+        this.messageList = new CopyOnWriteArrayList<>();
 		this.nodeStatus = null;
 		this.setConnected(false);
 	}
@@ -285,6 +287,15 @@ public class GlobalState extends Application{
 		}
 		sendRedrawUploads();
 	}
+
+    public void addToMessageList(FreenetMessage freenetMessage){
+        this.messageList.add(freenetMessage);
+    }
+
+    public CopyOnWriteArrayList<FreenetMessage> getMessageList(){
+        return this.messageList;
+    }
+
 	
 	public void sendRedrawStatus(){
 		debounceBroadcasts.call(this.updateStatus);

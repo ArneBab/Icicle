@@ -35,6 +35,7 @@ public class FreenetUtil extends Thread{
 			this.fcpAdapter.getGlobalState().setConnected(true);
 			fcpConnection.sendMessage(new ClientHello(context.getString(R.string.app_name)+this.fcpAdapter.getGlobalState().getDeviceID()));
 			fcpConnection.sendMessage(new WatchGlobal(true));
+            fcpConnection.sendMessage(new WatchFeeds(true));
 			fcpConnection.addFcpListener(fcpAdapter);
 		}catch(ConnectException e){
 			//failed to connect
