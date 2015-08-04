@@ -5,12 +5,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -75,9 +77,11 @@ public class ListMessagesActivity extends ActionBarActivity {
         for(FreenetMessage msg: messages){
             LinearLayout ms = (LinearLayout)getLayoutInflater().inflate(R.layout.message_summary, messageList, false);
             TextView sender = (TextView) ms.findViewById(R.id.message_name);
+            TextView messageDate = (TextView) ms.findViewById(R.id.message_date);
             TextView messageText = (TextView) ms.findViewById(R.id.message_summary);
             sender.setText(msg.getSender());
             messageText.setText(msg.getMessage());
+            messageDate.setText(gs.getPrettyDate(msg.getDate()));
             messageList.addView(ms);
         }
         swipeLayoutMessages.setRefreshing(false);

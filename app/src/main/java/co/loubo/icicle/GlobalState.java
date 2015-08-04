@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -1023,4 +1027,27 @@ public void onRefreshRateChange(int integer, boolean need_to_reset_loop) {
         aPeer.setField("Visibility",Constants.DEFAULT_VISIBILITY);
         return aPeer;
     }
+
+	public String getPrettyDate(Date timestamp) {
+		Date now = new Date();
+		long difference = now.getTime()-timestamp.getTime();
+		if(difference < 60000l){ // less than a minute
+			return String.valueOf((int)Math.floor(difference/1000l))+"s";
+		}
+		if(difference < 3600000l){ //less than an hour
+			return String.valueOf((int)Math.floor(difference/60000l))+"m";
+		}
+		if(difference < 86400000l){ //less than a day
+			return String.valueOf((int)Math.floor(difference/3600000l))+"h";
+		}
+		if(difference < 2592000000l){ //less than a month
+			return String.valueOf((int)Math.floor(difference/86400000l))+"d";
+		}
+		if(difference < 31536000000l){ //less than a year
+			DateFormat format = new SimpleDateFormat("dd MMM", Locale.ENGLISH);
+			return format.format(timestamp);
+		}
+		DateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+		return format.format(timestamp);//more than a year ago
+	}
 }
