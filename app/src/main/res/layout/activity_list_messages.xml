@@ -10,30 +10,11 @@
         android:layout_height="wrap_content"
         layout="@layout/toolbar" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container_messages"
+    <fragment
+        android:id="@+id/listFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/app_background" >
-
-            <LinearLayout
-                android:id="@+id/message_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:divider="@drawable/divider"
-                android:dividerPadding="0dp"
-                android:orientation="vertical"
-                android:showDividers="middle" >
-
-            </LinearLayout>
-
-
-        </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        class="co.loubo.icicle.ListMessagesFragment" />
 
 </LinearLayout>

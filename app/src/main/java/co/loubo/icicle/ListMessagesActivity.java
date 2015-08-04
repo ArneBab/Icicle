@@ -1,25 +1,19 @@
 package co.loubo.icicle;
 
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
-import java.util.concurrent.CopyOnWriteArrayList;
+import android.widget.ListView;
 
 
-public class ListMessagesActivity extends ActionBarActivity {
+public class ListMessagesActivity extends ActionBarActivity implements ListMessagesFragment.OnItemSelectedListener {
 
     private GlobalState gs;
-    private SwipeRefreshLayout swipeLayoutMessages;
+    private ListView list;
+    private ListMessagesFragment mListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +21,20 @@ public class ListMessagesActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_messages);
 
         this.gs = (GlobalState) getApplication();
-
+        this.list = (ListView)findViewById(android.R.id.list);
+        mListFragment = (ListMessagesFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
         // Set up the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         // setHasOptionsMenu(true);
         setSupportActionBar(toolbar);
-
-        swipeLayoutMessages = (SwipeRefreshLayout) findViewById(R.id.swipe_container_messages);
-        swipeLayoutMessages.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                redrawMessageList();
-            }
-        });
-        swipeLayoutMessages.setColorSchemeResources(R.color.primary,
-                R.color.accent);
-
-        redrawMessageList();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mListFragment.notifyDataSetChanged();
+        redrawMessageList();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,19 +60,7 @@ public class ListMessagesActivity extends ActionBarActivity {
     }
 
     public void redrawMessageList(){
-        CopyOnWriteArrayList<FreenetMessage> messages = this.gs.getMessageList();
-        LinearLayout messageList = (LinearLayout)findViewById(R.id.message_list_view);
-        messageList.removeAllViews();
-        for(FreenetMessage msg: messages){
-            LinearLayout ms = (LinearLayout)getLayoutInflater().inflate(R.layout.message_summary, messageList, false);
-            TextView sender = (TextView) ms.findViewById(R.id.message_name);
-            TextView messageDate = (TextView) ms.findViewById(R.id.message_date);
-            TextView messageText = (TextView) ms.findViewById(R.id.message_summary);
-            sender.setText(msg.getSender());
-            messageText.setText(msg.getMessage());
-            messageDate.setText(gs.getPrettyDate(msg.getDate()));
-            messageList.addView(ms);
-        }
-        swipeLayoutMessages.setRefreshing(false);
+
+
     }
 }

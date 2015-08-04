@@ -87,4 +87,5 @@
     <string name="trust">Trust</string>
     <string name="visibility">Visibility</string>
     <string name="title_activity_list_messages">Messages</string>
+    <string name="no_messages">No messages</string>
 </resources>
