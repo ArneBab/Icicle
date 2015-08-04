@@ -1,6 +1,5 @@
 /*
- * jSite2 - FpcListener.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - FpcListener.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +22,14 @@ import java.util.EventListener;
 
 /**
  * Interface for objects that want to be notified on certain FCP events.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “NodeHello” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param nodeHello
@@ -41,7 +40,7 @@ public interface FcpListener extends EventListener {
 	/**
 	 * Notifies a listener that a “CloseConnectionDuplicateClientName” message
 	 * was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param closeConnectionDuplicateClientName
@@ -51,7 +50,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “SSKKeypair” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received themessage
 	 * @param sskKeypair
@@ -61,7 +60,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “Peer” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param peer
@@ -71,7 +70,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that an “EndListPeers” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that recevied the message
 	 * @param endListPeers
@@ -81,7 +80,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PeerNote” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param peerNote
@@ -91,7 +90,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that an “EndListPeerNotes” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param endListPeerNotes
@@ -101,7 +100,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PeerRemoved” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param peerRemoved
@@ -111,7 +110,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “NodeData” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param nodeData
@@ -121,7 +120,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “TestDDAReply” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param testDDAReply
@@ -131,7 +130,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “TestDDAComplete” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param testDDAComplete
@@ -141,7 +140,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PersistentGet” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param persistentGet
@@ -151,7 +150,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PersistentPut” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param persistentPut
@@ -161,7 +160,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “EndListPersistentRequests” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param endListPersistentRequests
@@ -171,7 +170,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “URIGenerated” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param uriGenerated
@@ -181,7 +180,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “DataFound” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param dataFound
@@ -191,7 +190,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that an “AllData” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param allData
@@ -201,7 +200,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “SimpleProgress” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param simpleProgress
@@ -211,7 +210,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “StartedCompression” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param startedCompression
@@ -221,17 +220,17 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “FinishedCompression” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param finishedCompression
 	 *            The “FinishedCompression” message
 	 */
-	public void receviedFinishedCompression(FcpConnection fcpConnection, FinishedCompression finishedCompression);
+	public void receivedFinishedCompression(FcpConnection fcpConnection, FinishedCompression finishedCompression);
 
 	/**
 	 * Notifies a listener that an “UnknownPeerNoteType” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param unknownPeerNoteType
@@ -241,7 +240,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “UnknownNodeIdentifier” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param unknownNodeIdentifier
@@ -251,7 +250,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “ConfigData” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param configData
@@ -261,7 +260,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “GetFailed” message was recevied.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param getFailed
@@ -271,7 +270,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PutFailed” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param putFailed
@@ -281,7 +280,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that an “IdentifierCollision” message was receied.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param identifierCollision
@@ -291,7 +290,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PersistentPutDir” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param persistentPutDir
@@ -302,7 +301,7 @@ public interface FcpListener extends EventListener {
 	/**
 	 * Notifies a listener that a “PersistentRequestRemoved” message was
 	 * received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param persistentRequestRemoved
@@ -312,7 +311,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “SubscribedUSKUpdate” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that recevied the message
 	 * @param subscribedUSKUpdate
@@ -322,7 +321,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PluginInfo” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param pluginInfo
@@ -332,7 +331,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that an “FCPPluginReply“ message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param fcpPluginReply
@@ -343,7 +342,7 @@ public interface FcpListener extends EventListener {
 	/**
 	 * Notifies a listener that a “PersistentRequestModified” message was
 	 * received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param persistentRequestModified
@@ -353,7 +352,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PutSuccessful” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param putSuccessful
@@ -363,7 +362,7 @@ public interface FcpListener extends EventListener {
 
 	/**
 	 * Notifies a listener that a “PutFetchable” message was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param putFetchable
@@ -372,8 +371,28 @@ public interface FcpListener extends EventListener {
 	public void receivedPutFetchable(FcpConnection fcpConnection, PutFetchable putFetchable);
 
 	/**
+	 * Notifies a listener that a feed was sent to a peer.
+	 *
+	 * @param source
+	 *            The connection that received the message
+	 * @param sentFeed
+	 *            The “SentFeed” message
+	 */
+	public void receivedSentFeed(FcpConnection source, SentFeed sentFeed);
+
+	/**
+	 * Notifies a listener that a bookmark was updated.
+	 *
+	 * @param fcpConnection
+	 *            The connection that received the message
+	 * @param receivedBookmarkFeed
+	 *            The “ReceivedBookmarkFeed” message
+	 */
+	public void receivedBookmarkFeed(FcpConnection fcpConnection, ReceivedBookmarkFeed receivedBookmarkFeed);
+
+	/**
 	 * Notifies a listener that a “ProtocolError” was received.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param protocolError
@@ -381,51 +400,12 @@ public interface FcpListener extends EventListener {
 	 */
 	public void receivedProtocolError(FcpConnection fcpConnection, ProtocolError protocolError);
 
-    /**
-     * Notifies a listener that a “TextFeed” was received.
-     *
-     * @param fcpConnection
-     *            The connection that received the message
-     * @param textFeed
-     *            The “TextFeed” message
-     */
-    public void receivedTextFeed(FcpConnection fcpConnection, TextFeed textFeed);
-
-    /**
-     * Notifies a listener that a “BookmarkFeed” was received.
-     *
-     * @param fcpConnection
-     *            The connection that received the message
-     * @param bookmarkFeed
-     *            The “BookmarkFeed” message
-     */
-    public void receivedBookmarkFeed(FcpConnection fcpConnection, BookmarkFeed bookmarkFeed);
-
-    /**
-     * Notifies a listener that a “URIFeed” was received.
-     *
-     * @param fcpConnection
-     *            The connection that received the message
-     * @param uriFeed
-     *            The “URIFeed” message
-     */
-    public void receivedURIFeed(FcpConnection fcpConnection, URIFeed uriFeed);
-
-    /**
-     * Notifies a listener that a “Feed” was received.
-     *
-     * @param fcpConnection
-     *            The connection that received the message
-     * @param feed
-     *            The “Feed” message
-     */
-    public void receivedFeed(FcpConnection fcpConnection, Feed feed);
-
 	/**
-	 * Notifies a listener that a message has been received. This method is only
-	 * called if {@link FcpConnection#handleMessage(FcpMessage)} does not
-	 * recognize the message. Should that ever happen, please file a bug report!
-	 * 
+	 * Notifies a listener that a message has been received. This method is
+	 * only called if {@link FcpConnection#handleMessage(FcpMessage)} does not
+	 * recognize the message. Should that ever happen, please file a bug
+	 * report!
+	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param fcpMessage
@@ -434,15 +414,15 @@ public interface FcpListener extends EventListener {
 	public void receivedMessage(FcpConnection fcpConnection, FcpMessage fcpMessage);
 
 	/**
-	 * Notifies a listener that a connection was closed. A closed connection can
-	 * be reestablished by calling {@link FcpConnection#connect()} on the same
-	 * object again.
-	 * 
+	 * Notifies a listener that a connection was closed. A closed connection
+	 * can be reestablished by calling {@link FcpConnection#connect()} on the
+	 * same object again.
+	 *
 	 * @param fcpConnection
 	 *            The connection that was closed.
 	 * @param throwable
-	 *            The exception that caused the disconnect, or <code>null</code>
-	 *            if there was no exception
+	 *            The exception that caused the disconnect, or
+	 *            <code>null</code> if there was no exception
 	 */
 	public void connectionClosed(FcpConnection fcpConnection, Throwable throwable);
 

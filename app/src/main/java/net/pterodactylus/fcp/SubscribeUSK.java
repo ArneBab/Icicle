@@ -1,6 +1,5 @@
 /*
- * jSite2 - SubscribeUSK.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - SubscribeUSK.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +21,14 @@ package net.pterodactylus.fcp;
 /**
  * With a “SubscribeUSK” a client requests to be notified if the edition number
  * of a USK changes.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class SubscribeUSK extends FcpMessage {
 
 	/**
 	 * Creates a new “SubscribeUSK” message.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI to watch for changes
 	 * @param identifier
@@ -43,7 +42,7 @@ public class SubscribeUSK extends FcpMessage {
 
 	/**
 	 * Sets whether updates for the USK are actively searched.
-	 * 
+	 *
 	 * @param active
 	 *            <code>true</code> to actively search for newer editions,
 	 *            <code>false</code> to only watch for newer editions that are

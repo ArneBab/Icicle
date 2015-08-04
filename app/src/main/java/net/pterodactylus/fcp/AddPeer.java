@@ -1,6 +1,5 @@
 /*
- * jSite2 - AddPeer.java -
- * Copyright Â© 2008 David Roden
+ * jFCPlib - AddPeer.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +21,23 @@ package net.pterodactylus.fcp;
 import java.net.URL;
 
 /**
- * The â€œAddPeerâ€� request adds a peer to the node.
- * 
- * @author David â€˜Bombeâ€™ Roden &lt;bombe@freenetproject.org&gt;
+ * The “AddPeer” request adds a peer to the node.
+ *
+ * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class AddPeer extends FcpMessage {
 
 	/**
-	 * Creates a new â€œAddPeerâ€� request.
+	 * Creates a new “AddPeer” request.
 	 */
 	private AddPeer() {
 		super("AddPeer");
 	}
 
 	/**
-	 * Creates a new â€œAddPeerâ€� request that reads the noderef of the peer from
+	 * Creates a new “AddPeer” request that reads the noderef of the peer from
 	 * the given file.
-	 * 
+	 *
 	 * @param file
 	 *            The file to read the noderef from
 	 */
@@ -48,9 +47,9 @@ public class AddPeer extends FcpMessage {
 	}
 
 	/**
-	 * Creates a new â€œAddPeerâ€� request that reads the noderef of the peer from
+	 * Creates a new “AddPeer” request that reads the noderef of the peer from
 	 * the given URL.
-	 * 
+	 *
 	 * @param url
 	 *            The URL to read the noderef from
 	 */
@@ -60,8 +59,8 @@ public class AddPeer extends FcpMessage {
 	}
 
 	/**
-	 * Creates a new â€œAddPeerâ€� request that adds the peer given by the noderef.
-	 * 
+	 * Creates a new “AddPeer” request that adds the peer given by the noderef.
+	 *
 	 * @param nodeRef
 	 *            The noderef of the peer
 	 */
@@ -76,7 +75,7 @@ public class AddPeer extends FcpMessage {
 
 	/**
 	 * Sets the noderef of the peer to add.
-	 * 
+	 *
 	 * @param nodeRef
 	 *            The noderef of the peer
 	 */
@@ -85,12 +84,8 @@ public class AddPeer extends FcpMessage {
 		setField("opennet", String.valueOf(nodeRef.isOpennet()));
 		setField("identity", nodeRef.getIdentity());
 		setField("myName", nodeRef.getMyName());
-		if(nodeRef.getLocation() >= 0){
-			setField("location", String.valueOf(nodeRef.getLocation()));
-		}
-		if(nodeRef.isTestnet() != null){
-			setField("testnet", String.valueOf(nodeRef.isTestnet()));
-		}
+		setField("location", String.valueOf(nodeRef.getLocation()));
+		setField("testnet", String.valueOf(nodeRef.isTestnet()));
 		setField("version", String.valueOf(nodeRef.getVersion()));
 		setField("physical.udp", nodeRef.getPhysicalUDP());
 		setField("ark.pubURI", nodeRef.getARK().getPublicURI());

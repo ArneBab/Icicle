@@ -1,6 +1,5 @@
 /*
- * jSite2 - StartedCompression.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - StartedCompression.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * The “StartedCompression” message signals the client the compressing for a
  * request has started.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class StartedCompression extends BaseMessage {
+public class StartedCompression extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “StartedCompression” message that wraps the received
 	 * message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -40,16 +39,17 @@ public class StartedCompression extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns the number of the codec that is used for compression.
-	 * 
+	 *
 	 * @return The codec used for the compression, or <code>-1</code> if the
 	 *         codec could not be parsed
 	 */

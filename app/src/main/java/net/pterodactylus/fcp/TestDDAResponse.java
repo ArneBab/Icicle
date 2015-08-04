@@ -1,6 +1,5 @@
 /*
- * jSite2 - TestDDAResponse.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - TestDDAResponse.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,17 +21,18 @@ package net.pterodactylus.fcp;
 /**
  * A “TestDDAResponse” is sent to let the node know that either created a file
  * with the content from {@link TestDDAReply#getContentToWrite()} or that you
- * read the content of the file given by {@link TestDDAReply#getReadFilename()}.
- * 
+ * read the content of the file given by {@link TestDDAReply#getReadFilename()}
+ * .
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class TestDDAResponse extends FcpMessage {
 
 	/**
-	 * Creates a new “TestDDAResponse” message that signals that you created the
-	 * file given by {@link TestDDAReply#getWriteFilename()} and wrote the
+	 * Creates a new “TestDDAResponse” message that signals that you created
+	 * the file given by {@link TestDDAReply#getWriteFilename()} and wrote the
 	 * contents given by {@link TestDDAReply#getContentToWrite()} to it.
-	 * 
+	 *
 	 * @param directory
 	 *            The directory from the {@link TestDDARequest} command
 	 */
@@ -41,18 +41,18 @@ public class TestDDAResponse extends FcpMessage {
 	}
 
 	/**
-	 * Creates a new “TestDDAResponse” message that signals that you created the
-	 * file given by {@link TestDDAReply#getWriteFilename()} with the contents
-	 * given by {@link TestDDAReply#getContentToWrite()} to it (when you
-	 * specified that you want to write to the directory) and/or that you read
-	 * the file given by {@link TestDDAReply#getReadFilename()} (when you
+	 * Creates a new “TestDDAResponse” message that signals that you created
+	 * the file given by {@link TestDDAReply#getWriteFilename()} with the
+	 * contents given by {@link TestDDAReply#getContentToWrite()} to it (when
+	 * you specified that you want to write to the directory) and/or that you
+	 * read the file given by {@link TestDDAReply#getReadFilename()} (when you
 	 * specified you wanted to read the directory).
-	 * 
+	 *
 	 * @param directory
 	 *            The directory from the {@link TestDDARequest} command
 	 * @param readContent
-	 *            The read content, or <code>null</code> if you did not
-	 *            request read access
+	 *            The read content, or <code>null</code> if you did not request
+	 *            read access
 	 */
 	public TestDDAResponse(String directory, String readContent) {
 		super("TestDDAResponse");

@@ -1,6 +1,5 @@
 /*
- * jSite2 - DSAGroup.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - DSAGroup.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +21,9 @@ package net.pterodactylus.fcp;
 import java.security.interfaces.DSAParams;
 
 /**
- * Container for the DSA group of a peer. A DSA group consists of a base (called
- * “g”), a prime (called “p”) and a subprime (called “q”).
- * 
+ * Container for the DSA group of a peer. A DSA group consists of a base
+ * (called “g”), a prime (called “p”) and a subprime (called “q”).
+ *
  * @see DSAParams
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
@@ -42,7 +41,7 @@ public class DSAGroup {
 	/**
 	 * Creates a new DSA group with the given base (“g”), prime (“p”), and
 	 * subprime (“q”).
-	 * 
+	 *
 	 * @param base
 	 *            The base of the DSA group
 	 * @param prime
@@ -58,7 +57,7 @@ public class DSAGroup {
 
 	/**
 	 * Returns the base (“g”) of the DSA group.
-	 * 
+	 *
 	 * @return The base of the DSA group
 	 */
 	public String getBase() {
@@ -67,7 +66,7 @@ public class DSAGroup {
 
 	/**
 	 * Returns the prime (“p”) of the DSA group.
-	 * 
+	 *
 	 * @return The prime of the DSA group
 	 */
 	public String getPrime() {
@@ -76,7 +75,7 @@ public class DSAGroup {
 
 	/**
 	 * Returns the subprime (“q”) of the DSA group.
-	 * 
+	 *
 	 * @return The subprime of the DSA group
 	 */
 	public String getSubprime() {

@@ -1,6 +1,5 @@
 /*
- * jSite2 - ListPeerNotes.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ListPeerNotes.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ package net.pterodactylus.fcp;
 /**
  * A “ListPeerNodes” request tells the node to list all notes that have been
  * entered for a node. Note that notes are only supported for darknet nodes.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ListPeerNotes extends FcpMessage {
@@ -30,7 +29,7 @@ public class ListPeerNotes extends FcpMessage {
 	/**
 	 * Creates a new “ListPeerNotes” request that lists all notes of the
 	 * specified node.
-	 * 
+	 *
 	 * @param nodeIdentifier
 	 *            The identifier of the node
 	 */

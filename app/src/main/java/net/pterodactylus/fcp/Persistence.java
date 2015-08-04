@@ -1,6 +1,5 @@
 /*
- * jSite2 - Persistence.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - Persistence.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * Convenience class for persistence values.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public enum Persistence {

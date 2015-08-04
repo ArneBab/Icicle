@@ -1,6 +1,5 @@
 /*
- * jSite2 - GenerateSSK.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - GenerateSSK.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ package net.pterodactylus.fcp;
 /**
  * A “GenerateSSK” message. This message tells the node to generate a new SSK
  * key pair.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class GenerateSSK extends FcpMessage {
@@ -36,7 +35,7 @@ public class GenerateSSK extends FcpMessage {
 
 	/**
 	 * Creates a new “GenerateSSK” message with the given client identifier.
-	 * 
+	 *
 	 * @param clientIdentifier
 	 *            The client identifier
 	 */

@@ -1,6 +1,5 @@
 /*
- * jSite2 - ClientHello.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ClientHello.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ package net.pterodactylus.fcp;
 /**
  * A “ClientHello” message that <i>must</i> be sent to the node first thing
  * after calling {@link FcpConnection#connect()}.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ClientHello extends FcpMessage {
@@ -31,7 +30,7 @@ public class ClientHello extends FcpMessage {
 	 * Creates a new “ClientHello” message with the given client name. The
 	 * client name has to be unique to the node otherwise you will get a
 	 * {@link CloseConnectionDuplicateClientName} response from the node!
-	 * 
+	 *
 	 * @param clientName
 	 *            The unique client name
 	 */
@@ -44,7 +43,7 @@ public class ClientHello extends FcpMessage {
 	 * client name has to be unique to the node otherwise you will get a
 	 * {@link CloseConnectionDuplicateClientName} response from the node! The
 	 * expected FCP version is currently ignored by the node.
-	 * 
+	 *
 	 * @param clientName
 	 *            The unique client name
 	 * @param expectedVersion

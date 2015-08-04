@@ -1,6 +1,5 @@
 /*
- * jSite2 - ModifyConfig.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ModifyConfig.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * The “ModifyConfig” message is used to change the node’s configuration.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ModifyConfig extends FcpMessage {
@@ -35,7 +34,7 @@ public class ModifyConfig extends FcpMessage {
 
 	/**
 	 * Sets the option with the given name to the given value.
-	 * 
+	 *
 	 * @param option
 	 *            The name of the option
 	 * @param value

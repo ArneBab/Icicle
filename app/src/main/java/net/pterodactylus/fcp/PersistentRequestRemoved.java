@@ -1,6 +1,5 @@
 /*
- * jSite2 - PersistentRequestRemoved.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - PersistentRequestRemoved.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * A “PersistentRequestRemoved” message signals that a persistent request was
  * removed from either the global or the client-local queue.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class PersistentRequestRemoved extends BaseMessage {
+public class PersistentRequestRemoved extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “PersistentRequestRemoved” message that wraps the received
 	 * message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -40,16 +39,17 @@ public class PersistentRequestRemoved extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns whether the request was removed from the global queue.
-	 * 
+	 *
 	 * @return <code>true</code> if the request was removed from the global
 	 *         queue, <code>false</code> if it was removed from the
 	 *         client-local queue

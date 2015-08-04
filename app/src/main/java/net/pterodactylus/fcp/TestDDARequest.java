@@ -1,6 +1,5 @@
 /*
- * jSite2 - TestDDARequest.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - TestDDARequest.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,22 +20,21 @@ package net.pterodactylus.fcp;
 
 /**
  * The “TestDDARequest” initiates a DDA test sequence.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class TestDDARequest extends FcpMessage {
 
 	/**
 	 * Creates a new “TestDDARequest” command that initiates a DDA test.
-	 * 
+	 *
 	 * @param directory
 	 *            The directory you want to access files in
 	 * @param wantReadDirectory
 	 *            <code>true</code> if you want to read files from the
 	 *            directory
 	 * @param wantWriteDirectory
-	 *            <code>true</code> if you want to write files to the
-	 *            directory
+	 *            <code>true</code> if you want to write files to the directory
 	 */
 	public TestDDARequest(String directory, boolean wantReadDirectory, boolean wantWriteDirectory) {
 		super("TestDDARequest");

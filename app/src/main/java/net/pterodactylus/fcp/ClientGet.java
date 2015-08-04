@@ -1,6 +1,5 @@
 /*
- * jSite2 - ClientGet.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ClientGet.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +20,14 @@ package net.pterodactylus.fcp;
 
 /**
  * A “ClientGet” request is used for download files from the Freenet node.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ClientGet extends FcpMessage {
 
 	/**
 	 * Creates a new “ClientGet” request.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI to get
 	 * @param identifier
@@ -40,7 +39,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Creates a new “ClientGet” request.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI to get
 	 * @param identifier
@@ -58,7 +57,7 @@ public class ClientGet extends FcpMessage {
 	/**
 	 * Sets whether the local data store should be ignored when searching for a
 	 * key.
-	 * 
+	 *
 	 * @param ignoreDataStore
 	 *            <code>true</code> to ignore the local data store,
 	 *            <code>false</code> to include it
@@ -70,7 +69,7 @@ public class ClientGet extends FcpMessage {
 	/**
 	 * Sets whether the search for the key should be restricted to the local
 	 * data store only.
-	 * 
+	 *
 	 * @param dsOnly
 	 *            <code>true</code> to restrict the search to the local data
 	 *            store, <code>false</code> to search on other nodes, too
@@ -81,7 +80,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets the verbosity of the request.
-	 * 
+	 *
 	 * @param verbosity
 	 *            The verbosity of the request
 	 */
@@ -90,9 +89,9 @@ public class ClientGet extends FcpMessage {
 	}
 
 	/**
-	 * Sets the maximum size of the file to retrieve. If the file is larger than
-	 * this size the request will fail!
-	 * 
+	 * Sets the maximum size of the file to retrieve. If the file is larger
+	 * than this size the request will fail!
+	 *
 	 * @param maxSize
 	 *            The maximum size of the file to retrieve
 	 */
@@ -103,7 +102,7 @@ public class ClientGet extends FcpMessage {
 	/**
 	 * Sets the maximum size of temporary files created by the node. If a
 	 * temporary file is larger than this size the request will fail!
-	 * 
+	 *
 	 * @param maxTempSize
 	 *            The maximum size of temporary files
 	 */
@@ -113,7 +112,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * The maximum number of retries in case a block can not be retrieved.
-	 * 
+	 *
 	 * @param maxRetries
 	 *            The maximum number of retries for failed blocks,
 	 *            <code>-1</code> to try forever
@@ -124,7 +123,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets the priority of the request.
-	 * 
+	 *
 	 * @param priority
 	 *            The priority of the request
 	 */
@@ -134,7 +133,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets the persistence of the request.
-	 * 
+	 *
 	 * @param persistence
 	 *            The persistence of the request
 	 */
@@ -144,7 +143,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets the client token of the request.
-	 * 
+	 *
 	 * @param clientToken
 	 *            The client token of the request
 	 */
@@ -154,7 +153,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets whether the request should be visible on the global queue.
-	 * 
+	 *
 	 * @param global
 	 *            <code>true</code> to make the request visible on the global
 	 *            queue, <code>false</code> for client-local queue only
@@ -165,7 +164,7 @@ public class ClientGet extends FcpMessage {
 
 	/**
 	 * Sets whether to request the “binary blob” for a key.
-	 * 
+	 *
 	 * @param binaryBlob
 	 *            <code>true</code> to request the binary blob,
 	 *            <code>false</code> to get the “real thing”
@@ -175,10 +174,20 @@ public class ClientGet extends FcpMessage {
 	}
 
 	/**
+	 * Sets whether to filter the fetched content.
+	 *
+	 * @param filterData
+	 *            {@code true} to filter content, {@code false} otherwise
+	 */
+	public void setFilterData(boolean filterData) {
+		setField("FilterData", String.valueOf(filterData));
+	}
+
+	/**
 	 * Sets the allowed MIME types of the requested file. If the MIME type of
 	 * the file does not match one of the given MIME types the request will
 	 * fail!
-	 * 
+	 *
 	 * @param allowedMimeTypes
 	 *            The allowed MIME types
 	 */
@@ -189,7 +198,7 @@ public class ClientGet extends FcpMessage {
 	/**
 	 * Sets the filename to download the file to. You should only call this
 	 * method if your return type is {@link ReturnType#disk}!
-	 * 
+	 *
 	 * @param filename
 	 *            The filename to download the file to
 	 */
@@ -198,9 +207,9 @@ public class ClientGet extends FcpMessage {
 	}
 
 	/**
-	 * Sets the name for the temporary file. You should only call this method if
-	 * your return type is {@link ReturnType#disk}!
-	 * 
+	 * Sets the name for the temporary file. You should only call this method
+	 * if your return type is {@link ReturnType#disk}!
+	 *
 	 * @param tempFilename
 	 *            The name of the temporary file
 	 */

@@ -1,6 +1,5 @@
 /*
- * jSite2 - BaseMessage.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - BaseMessage.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +22,7 @@ import java.util.Map;
 
 /**
  * A basic message abstraction that wraps a received FCP message.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class BaseMessage {
@@ -33,7 +32,7 @@ public class BaseMessage {
 
 	/**
 	 * Creates a new base message that wraps the given message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The FCP message that was received
 	 */
@@ -43,7 +42,7 @@ public class BaseMessage {
 
 	/**
 	 * Returns the name of the message.
-	 * 
+	 *
 	 * @return The name of the message
 	 */
 	public String getName() {
@@ -52,7 +51,7 @@ public class BaseMessage {
 
 	/**
 	 * Returns the content of the field.
-	 * 
+	 *
 	 * @param field
 	 *            The name of the field
 	 * @return The content of the field, or <code>null</code> if there is no
@@ -64,7 +63,7 @@ public class BaseMessage {
 
 	/**
 	 * Returns all fields from the received message.
-	 * 
+	 *
 	 * @see FcpMessage#getFields()
 	 * @return All fields from the message
 	 */

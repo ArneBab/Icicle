@@ -1,6 +1,5 @@
 /*
- * jSite2 - ListPeers.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ListPeers.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * The “ListPeer” requests asks the node for a list of all peers it has.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ListPeers extends FcpMessage {
@@ -29,7 +28,7 @@ public class ListPeers extends FcpMessage {
 	/**
 	 * Creates a new “ListPeers” request that only includes basic data of the
 	 * peers.
-	 * 
+	 *
 	 * @param identifier
 	 *            The identifier of the request
 	 */
@@ -38,13 +37,14 @@ public class ListPeers extends FcpMessage {
 	}
 
 	/**
-	 * Creates a new “ListPeers” request that includes wanted data of the peers.
-	 * 
+	 * Creates a new “ListPeers” request that includes wanted data of the
+	 * peers.
+	 *
 	 * @param identifier
 	 *            The identifier of the request
 	 * @param withMetadata
-	 *            If <code>true</code> metadata of the peers is included in
-	 *            the reply
+	 *            If <code>true</code> metadata of the peers is included in the
+	 *            reply
 	 * @param withVolatile
 	 *            if <code>true</code> volatile data of the peers is included
 	 *            in the reply

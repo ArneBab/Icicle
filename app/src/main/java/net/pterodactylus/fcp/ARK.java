@@ -1,6 +1,5 @@
 /*
- * jSite2 - ARK.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ARK.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * Container for ARKs (address resolution keys).
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ARK {
@@ -37,7 +36,7 @@ public class ARK {
 
 	/**
 	 * Creates a new ARK with the given URI and number.
-	 * 
+	 *
 	 * @param publicURI
 	 *            The public URI of the ARK
 	 * @param number
@@ -49,7 +48,7 @@ public class ARK {
 
 	/**
 	 * Creates a new ARK with the given URIs and number.
-	 * 
+	 *
 	 * @param publicURI
 	 *            The public URI of the ARK
 	 * @param privateURI
@@ -72,7 +71,7 @@ public class ARK {
 
 	/**
 	 * Returns the public URI of the ARK.
-	 * 
+	 *
 	 * @return The public URI of the ARK
 	 */
 	public String getPublicURI() {
@@ -81,7 +80,7 @@ public class ARK {
 
 	/**
 	 * Returns the private URI of the ARK.
-	 * 
+	 *
 	 * @return The private URI of the ARK
 	 */
 	public String getPrivateURI() {
@@ -90,7 +89,7 @@ public class ARK {
 
 	/**
 	 * Returns the number of the ARK.
-	 * 
+	 *
 	 * @return The number of the ARK
 	 */
 	public int getNumber() {

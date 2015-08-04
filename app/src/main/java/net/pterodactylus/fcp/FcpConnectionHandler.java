@@ -1,6 +1,5 @@
 /*
- * jSite2 - FcpConnectionHandler.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - FcpConnectionHandler.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,13 +22,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import net.pterodactylus.util.logging.Logging;
 
 /**
  * Handles an FCP connection to a node.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 class FcpConnectionHandler implements Runnable {
+
+	/** The logger. */
+	private static final Logger logger = Logging.getLogger(FcpConnectionHandler.class.getName());
 
 	/** The underlying connection. */
 	private final FcpConnection fcpConnection;
@@ -46,7 +52,7 @@ class FcpConnectionHandler implements Runnable {
 	/**
 	 * Creates a new connection handler that operates on the given connection
 	 * and input stream.
-	 * 
+	 *
 	 * @param fcpConnection
 	 *            The underlying FCP connection
 	 * @param remoteInputStream
@@ -60,6 +66,7 @@ class FcpConnectionHandler implements Runnable {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void run() {
 		FcpMessage fcpMessage = null;
 		Throwable throwable = null;
@@ -71,7 +78,7 @@ class FcpConnectionHandler implements Runnable {
 			}
 			try {
 				String line = readLine();
-				//System.out.println("read line: " + line);
+				logger.log(Level.FINEST, "read line: %1$s", line);
 				if (line == null) {
 					break;
 				}
@@ -120,7 +127,7 @@ class FcpConnectionHandler implements Runnable {
 	/**
 	 * Reads bytes from {@link #remoteInputStream} until ‘\r’ or ‘\n’ are
 	 * encountered and decodes the read bytes using UTF-8.
-	 * 
+	 *
 	 * @return The decoded line
 	 * @throws IOException
 	 *             if an I/O error occurs

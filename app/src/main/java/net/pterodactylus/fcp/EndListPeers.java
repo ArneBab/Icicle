@@ -1,6 +1,5 @@
 /*
- * jSite2 - EndListPeers.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - EndListPeers.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +20,14 @@ package net.pterodactylus.fcp;
 
 /**
  * This message marks the end of a list of “Peer” replies.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class EndListPeers extends BaseMessage {
+public class EndListPeers extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “EndListPeers” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The message that was received
 	 */
@@ -38,9 +37,10 @@ public class EndListPeers extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}

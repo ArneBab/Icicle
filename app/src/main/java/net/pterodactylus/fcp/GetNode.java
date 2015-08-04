@@ -1,6 +1,5 @@
 /*
- * jSite2 - GetNode.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - GetNode.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,24 +21,25 @@ package net.pterodactylus.fcp;
 /**
  * The “GetNode” command returns the darknet or opennet noderef of the node,
  * optionally including private and volatile data.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class GetNode extends FcpMessage {
 
 	/**
-	 * Creates a “GetNode” command that returns the darknet noderef of the node.
+	 * Creates a “GetNode” command that returns the darknet noderef of the
+	 * node.
 	 */
 	public GetNode() {
 		this(null, null, null);
 	}
 
 	/**
-	 * Creates a “GetNode” command that returns the request noderef of the node,
-	 * including private and volatile data, if requested. If any of the Boolean
-	 * parameters are <code>null</code> the parameter is ignored and the
-	 * node’s default value is used.
-	 * 
+	 * Creates a “GetNode” command that returns the request noderef of the
+	 * node, including private and volatile data, if requested. If any of the
+	 * Boolean parameters are <code>null</code> the parameter is ignored and
+	 * the node’s default value is used.
+	 *
 	 * @param giveOpennetRef
 	 *            <code>true</code> to request the opennet noderef,
 	 *            <code>false</code> for darknet

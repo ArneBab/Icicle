@@ -1,6 +1,5 @@
 /*
- * jSite2 - EndListPersistentRequests.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - EndListPersistentRequests.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * The “EndListPersistentRequests” message signals the end of a list of
  * {@link PersistentGet} and {@link PersistentPut} requests.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class EndListPersistentRequests extends BaseMessage {
 
 	/**
-	 * Creates a new “EndListPersistentRequests” message that wraps the received
-	 * message.
-	 * 
+	 * Creates a new “EndListPersistentRequests” message that wraps the
+	 * received message.
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */

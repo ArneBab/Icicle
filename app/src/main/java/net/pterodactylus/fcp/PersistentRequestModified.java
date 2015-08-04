@@ -1,6 +1,5 @@
 /*
- * jSite2 - PersistentRequestModified.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - PersistentRequestModified.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * The “PersistentRequestModified” message is a reply to
  * {@link ModifyPersistentRequest}.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class PersistentRequestModified extends BaseMessage {
+public class PersistentRequestModified extends BaseMessage implements Identifiable {
 
 	/**
-	 * Creates a new “PersistentRequestModified” message that wraps the received
-	 * message.
-	 * 
+	 * Creates a new “PersistentRequestModified” message that wraps the
+	 * received message.
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -40,16 +39,17 @@ public class PersistentRequestModified extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the changed request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns whether the request is on the global queue.
-	 * 
+	 *
 	 * @return <code>true</code> if the request is on the global queue,
 	 *         <code>false</code> if it is on a client-local queue
 	 */
@@ -59,7 +59,7 @@ public class PersistentRequestModified extends BaseMessage {
 
 	/**
 	 * Returns the client token, if it was changed.
-	 * 
+	 *
 	 * @return The new client token, or <code>null</code> if the client token
 	 *         was not changed
 	 */
@@ -69,7 +69,7 @@ public class PersistentRequestModified extends BaseMessage {
 
 	/**
 	 * Returns the priority of the request, if it was changed.
-	 * 
+	 *
 	 * @return The new priority of the request, or {@link Priority#unknown} if
 	 *         the priority was not changed
 	 */

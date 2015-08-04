@@ -1,6 +1,5 @@
 /*
- * jSite2 - SimpleProgress.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - SimpleProgress.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +21,14 @@ package net.pterodactylus.fcp;
 /**
  * A “SimpleProgress” message tells the client about the progress of a
  * {@link ClientGet} or {@link ClientPut} operation.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class SimpleProgress extends BaseMessage {
+public class SimpleProgress extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “SimpleProgress” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -40,7 +39,7 @@ public class SimpleProgress extends BaseMessage {
 	/**
 	 * Returns the total number of blocks. This number may increase as long as
 	 * {@link #isFinalizedTotal()} returns <code>false</code>.
-	 * 
+	 *
 	 * @return The total number of blocks
 	 */
 	public int getTotal() {
@@ -52,7 +51,7 @@ public class SimpleProgress extends BaseMessage {
 	 * This number might actually be lower than {@link #getTotal} because of
 	 * redundancy information. This number may also increase as long as
 	 * {@link #isFinalizedTotal()} returns <code>false</code>.
-	 * 
+	 *
 	 * @return The number of required blocks
 	 */
 	public int getRequired() {
@@ -61,7 +60,7 @@ public class SimpleProgress extends BaseMessage {
 
 	/**
 	 * Returns the number of blocks that have failed and run out of retries.
-	 * 
+	 *
 	 * @return The number of failed blocks
 	 */
 	public int getFailed() {
@@ -71,7 +70,7 @@ public class SimpleProgress extends BaseMessage {
 	/**
 	 * Returns the number of fatally failed blocks. A block that failed fatally
 	 * can never be completed, even with infinite retries.
-	 * 
+	 *
 	 * @return The number of fatally failed blocks
 	 */
 	public int getFatallyFailed() {
@@ -80,7 +79,7 @@ public class SimpleProgress extends BaseMessage {
 
 	/**
 	 * Returns the number of blocks that have been successfully processed.
-	 * 
+	 *
 	 * @return The number of succeeded blocks
 	 */
 	public int getSucceeded() {
@@ -92,7 +91,7 @@ public class SimpleProgress extends BaseMessage {
 	 * been finalized. Once the total number of blocks has been finalized for a
 	 * request it will not change any more, and this method of every further
 	 * SimpleProgress message will always return <code>true</code>.
-	 * 
+	 *
 	 * @return <code>true</code> if the number of total blocks has been
 	 *         finalized, <code>false</code> otherwise
 	 */
@@ -102,9 +101,10 @@ public class SimpleProgress extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}

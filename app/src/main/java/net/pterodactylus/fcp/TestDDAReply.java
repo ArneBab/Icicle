@@ -1,6 +1,5 @@
 /*
- * jSite2 - TestDDAReply.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - TestDDAReply.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,16 +22,17 @@ package net.pterodactylus.fcp;
  * The “TestDDAReply” is sent as a response to {@link TestDDARequest}. If you
  * specified that you wanted to read files from that directory
  * {@link #getReadFilename()} will give you a filename. Similarly, if you
- * specified that you want to write in the directory {@link #getWriteFilename()}
- * will give you a filename to write {@link #getContentToWrite()} to.
- * 
+ * specified that you want to write in the directory
+ * {@link #getWriteFilename()} will give you a filename to write
+ * {@link #getContentToWrite()} to.
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class TestDDAReply extends BaseMessage {
 
 	/**
 	 * Creates a “TestDDAReply” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -42,7 +42,7 @@ public class TestDDAReply extends BaseMessage {
 
 	/**
 	 * Returns the directory the TestDDRequest was made for.
-	 * 
+	 *
 	 * @return The directory to test
 	 */
 	public String getDirectory() {
@@ -52,7 +52,7 @@ public class TestDDAReply extends BaseMessage {
 	/**
 	 * Returns the filename you have to read to proof your ability to read that
 	 * specific directory.
-	 * 
+	 *
 	 * @return The name of the file to read
 	 */
 	public String getReadFilename() {
@@ -62,7 +62,7 @@ public class TestDDAReply extends BaseMessage {
 	/**
 	 * Returns the filename you have to write to to proof your ability to write
 	 * to that specific directory.
-	 * 
+	 *
 	 * @return The name of the file write to
 	 */
 	public String getWriteFilename() {
@@ -73,7 +73,7 @@ public class TestDDAReply extends BaseMessage {
 	 * If you requested a test for writing permissions you have to write the
 	 * return value of this method to the file given by
 	 * {@link #getWriteFilename()}.
-	 * 
+	 *
 	 * @return The content to write to the file
 	 */
 	public String getContentToWrite() {

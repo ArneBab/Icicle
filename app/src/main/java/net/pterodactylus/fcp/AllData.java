@@ -1,6 +1,5 @@
 /*
- * jSite2 - AllData.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - AllData.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,23 +22,23 @@ import java.io.InputStream;
 
 /**
  * The “AllData” message carries the payload of a successful {@link ClientGet}
- * request. You will only received this message if the {@link ClientGet} request
- * was started with a return type of {@link ReturnType#direct}. If you get this
- * message and decide that the data is for you, call
+ * request. You will only received this message if the {@link ClientGet}
+ * request was started with a return type of {@link ReturnType#direct}. If you
+ * get this message and decide that the data is for you, call
  * {@link #getPayloadInputStream()} to get the data. If an AllData message
  * passes through all registered {@link FcpListener}s without the payload being
  * consumed, the payload is discarded!
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class AllData extends BaseMessage {
+public class AllData extends BaseMessage implements Identifiable {
 
 	/** The payload. */
 	private InputStream payloadInputStream;
 
 	/**
 	 * Creates an “AllData” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 * @param payloadInputStream
@@ -52,16 +51,17 @@ public class AllData extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns the length of the data.
-	 * 
+	 *
 	 * @return The length of the data, or <code>-1</code> if the length could
 	 *         not be parsed
 	 */
@@ -71,7 +71,7 @@ public class AllData extends BaseMessage {
 
 	/**
 	 * Returns the startup time of the request.
-	 * 
+	 *
 	 * @return The startup time of the request (in milliseconds since Jan 1,
 	 *         1970 UTC), or <code>-1</code> if the time could not be parsed
 	 */
@@ -81,7 +81,7 @@ public class AllData extends BaseMessage {
 
 	/**
 	 * Returns the completion time of the request.
-	 * 
+	 *
 	 * @return The completion time of the request (in milliseconds since Jan 1,
 	 *         1970 UTC), or <code>-1</code> if the time could not be parsed
 	 */
@@ -93,11 +93,20 @@ public class AllData extends BaseMessage {
 	 * Returns the payload input stream. You <strong>have</strong> consume the
 	 * input stream before returning from the
 	 * {@link FcpListener#receivedAllData(FcpConnection, AllData)} method!
-	 * 
+	 *
 	 * @return The payload
 	 */
 	public InputStream getPayloadInputStream() {
 		return payloadInputStream;
+	}
+
+	/**
+	 * Returns the content type of the found file.
+	 *
+	 * @return The content type
+	 */
+	public String getContentType() {
+		return getField("Metadata.ContentType");
 	}
 
 }

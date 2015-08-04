@@ -1,6 +1,5 @@
 /*
- * jSite2 - IdentifierCollision.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - IdentifierCollision.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * The “IdentifierCollision” message signals the client that the identifier
  * chosen for a request is already existing.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class IdentifierCollision extends BaseMessage {
+public class IdentifierCollision extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “IdentifierCollision” message that wraps the received
 	 * message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -40,16 +39,17 @@ public class IdentifierCollision extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns whether the request is on the global queue.
-	 * 
+	 *
 	 * @return <code>true</code> if the request is on the global queue,
 	 *         <code>false</code> if it is on the client-local queue
 	 */

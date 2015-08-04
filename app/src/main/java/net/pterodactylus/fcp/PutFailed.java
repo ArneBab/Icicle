@@ -1,6 +1,5 @@
 /*
- * jSite2 - GetFailed.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - GetFailed.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +27,14 @@ import java.util.Map.Entry;
  * The “PutFailed” message signals the client that a {@link ClientPut} request
  * has failed. This also means that no further progress messages for that
  * request will be sent.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class PutFailed extends BaseMessage {
+public class PutFailed extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “PutFailed” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -45,7 +44,7 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the code of the error.
-	 * 
+	 *
 	 * @return The code of the error, or <code>-1</code> if the error code
 	 *         could not be parsed
 	 */
@@ -55,16 +54,17 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns whether the request is on the global queue.
-	 * 
+	 *
 	 * @return <code>true</code> if the request is on the global queue,
 	 *         <code>false</code> if it is on the client-local queue
 	 */
@@ -74,7 +74,7 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the description of the error code.
-	 * 
+	 *
 	 * @return The description of the error code
 	 */
 	public String getCodeDescription() {
@@ -83,7 +83,7 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the extra description of the error.
-	 * 
+	 *
 	 * @return The extra description of the error
 	 */
 	public String getExtraDescription() {
@@ -92,7 +92,7 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the short description of the error.
-	 * 
+	 *
 	 * @return The short description of the error
 	 */
 	public String getShortCodeDescription() {
@@ -101,7 +101,7 @@ public class PutFailed extends BaseMessage {
 
 	/**
 	 * Returns the expected URI of the request.
-	 * 
+	 *
 	 * @return The expected URI
 	 */
 	public String getExpectedURI() {
@@ -109,9 +109,9 @@ public class PutFailed extends BaseMessage {
 	}
 
 	/**
-	 * Returns whether the request failed fatally. If a request fails fatally it
-	 * can never complete, even with inifinite retries.
-	 * 
+	 * Returns whether the request failed fatally. If a request fails fatally
+	 * it can never complete, even with inifinite retries.
+	 *
 	 * @return <code>true</code> if the request failed fatally,
 	 *         <code>false</code> otherwise
 	 */
@@ -123,13 +123,13 @@ public class PutFailed extends BaseMessage {
 	 * Returns a list of complex error codes with the message. Use
 	 * {@link #getComplexErrorDescription(int)} and
 	 * {@link #getComplexErrorCount(int)} to get details.
-	 * 
+	 *
 	 * @return A list of complex error codes
 	 */
 	public int[] getComplexErrorCodes() {
 		Map<String, String> allFields = getFields();
 		List<Integer> errorCodeList = new ArrayList<Integer>();
-		for (Entry<String, String> field: allFields.entrySet()) {
+		for (Entry<String, String> field : allFields.entrySet()) {
 			String fieldKey = field.getKey();
 			if (fieldKey.startsWith("Errors.")) {
 				int nextDot = fieldKey.indexOf('.', 7);
@@ -143,7 +143,7 @@ public class PutFailed extends BaseMessage {
 		}
 		int[] errorCodes = new int[errorCodeList.size()];
 		int errorIndex = 0;
-		for (int errorCode: errorCodeList) {
+		for (int errorCode : errorCodeList) {
 			errorCodes[errorIndex++] = errorCode;
 		}
 		return errorCodes;
@@ -152,7 +152,7 @@ public class PutFailed extends BaseMessage {
 	/**
 	 * Returns the description of the complex error. You should only hand it
 	 * error codes you got from {@link #getComplexErrorCodes()}!
-	 * 
+	 *
 	 * @param errorCode
 	 *            The error code
 	 * @return The description of the complex error
@@ -164,7 +164,7 @@ public class PutFailed extends BaseMessage {
 	/**
 	 * Returns the count of the complex error. You should only hand it error
 	 * codes you got from {@link #getComplexErrorCodes()}!
-	 * 
+	 *
 	 * @param errorCode
 	 *            The error code
 	 * @return The count of the complex error, or <code>-1</code> if the count

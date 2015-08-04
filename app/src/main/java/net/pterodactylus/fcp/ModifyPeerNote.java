@@ -1,6 +1,5 @@
 /*
- * jSite2 - ModifyPeerNote.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ModifyPeerNote.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * The “ModifyPeerNote” command modifies a peer note.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ModifyPeerNote extends FcpMessage {
@@ -29,11 +28,11 @@ public class ModifyPeerNote extends FcpMessage {
 	/**
 	 * Creates a new “ModifyPeerNote” request that changes peer note of the
 	 * given type and node to the given text.
-	 * 
+	 *
 	 * @see PeerNote
 	 * @param nodeIdentifier
-	 *            The identifier of the node, i.e. name, identity, or IP address
-	 *            and port
+	 *            The identifier of the node, i.e. name, identity, or IP
+	 *            address and port
 	 * @param noteText
 	 *            The base64-encoded text
 	 * @param peerNoteType

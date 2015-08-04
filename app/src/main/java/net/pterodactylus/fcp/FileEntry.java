@@ -1,6 +1,5 @@
 /*
- * jSite2 - FileEntry.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - FileEntry.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +24,7 @@ import java.util.Map;
 
 /**
  * Container class for file entry data.
- * 
+ *
  * @see ClientPutComplexDir#addFileEntry(FileEntry)
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
@@ -39,7 +38,7 @@ public abstract class FileEntry {
 
 	/**
 	 * Creates a new file entry with the given name and upload source.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the file
 	 * @param uploadFrom
@@ -53,12 +52,12 @@ public abstract class FileEntry {
 	/**
 	 * Creates a new file entry for a file that should be transmitted to the
 	 * node in the payload of the message.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the file
 	 * @param contentType
-	 *            The content type of the file, or <code>null</code> to let
-	 *            the node auto-detect it
+	 *            The content type of the file, or <code>null</code> to let the
+	 *            node auto-detect it
 	 * @param length
 	 *            The length of the file
 	 * @param dataInputStream
@@ -71,14 +70,14 @@ public abstract class FileEntry {
 
 	/**
 	 * Creates a new file entry for a file that should be uploaded from disk.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the file
 	 * @param filename
 	 *            The name of the file on disk
 	 * @param contentType
-	 *            The content type of the file, or <code>null</code> to let
-	 *            the node auto-detect it
+	 *            The content type of the file, or <code>null</code> to let the
+	 *            node auto-detect it
 	 * @param length
 	 *            The length of the file, or <code>-1</code> to not specify a
 	 *            size
@@ -90,7 +89,7 @@ public abstract class FileEntry {
 
 	/**
 	 * Creates a new file entry for a file that redirects to another URI.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the file
 	 * @param targetURI
@@ -103,7 +102,7 @@ public abstract class FileEntry {
 
 	/**
 	 * Returns the fields for this file entry.
-	 * 
+	 *
 	 * @return The fields for this file entry
 	 */
 	abstract Map<String, String> getFields();
@@ -111,7 +110,7 @@ public abstract class FileEntry {
 	/**
 	 * A file entry for a file that should be transmitted in the payload of the
 	 * {@link ClientPutComplexDir} message.
-	 * 
+	 *
 	 * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
 	 */
 	static class DirectFileEntry extends FileEntry {
@@ -127,7 +126,7 @@ public abstract class FileEntry {
 
 		/**
 		 * Creates a new direct file entry with content type auto-detection.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the file
 		 * @param length
@@ -141,12 +140,12 @@ public abstract class FileEntry {
 
 		/**
 		 * Creates a new direct file entry.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the file
 		 * @param contentType
-		 *            The content type of the file, or <code>null</code> to
-		 *            let the node auto-detect it
+		 *            The content type of the file, or <code>null</code> to let
+		 *            the node auto-detect it
 		 * @param length
 		 *            The length of the file
 		 * @param inputStream
@@ -176,7 +175,7 @@ public abstract class FileEntry {
 
 		/**
 		 * Returns the input stream of the file.
-		 * 
+		 *
 		 * @return The input stream of the file
 		 */
 		InputStream getInputStream() {
@@ -187,7 +186,7 @@ public abstract class FileEntry {
 
 	/**
 	 * A file entry for a file that should be uploaded from the disk.
-	 * 
+	 *
 	 * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
 	 */
 	static class DiskFileEntry extends FileEntry {
@@ -203,7 +202,7 @@ public abstract class FileEntry {
 
 		/**
 		 * Creates a new disk file entry.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the file
 		 * @param filename
@@ -217,14 +216,14 @@ public abstract class FileEntry {
 
 		/**
 		 * Creates a new disk file entry.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the file
 		 * @param filename
 		 *            The name of the on-disk file
 		 * @param contentType
-		 *            The content type of the file, or <code>null</code> to
-		 *            let the node auto-detect it
+		 *            The content type of the file, or <code>null</code> to let
+		 *            the node auto-detect it
 		 * @param length
 		 *            The length of the file
 		 */
@@ -257,7 +256,7 @@ public abstract class FileEntry {
 
 	/**
 	 * A file entry for a file that redirects to another URI.
-	 * 
+	 *
 	 * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
 	 */
 	static class RedirectFileEntry extends FileEntry {
@@ -267,7 +266,7 @@ public abstract class FileEntry {
 
 		/**
 		 * Creates a new redirect file entry.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the file
 		 * @param targetURI

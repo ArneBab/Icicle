@@ -1,6 +1,5 @@
 /*
- * jSite2 - PersistentPut.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - PersistentPut.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +21,14 @@ package net.pterodactylus.fcp;
 /**
  * A “PersistentPut” message notifies a client about a persistent
  * {@link ClientPut} request.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class PersistentPut extends BaseMessage {
+public class PersistentPut extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “PersistentPut” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -39,7 +38,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the client token of the request.
-	 * 
+	 *
 	 * @return The client token of the request
 	 */
 	public String getClientToken() {
@@ -48,9 +47,9 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the data length of the request.
-	 * 
-	 * @return The data length of the request, or <code>-1</code> if the
-	 *         length could not be parsed
+	 *
+	 * @return The data length of the request, or <code>-1</code> if the length
+	 *         could not be parsed
 	 */
 	public long getDataLength() {
 		return FcpUtils.safeParseLong(getField("DataLength"));
@@ -58,7 +57,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns whether the request is on the global queue.
-	 * 
+	 *
 	 * @return <code>true</code> if the request is on the global queue,
 	 *         <code>false</code> otherwise
 	 */
@@ -68,9 +67,10 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
@@ -78,10 +78,10 @@ public class PersistentPut extends BaseMessage {
 	/**
 	 * Returns the maximum number of retries for failed blocks. When
 	 * <code>-1</code> is returned each block is tried forever.
-	 * 
+	 *
 	 * @return The maximum number of retries for failed blocks, or
-	 *         <code>-1</code> for unlimited retries, or <code>-2</code> if
-	 *         the number of retries could not be parsed
+	 *         <code>-1</code> for unlimited retries, or <code>-2</code> if the
+	 *         number of retries could not be parsed
 	 */
 	public int getMaxRetries() {
 		return FcpUtils.safeParseInt(getField("MaxRetries"));
@@ -89,7 +89,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the content type of the data.
-	 * 
+	 *
 	 * @return The content type
 	 */
 	public String getMetadataContentType() {
@@ -98,7 +98,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the persistence of the request.
-	 * 
+	 *
 	 * @return The persistence of the request
 	 */
 	public Persistence getPersistence() {
@@ -107,7 +107,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the priority of the request.
-	 * 
+	 *
 	 * @return The priority of the request, or {@link Priority#unknown} if the
 	 *         priority could not be parsed
 	 */
@@ -117,9 +117,9 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns whether this request has started.
-	 * 
-	 * @return <code>true</code> if the request has started,
-	 *         <code>false</code> otherwise
+	 *
+	 * @return <code>true</code> if the request has started, <code>false</code>
+	 *         otherwise
 	 */
 	public boolean isStarted() {
 		return Boolean.valueOf(getField("Started"));
@@ -127,7 +127,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the target filename of the request.
-	 * 
+	 *
 	 * @return The target filename of the request
 	 */
 	public String getTargetFilename() {
@@ -136,7 +136,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the upload source of the request.
-	 * 
+	 *
 	 * @return The upload source of the request
 	 */
 	public UploadFrom getUploadFrom() {
@@ -145,7 +145,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the target URI of the request.
-	 * 
+	 *
 	 * @return The target URI of the request
 	 */
 	public String getURI() {
@@ -154,7 +154,7 @@ public class PersistentPut extends BaseMessage {
 
 	/**
 	 * Returns the verbosity of the request.
-	 * 
+	 *
 	 * @return The verbosity of the request
 	 */
 	public Verbosity getVerbosity() {

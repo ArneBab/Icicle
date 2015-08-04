@@ -1,6 +1,5 @@
 /*
- * jSite2 - PluginInfo.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - PluginInfo.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +20,14 @@ package net.pterodactylus.fcp;
 
 /**
  * The “PluginInfo” message is a reply to the {@link GetPluginInfo} request.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class PluginInfo extends BaseMessage {
+public class PluginInfo extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “PluginInfo” message that wraps the received message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -38,7 +37,7 @@ public class PluginInfo extends BaseMessage {
 
 	/**
 	 * Returns the name of the plugin.
-	 * 
+	 *
 	 * @return The name of the plugin
 	 */
 	public String getPluginName() {
@@ -47,16 +46,17 @@ public class PluginInfo extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns the original URI of the plugin.
-	 * 
+	 *
 	 * @return The original URI of the plugin
 	 */
 	public String getOriginalURI() {
@@ -65,7 +65,7 @@ public class PluginInfo extends BaseMessage {
 
 	/**
 	 * Returns whether the plugin is started.
-	 * 
+	 *
 	 * @return <code>true</code> if the plugin is started, <code>false</code>
 	 *         otherwise
 	 */

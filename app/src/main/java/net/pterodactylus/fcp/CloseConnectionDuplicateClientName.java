@@ -1,6 +1,5 @@
 /*
- * jSite2 - CloseConnectionDuplicateClientName.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - CloseConnectionDuplicateClientName.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +20,7 @@ package net.pterodactylus.fcp;
 
 /**
  * A “CloseConnectionDuplicateClientName” message.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class CloseConnectionDuplicateClientName extends BaseMessage {
@@ -29,7 +28,7 @@ public class CloseConnectionDuplicateClientName extends BaseMessage {
 	/**
 	 * Creates a new CloseConnectionDuplicateClientName message that wraps the
 	 * given message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */

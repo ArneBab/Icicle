@@ -1,6 +1,5 @@
 /*
- * jSite2 - ModifyPeer.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ModifyPeer.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +20,18 @@ package net.pterodactylus.fcp;
 
 /**
  * The “ModifyPeer” request lets you modify certain properties of a peer.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ModifyPeer extends FcpMessage {
 
 	/**
-	 * Creates a new “ModifyPeer” request. All Boolean parameters may be null to
-	 * not influence the current setting.
-	 * 
+	 * Creates a new “ModifyPeer” request. All Boolean parameters may be null
+	 * to not influence the current setting.
+	 *
 	 * @param nodeIdentifier
-	 *            The identifier of the node, i.e. name, identity, or IP address
-	 *            and port
+	 *            The identifier of the node, i.e. name, identity, or IP
+	 *            address and port
 	 * @param allowLocalAddresses
 	 *            Whether to allow local addresses from this node
 	 * @param disabled

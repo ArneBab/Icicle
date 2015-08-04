@@ -1,6 +1,5 @@
 /*
- * jSite2 - FinishedCompression.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - FinishedCompression.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +21,15 @@ package net.pterodactylus.fcp;
 /**
  * A “FinishedCompression” message signals the client that the compression of
  * the request data has been finished.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class FinishedCompression extends BaseMessage {
+public class FinishedCompression extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “FinishedCompression” message that wraps the received
 	 * message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The message that was recevied
 	 */
@@ -40,16 +39,17 @@ public class FinishedCompression extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the request.
-	 * 
+	 *
 	 * @return The identifier of the request
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns the ID of the codec that was used for compression.
-	 * 
+	 *
 	 * @return The ID of the codec that was used for compression
 	 */
 	public int getCodec() {
@@ -58,7 +58,7 @@ public class FinishedCompression extends BaseMessage {
 
 	/**
 	 * Returns the original size of the data (i.e. before compression).
-	 * 
+	 *
 	 * @return The original size of the data
 	 */
 	public long getOriginalSize() {
@@ -67,7 +67,7 @@ public class FinishedCompression extends BaseMessage {
 
 	/**
 	 * Returns the compressed size of the data (i.e. after compression).
-	 * 
+	 *
 	 * @return The compressed size of the data
 	 */
 	public long getCompressedSize() {

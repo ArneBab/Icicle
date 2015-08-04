@@ -1,6 +1,5 @@
 /*
- * jSite2 - ModifyPersistentRequest.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ModifyPersistentRequest.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@ package net.pterodactylus.fcp;
 /**
  * A “ModifyPersistentRequest” is used to modify certain properties of a
  * persistent request while it is running.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ModifyPersistentRequest extends FcpMessage {
@@ -30,7 +29,7 @@ public class ModifyPersistentRequest extends FcpMessage {
 	/**
 	 * Creates a new “ModifyPersistentRequest” that changes the specified
 	 * request.
-	 * 
+	 *
 	 * @param requestIdentifier
 	 *            The identifier of the request
 	 * @param global
@@ -45,7 +44,7 @@ public class ModifyPersistentRequest extends FcpMessage {
 
 	/**
 	 * Sets the new client token of the request.
-	 * 
+	 *
 	 * @param newClientToken
 	 *            The new client token of the request
 	 */
@@ -55,11 +54,11 @@ public class ModifyPersistentRequest extends FcpMessage {
 
 	/**
 	 * Sets the new priority of the request.
-	 * 
+	 *
 	 * @param newPriority
 	 *            The new priority of the request
 	 */
-	public void setPriority(int newPriority) {
+	public void setPriority(Priority newPriority) {
 		setField("PriorityClass", String.valueOf(newPriority));
 	}
 

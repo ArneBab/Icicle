@@ -1,6 +1,5 @@
 /*
- * jSite2 - PluginMessage.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - PluginMessage.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +21,14 @@ package net.pterodactylus.fcp;
 /**
  * An “CPPluginMessage” sends a message with custom parameters and (optional)
  * payload to a plugin.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class FCPPluginMessage extends FcpMessage {
 
 	/**
 	 * Creates a new “FCPPluginMessage” message for the given plugin.
-	 * 
+	 *
 	 * @param pluginClass
 	 *            The name of the plugin class
 	 */
@@ -39,10 +38,10 @@ public class FCPPluginMessage extends FcpMessage {
 	}
 
 	/**
-	 * Sets the identifier of the request. Though this is still optional you are
-	 * encouraged to include it because the plugin might reply in random order
-	 * to requests.
-	 * 
+	 * Sets the identifier of the request. Though this is still optional you
+	 * are encouraged to include it because the plugin might reply in random
+	 * order to requests.
+	 *
 	 * @param identifier
 	 *            The identifier of the request
 	 */
@@ -52,7 +51,7 @@ public class FCPPluginMessage extends FcpMessage {
 
 	/**
 	 * Sets a custom parameter for the plugin.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the parameter
 	 * @param value
@@ -64,8 +63,9 @@ public class FCPPluginMessage extends FcpMessage {
 
 	/**
 	 * Sets the length of data of the optional payload. If you call this method
-	 * you also have to call {@link #setPayloadInputStream(java.io.InputStream)}!
-	 * 
+	 * you also have to call
+	 * {@link #setPayloadInputStream(java.io.InputStream)} !
+	 *
 	 * @param dataLength
 	 *            The length of data in the payload input stream
 	 */

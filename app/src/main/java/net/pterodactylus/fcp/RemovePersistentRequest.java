@@ -1,6 +1,5 @@
 /*
- * jSite2 - RemovePersistentRequest.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - RemovePersistentRequest.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +22,14 @@ package net.pterodactylus.fcp;
  * The “RemovePersistentRequest” message tells the node to remove a persistent
  * request, cancelling it first (resulting in a {@link GetFailed} or
  * {@link PutFailed} message), if necessary.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class RemovePersistentRequest extends FcpMessage {
 
 	/**
 	 * Creates a new “RemovePersistentRequest” message.
-	 * 
+	 *
 	 * @param identifier
 	 *            The identifier of the request
 	 */
@@ -41,7 +40,7 @@ public class RemovePersistentRequest extends FcpMessage {
 
 	/**
 	 * Sets whether the request is on the global queue.
-	 * 
+	 *
 	 * @param global
 	 *            <code>true</code> if the request is on the global queue,
 	 *            <code>false</code> if it is on the client-local queue

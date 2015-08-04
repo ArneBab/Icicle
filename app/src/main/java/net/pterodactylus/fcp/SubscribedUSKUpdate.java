@@ -1,6 +1,5 @@
 /*
- * jSite2 - SubscribedUSKUpdate.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - SubscribedUSKUpdate.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +19,20 @@
 package net.pterodactylus.fcp;
 
 /**
- * A “SubscribedUSKUpdate” message is sent each time a new edition of a USK that
- * was previously subscribed to with {@link SubscribeUSK} was found. Note that
- * if the new edition that was found is several editions ahead of the currently
- * last known edition, you will received a SubscribedUSKUpdate for each edition
- * inbetween as welL!
- * 
+ * A “SubscribedUSKUpdate” message is sent each time a new edition of a USK
+ * that was previously subscribed to with {@link SubscribeUSK} was found. Note
+ * that if the new edition that was found is several editions ahead of the
+ * currently last known edition, you will received a SubscribedUSKUpdate for
+ * each edition inbetween as welL!
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class SubscribedUSKUpdate extends BaseMessage {
+public class SubscribedUSKUpdate extends BaseMessage implements Identifiable {
 
 	/**
 	 * Creates a new “SubscribedUSKUpdate” message that wraps the received
 	 * message.
-	 * 
+	 *
 	 * @param receivedMessage
 	 *            The received message
 	 */
@@ -43,16 +42,17 @@ public class SubscribedUSKUpdate extends BaseMessage {
 
 	/**
 	 * Returns the identifier of the subscription.
-	 * 
+	 *
 	 * @return The identifier of the subscription
 	 */
+	@Override
 	public String getIdentifier() {
 		return getField("Identifier");
 	}
 
 	/**
 	 * Returns the new edition that was found.
-	 * 
+	 *
 	 * @return The new edition
 	 */
 	public int getEdition() {
@@ -61,7 +61,7 @@ public class SubscribedUSKUpdate extends BaseMessage {
 
 	/**
 	 * Returns the complete URI, including the new edition.
-	 * 
+	 *
 	 * @return The complete URI
 	 */
 	public String getURI() {

@@ -1,6 +1,5 @@
 /*
- * jSite2 - ListPersistentRequests.java -
- * Copyright © 2008 David Roden
+ * jFCPlib - ListPersistentRequests.java - Copyright © 2008 David Roden
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +22,7 @@ package net.pterodactylus.fcp;
  * Command to tell the node to list all persistent requests from the current
  * queue, which is either the global queue or the client-local queue, depending
  * on your {@link WatchGlobal} status.
- * 
+ *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
 public class ListPersistentRequests extends FcpMessage {
