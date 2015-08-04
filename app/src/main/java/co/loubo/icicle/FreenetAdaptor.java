@@ -136,7 +136,7 @@ public class FreenetAdaptor extends FcpAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.gs.addToMessageList(new FreenetMessage(new Date(feed.getUpdatedTime()),new String(data),feed.getSourceNodeName(),Constants.SELF));
+        this.gs.addToMessageList(new FreenetMessage(new Date(feed.getUpdatedTime()),new String(data), feed.getHeader(),Constants.SELF));
     }
 
     public void receivedSSKKeypair(FcpConnection fcpConnection, SSKKeypair sskKeypair) {
