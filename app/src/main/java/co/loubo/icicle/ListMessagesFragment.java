@@ -38,7 +38,7 @@ public class ListMessagesFragment extends ListFragment {
 
 
         setListAdapter(mAdapter);
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        list.setChoiceMode(ListView.CHOICE_MODE_NONE);
         list.setDivider(getResources().getDrawable(R.drawable.divider));
         list.setSelector(getResources().getDrawable(R.drawable.list_selection_background));
 
@@ -66,16 +66,7 @@ public class ListMessagesFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if(lastChecked == position){
-            l.setItemChecked(position, false);
-            lastChecked = -1;
-        }else {
-            l.setItemChecked(position, true);
-            lastChecked = position;
-        }
-        if(listener != null) {
-            listener.redrawMessageList();
-        }
+
     }
 
     private class MessageListArrayAdapter extends ArrayAdapter<String> {
