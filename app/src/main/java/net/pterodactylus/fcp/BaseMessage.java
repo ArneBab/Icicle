@@ -57,7 +57,7 @@ public class BaseMessage {
 	 * @return The content of the field, or <code>null</code> if there is no
 	 *         such field
 	 */
-	protected String getField(String field) {
+	public String getField(String field) {
 		return receivedMessage.getField(field);
 	}
 

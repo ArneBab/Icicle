@@ -18,61 +18,66 @@
 
 package net.pterodactylus.fcp;
 
+import java.io.InputStream;
+
 /**
  * Implementation of the “ReceivedBookmarkFeed” FCP message. This message
  * notifies an FCP client that an update for a bookmark has been found.
  *
  * @author David ‘Bombe’ Roden &lt;bombe@freenetproject.org&gt;
  */
-public class ReceivedBookmarkFeed extends BaseMessage {
+public class URIFeed extends BaseMessage {
 
+
+	/** The payload. */
+	private InputStream payloadInputStream;
 	/**
 	 * Creates a new “ReceivedBookmarkFeed” message.
 	 *
 	 * @param fcpMessage
 	 *            The FCP message to get the fields from
 	 */
-	public ReceivedBookmarkFeed(FcpMessage fcpMessage) {
+	public URIFeed(FcpMessage fcpMessage, InputStream payloadInputStream) {
 		super(fcpMessage);
+		this.payloadInputStream = payloadInputStream;
 	}
 
-	/**
-	 * Returns the name of the bookmark.
-	 *
-	 * @return The bookmark’s name
-	 */
-	public String getBookmarkName() {
-		return getField("Name");
+	public long getDataLength() {
+		return FcpUtils.safeParseLong(getField("DataLength"));
 	}
-
-	/**
-	 * Returns the URI of the updated bookmark.
-	 *
-	 * @return The bookmark’s URI
-	 */
+	public long getTextLength() {
+		return FcpUtils.safeParseLong(getField("TextLength"));
+	}
+	public long getTimeReceived() {
+		return FcpUtils.safeParseLong(getField("TimeReceived"));
+	}
+	public long getTimeSent() {
+		return FcpUtils.safeParseLong(getField("TimeSent"));
+	}
+	public String getSourceNodeName() {
+		return getField("SourceNodeName");
+	}
+	public String getHeader() {
+		return getField("Header");
+	}
+	public String getShortText(){
+		return getField("ShortText");
+	}
 	public String getURI() {
 		return getField("URI");
 	}
-
-	/**
-	 * Returns whether the bookmark has an active link image.
-	 *
-	 * @return {@code true} if the bookmark has an active link image,
-	 *         {@code false} otherwise
-	 */
-	public boolean hasActiveLink() {
-		return Boolean.parseBoolean(getField("HasAnActiveLink"));
+	public String getField(String field){
+		return super.getField(field);
 	}
 
 	/**
-	 * Returns the description of the bookmark. Note that the description may
-	 * be {@code null} and if it is not, it is base64-encoded!
+	 * Returns the payload input stream. You <strong>have</strong> consume the
+	 * input stream before returning from the
+	 * {@link FcpListener#receivedURIFeed(FcpConnection, URIFeed)} method!
 	 *
-	 * @return The bookmark’s description, or {@code null} if the bookmark has
-	 *         no description
+	 * @return The payload
 	 */
-	public String getDescription() {
-		return getField("Description");
+	public InputStream getPayloadInputStream() {
+		return payloadInputStream;
 	}
-
 }

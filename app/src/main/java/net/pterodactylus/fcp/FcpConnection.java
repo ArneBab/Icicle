@@ -311,10 +311,40 @@ public class FcpConnection implements Closeable {
 			fcpListenerManager.fireReceivedNodeHello(new NodeHello(fcpMessage));
 		} else if ("CloseConnectionDuplicateClientName".equals(messageName)) {
 			fcpListenerManager.fireReceivedCloseConnectionDuplicateClientName(new CloseConnectionDuplicateClientName(fcpMessage));
+		} else if ("TextFeed".equals(messageName)) {
+			LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+			fcpListenerManager.fireReceivedTextFeed(new TextFeed(fcpMessage, payloadInputStream));
+			try {
+				payloadInputStream.consume();
+			} catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+			}
+		} else if ("BookmarkFeed".equals(messageName)) {
+			LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+			fcpListenerManager.fireReceivedBookmarkFeed(new BookmarkFeed(fcpMessage, payloadInputStream));
+			try {
+				payloadInputStream.consume();
+			} catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+			}
+		} else if ("URIFeed".equals(messageName)) {
+			LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+			fcpListenerManager.fireReceivedURIFeed(new URIFeed(fcpMessage, payloadInputStream));
+			try {
+				payloadInputStream.consume();
+			} catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+			}
+		} else if ("Feed".equals(messageName)) {
+			LimitedInputStream payloadInputStream = getInputStream(FcpUtils.safeParseLong(fcpMessage.getField("DataLength")));
+			fcpListenerManager.fireReceivedFeed(new Feed(fcpMessage, payloadInputStream));
+			try {
+				payloadInputStream.consume();
+			} catch (IOException ioe1) {
+				/* well, ignore. when the connection handler fails, all fails. */
+			}
 		} else if ("SentFeed".equals(messageName)) {
 			fcpListenerManager.fireSentFeed(new SentFeed(fcpMessage));
-		} else if ("ReceivedBookmarkFeed".equals(messageName)) {
-			fcpListenerManager.fireReceivedBookmarkFeed(new ReceivedBookmarkFeed(fcpMessage));
 		} else {
 			fcpListenerManager.fireMessageReceived(fcpMessage);
 		}

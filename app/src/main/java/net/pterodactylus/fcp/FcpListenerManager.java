@@ -527,17 +527,62 @@ public class FcpListenerManager extends AbstractListenerManager<FcpConnection, F
 	}
 
 	/**
-	 * Notifies all listeners that a “ReceivedBookmarkFeed” message was
+	 * Notifies all listeners that a “TextFeed” message was
 	 * received.
 	 *
 	 * @see FcpListener#receivedBookmarkFeed(FcpConnection,
-	 *      ReceivedBookmarkFeed)
+	 *      BookmarkFeed)
+	 * @param receivedTextFeed
+	 *            The “TextFeed” message
+	 */
+	public void fireReceivedTextFeed(TextFeed receivedTextFeed) {
+		for (FcpListener fcpListener : getListeners()) {
+			fcpListener.receivedTextFeed(getSource(), receivedTextFeed);
+		}
+	}
+
+	/**
+	 * Notifies all listeners that a “BookmarkFeed” message was
+	 * received.
+	 *
+	 * @see FcpListener#receivedBookmarkFeed(FcpConnection,
+	 *      BookmarkFeed)
 	 * @param receivedBookmarkFeed
 	 *            The “ReceivedBookmarkFeed” message
 	 */
-	public void fireReceivedBookmarkFeed(ReceivedBookmarkFeed receivedBookmarkFeed) {
+	public void fireReceivedBookmarkFeed(BookmarkFeed receivedBookmarkFeed) {
 		for (FcpListener fcpListener : getListeners()) {
 			fcpListener.receivedBookmarkFeed(getSource(), receivedBookmarkFeed);
+		}
+	}
+
+	/**
+	 * Notifies all listeners that a “URIFeed” message was
+	 * received.
+	 *
+	 * @see FcpListener#receivedBookmarkFeed(FcpConnection,
+	 *      BookmarkFeed)
+	 * @param receivedURIFeed
+	 *            The “URIFeed” message
+	 */
+	public void fireReceivedURIFeed(URIFeed receivedURIFeed) {
+		for (FcpListener fcpListener : getListeners()) {
+			fcpListener.receivedURIFeed(getSource(), receivedURIFeed);
+		}
+	}
+
+	/**
+	 * Notifies all listeners that a “Feed” message was
+	 * received.
+	 *
+	 * @see FcpListener#receivedBookmarkFeed(FcpConnection,
+	 *      BookmarkFeed)
+	 * @param receivedFeed
+	 *            The “RFeed” message
+	 */
+	public void fireReceivedFeed(Feed receivedFeed) {
+		for (FcpListener fcpListener : getListeners()) {
+			fcpListener.receivedFeed(getSource(), receivedFeed);
 		}
 	}
 

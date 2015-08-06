@@ -381,14 +381,44 @@ public interface FcpListener extends EventListener {
 	public void receivedSentFeed(FcpConnection source, SentFeed sentFeed);
 
 	/**
+	 * Notifies a listener that a Text Message was received.
+	 *
+	 * @param fcpConnection
+	 *            The connection that received the message
+	 * @param receivedTextFeed
+	 *            The “TextFeed” message
+	 */
+	public void receivedTextFeed(FcpConnection fcpConnection, TextFeed receivedTextFeed);
+
+	/**
 	 * Notifies a listener that a bookmark was updated.
 	 *
 	 * @param fcpConnection
 	 *            The connection that received the message
 	 * @param receivedBookmarkFeed
-	 *            The “ReceivedBookmarkFeed” message
+	 *            The “BookmarkFeed” message
 	 */
-	public void receivedBookmarkFeed(FcpConnection fcpConnection, ReceivedBookmarkFeed receivedBookmarkFeed);
+	public void receivedBookmarkFeed(FcpConnection fcpConnection, BookmarkFeed receivedBookmarkFeed);
+
+	/**
+	 * Notifies a listener that a link was received.
+	 *
+	 * @param fcpConnection
+	 *            The connection that received the message
+	 * @param receivedURIFeed
+	 *            The “URIFeed” message
+	 */
+	public void receivedURIFeed(FcpConnection fcpConnection, URIFeed receivedURIFeed);
+
+	/**
+	 * Notifies a listener that a message was received from the node.
+	 *
+	 * @param fcpConnection
+	 *            The connection that received the message
+	 * @param receivedFeed
+	 *            The “Feed” message
+	 */
+	public void receivedFeed(FcpConnection fcpConnection, Feed receivedFeed);
 
 	/**
 	 * Notifies a listener that a “ProtocolError” was received.
