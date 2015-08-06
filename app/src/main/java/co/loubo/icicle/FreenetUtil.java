@@ -167,7 +167,8 @@ public class FreenetUtil extends Thread{
         try {
             synchronized (fcpAdapter) {
                 ModifyPersistentRequest req = new ModifyPersistentRequest(obj.getString("identifier"),true);
-                req.setPriority(obj.getInt("priority"));
+				Priority p = Priority.values()[obj.getInt("priority")];
+                req.setPriority(p);
                 fcpConnection.sendMessage(req);
             }
         } catch (IOException e) {
