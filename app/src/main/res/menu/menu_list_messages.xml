@@ -7,4 +7,11 @@
         android:icon="@drawable/ic_refresh_white_36dp"
         android:title="@string/action_refresh"/>
 
+    <item
+        android:id="@+id/action_compose"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_edit_white_36dp"
+        android:title="@string/action_compose"/>
+
 </menu>

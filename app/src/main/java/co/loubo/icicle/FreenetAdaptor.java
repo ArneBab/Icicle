@@ -138,6 +138,7 @@ public class FreenetAdaptor extends FcpAdapter {
         }
         this.gs.addToMessageList(new FreenetMessage(new Date(feed.getUpdatedTime()),new String(data), feed.getHeader(),Constants.SELF));
     }
+	//TODO: handle SentFeed message
 
     public void receivedSSKKeypair(FcpConnection fcpConnection, SSKKeypair sskKeypair) {
 		this.gs.setSSKeypair(sskKeypair);

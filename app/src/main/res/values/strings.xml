@@ -88,4 +88,14 @@
     <string name="visibility">Visibility</string>
     <string name="title_activity_list_messages">Messages</string>
     <string name="no_messages">No messages</string>
+    <string name="title_activity_compose_message">Compose Message</string>
+    <string name="action_compose">Compose</string>
+    <string name="action_send">Send</string>
+    <string name="recipient">Recipients</string>
+    <string name="to">To</string>
+    <string name="message">Message</string>
+    <string name="title_activity_recipient_picker">Select Recipient</string>
+    <string name="action_next">Next</string>
+
+    <string name="no_recipients">No valid recipients. You can only send messages to Darknet peers.</string>
 </resources>

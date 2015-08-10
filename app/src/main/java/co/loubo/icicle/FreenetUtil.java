@@ -1,7 +1,9 @@
 package co.loubo.icicle;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ConnectException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -33,9 +35,10 @@ public class FreenetUtil extends Thread{
 		try{
 			fcpConnection.connect();
 			this.fcpAdapter.getGlobalState().setConnected(true);
-			fcpConnection.sendMessage(new ClientHello(context.getString(R.string.app_name)+this.fcpAdapter.getGlobalState().getDeviceID()));
+			fcpConnection.sendMessage(new ClientHello(context.getString(R.string.app_name) + this.fcpAdapter.getGlobalState().getDeviceID()));
 			fcpConnection.sendMessage(new WatchGlobal(true));
             fcpConnection.sendMessage(new WatchFeeds(true));
+			//fcpConnection.sendMessage(new SendTextFeed());
 			fcpConnection.addFcpListener(fcpAdapter);
 		}catch(ConnectException e){
 			//failed to connect
@@ -178,6 +181,28 @@ public class FreenetUtil extends Thread{
             this.fcpAdapter.getGlobalState().setConnected(false);
         }
     }
+
+	private void sendTextFeed(SendTextFeed sendTextFeed){
+		try {
+
+
+			String out = sendTextFeed.getField("Text");
+			sendTextFeed.setField("Text","");
+			sendTextFeed.setDataLength(out.getBytes().length);
+
+			BufferedInputStream payloadInputStream = new BufferedInputStream(new ByteArrayInputStream(out.getBytes()));
+			sendTextFeed.setPayloadInputStream(payloadInputStream);
+
+			synchronized (fcpAdapter) {
+				fcpConnection.sendMessage(sendTextFeed);
+			}
+		} catch (IOException e) {
+			//failed to connect
+			e.printStackTrace();
+			fcpConnection = null;
+			this.fcpAdapter.getGlobalState().setConnected(false);
+		}
+	}
 	
 	public void run(){
 		//System.out.println(">>>FreenetUtil.run()");
@@ -216,6 +241,9 @@ public class FreenetUtil extends Thread{
                     case Constants.MsgUpdatePriority:
                         updatePriority((Bundle) msg.obj);
                         break;
+					case Constants.MsgSendTextFeed:
+						sendTextFeed((SendTextFeed) msg.obj);
+						break;
 					default:
 						break;
 					}

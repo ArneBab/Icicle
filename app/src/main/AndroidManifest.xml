@@ -104,6 +104,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.loubo.icicle.MainActivity" />
         </activity>
+        <activity
+            android:name=".ComposeMessageActivity"
+            android:label="@string/title_activity_compose_message"
+            android:parentActivityName=".ListMessagesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.loubo.icicle.ListMessagesActivity" />
+        </activity>
+        <activity
+            android:name=".ListRecipientsActivity"
+            android:label="@string/title_activity_recipient_picker"
+            android:parentActivityName=".ListMessagesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.loubo.icicle.ListMessagesActivity" />
+        </activity>
     </application>
 
 </manifest>

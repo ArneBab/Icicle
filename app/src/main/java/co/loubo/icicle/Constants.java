@@ -14,6 +14,7 @@ public class Constants {
 	public static final int MsgFileUpload = 1005;
 	public static final int MsgAddNoderef = 1006;
     public static final int MsgUpdatePriority = 1007;
+	public static final int MsgSendTextFeed = 1008;
 	protected static final Object FNconnected = "CONNECTED";
 	protected static final Object FNbackedoff = "BACKED OFF";
 	public static final int Activity_File_Upload = 20;
@@ -49,6 +50,8 @@ public class Constants {
     public static final String SELECTED_URI = "SelectedUri";
     public static final String SELF = "Me";
     public static String ToastMessage = "ToastMessage";
+	public static String MSGRecipientName = "RecipientName";
+	public static String MSGRecipientIdentity = "RecipientIdentity";
 	
 	public static int numberOfTabs = 4;
     public static final int TAB_STATUS = 0;
