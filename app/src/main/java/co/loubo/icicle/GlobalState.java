@@ -74,6 +74,7 @@ public class GlobalState extends Application{
 	private String deviceID;
 	private int refresh_rate;
 	private boolean wifiOnly;
+	private String identity;
 	
 	private boolean isConnected = false;
 	private boolean isMainActivityVisible = false;
@@ -245,9 +246,14 @@ public class GlobalState extends Application{
 		this.nodeStatus.setRecentInputRate(Double.parseDouble(newNodeData.getVolatile("recentInputRate"))/1000);
 		this.nodeStatus.setRecentOutputRate(Double.parseDouble(newNodeData.getVolatile("recentOutputRate"))/1000);
 		this.nodeStatus.setUptimeSeconds(Double.parseDouble(newNodeData.getVolatile("uptimeSeconds")));
+		this.identity = newNodeData.getIdentity();
         extractNodeReference(newNodeData, this.getActiveLocalNode());
 		sendRedrawStatus();
         savePreferences();
+	}
+
+	public String getIdentity() {
+		return this.identity;
 	}
 
 
@@ -261,6 +267,19 @@ public class GlobalState extends Application{
 		sendRedrawPeersList();
 	}
 
+	public Peer getPeer(int index){
+		return peers.get(index);
+	}
+
+	public CopyOnWriteArrayList<Peer> getDarknetPeerList() {
+		CopyOnWriteArrayList<Peer> darknetPeers = new CopyOnWriteArrayList<Peer>();
+		for (Peer p : peers) {
+			if(!p.isOpennet()){
+				darknetPeers.add(p);
+			}
+		}
+		return darknetPeers;
+	}
 	
 	public void addToDownloadsList(PersistentGet get){
 		Download existingDownload = getDownload(get.getIdentifier());
