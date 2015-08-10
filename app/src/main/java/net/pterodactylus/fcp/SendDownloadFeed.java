@@ -39,7 +39,7 @@ public class SendDownloadFeed extends AbstractSendFeedMessage {
 	 *            The description of the download (may be {@code null})
 	 */
 	public SendDownloadFeed(String identifier, String nodeIdentifier, String uri, String description) {
-		super("SendDownloadFeed", identifier, nodeIdentifier);
+		super("SendURI", identifier, nodeIdentifier);
 		setField("URI", uri);
 		setField("Description", description);
 	}

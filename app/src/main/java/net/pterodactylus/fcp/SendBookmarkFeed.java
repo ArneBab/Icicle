@@ -43,7 +43,7 @@ public class SendBookmarkFeed extends AbstractSendFeedMessage {
 	 *            {@code false} otherwise
 	 */
 	public SendBookmarkFeed(String identifier, String nodeIdentifier, String name, String uri, String description, boolean hasActiveLink) {
-		super("SendBookmarkFeed", identifier, nodeIdentifier);
+		super("SendBookmark", identifier, nodeIdentifier);
 		setField("Name", name);
 		setField("URI", uri);
 		setField("Description", description);

@@ -36,8 +36,12 @@ public class SendTextFeed extends AbstractSendFeedMessage {
 	 *            The text to send
 	 */
 	public SendTextFeed(String identifier, String nodeIdentifier, String text) {
-		super("SendTextFeed", identifier, nodeIdentifier);
+		super("SendText", identifier, nodeIdentifier);
 		setField("Text", text);
+	}
+
+	public void setDataLength(long dataLength) {
+		setField("DataLength", String.valueOf(dataLength));
 	}
 
 }
