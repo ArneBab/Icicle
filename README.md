@@ -31,9 +31,3 @@ Icicle For Freenet uses FCPv2 to connect to your Freenet node. FCP has to be ena
 **android.permission.NFC:** Required to share Node References over NFC.
 **android.permission.READ_EXTERNAL_STORAGE** and
 **android.permission.WRITE_EXTERNAL_STORAGE:** Required to write your Node Reference temporarily to external storage when sharing via another app (such as email)
-
-##Links
-
-[![Get it on Google Play](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=co.loubo.icicle)
-
-[Developer Website](http://loubo.co/icicle)
